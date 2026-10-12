@@ -8,7 +8,7 @@ interface LoginPageProps {
 }
 
 export const LoginPage: React.FC<LoginPageProps> = ({ onSwitchToRegister, onSuccess }) => {
-  const { login, error, clearError, switchDemoAccount } = useAuth();
+  const { login, error, clearError } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -18,13 +18,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSwitchToRegister, onSucc
     setSubmitting(true);
     const ok = await login(email, password);
     setSubmitting(false);
-    if (ok) {
-      onSuccess();
-    }
-  };
-
-  const handleDemoClick = async (demoEmail: string) => {
-    const ok = await switchDemoAccount(demoEmail);
     if (ok) {
       onSuccess();
     }
@@ -91,39 +84,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSwitchToRegister, onSucc
         {/* Wireframe Page 1 Yellow Banner */}
         <div className="bg-amber-100/70 border border-amber-300 text-amber-900 text-xs px-3.5 py-2 rounded-lg font-mono text-center">
           POST /api/auth/login returns a 7-day JWT
-        </div>
-
-        {/* Quick Demo Logins for Instant Testing */}
-        <div className="pt-2 border-t border-gray-100 space-y-2">
-          <span className="block text-[11px] font-bold uppercase tracking-wider text-gray-500 text-center">
-            Or log in as demo user
-          </span>
-          <div className="grid grid-cols-2 gap-2 text-xs">
-            <button
-              onClick={() => handleDemoClick('rahul@college.edu')}
-              className="p-2 border rounded-lg text-left hover:bg-gray-50 font-medium"
-            >
-              Rahul (Student)
-            </button>
-            <button
-              onClick={() => handleDemoClick('vikram@staynest.com')}
-              className="p-2 border rounded-lg text-left hover:bg-gray-50 font-medium"
-            >
-              Vikram (Owner)
-            </button>
-            <button
-              onClick={() => handleDemoClick('suresh@staynest.com')}
-              className="p-2 border rounded-lg text-left hover:bg-gray-50 font-medium"
-            >
-              Suresh (Unverified)
-            </button>
-            <button
-              onClick={() => handleDemoClick('admin@staynest.com')}
-              className="p-2 border rounded-lg text-left hover:bg-gray-50 font-medium"
-            >
-              Admin Moderator
-            </button>
-          </div>
         </div>
       </div>
     </div>

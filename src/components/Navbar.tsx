@@ -45,45 +45,14 @@ export const Navbar: React.FC<NavbarProps> = ({
   ];
 
   return (
-    <header className="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-xs">
-      {/* Top Demo Fast Switcher Bar */}
-      <div className="bg-slate-900 text-white text-xs py-1.5 px-4 flex flex-wrap items-center justify-between gap-2">
-        <div className="flex items-center gap-2">
-          <span className="flex items-center gap-1 font-semibold text-emerald-400">
-            <span className={`w-2 h-2 rounded-full ${isConnected ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`} />
-            {isConnected ? 'Real-time sync active' : 'Connecting real-time...'}
-          </span>
-          <span className="text-slate-400 hidden sm:inline">|</span>
-          <span className="text-slate-300 hidden md:inline">Quick Test Roles:</span>
-        </div>
-
-        <div className="flex items-center gap-1.5 overflow-x-auto py-0.5">
-          {demoAccounts.map(acc => (
-            <button
-              key={acc.email}
-              onClick={() => {
-                switchDemoAccount(acc.email);
-                setDemoMenuOpen(false);
-              }}
-              className={`px-2 py-0.5 rounded text-[11px] font-medium transition ${
-                user?.email === acc.email
-                  ? 'bg-blue-600 text-white font-bold ring-1 ring-blue-300'
-                  : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
-              }`}
-            >
-              {acc.badge}
-            </button>
-          ))}
-        </div>
-      </div>
-
+    <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-xs">
       {/* Main Navigation Bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Brand + Role Badge */}
           <div className="flex items-center gap-3">
             <button
-              onClick={() => setCurrentTab('browse')}
+              onClick={() => setCurrentTab(user ? 'browse' : 'login')}
               className="flex items-center gap-2 text-xl font-bold text-gray-900 tracking-tight hover:opacity-90 transition"
             >
               <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-black shadow-xs">
@@ -99,19 +68,20 @@ export const Navbar: React.FC<NavbarProps> = ({
             )}
           </div>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-1 lg:space-x-2">
-            <button
-              onClick={() => setCurrentTab('browse')}
-              className={`px-3 py-2 rounded-md text-sm font-medium transition flex items-center gap-1.5 ${
-                currentTab === 'browse'
-                  ? 'bg-blue-50 text-blue-700 font-semibold'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-              }`}
-            >
-              <Home className="w-4 h-4" />
-              Browse
-            </button>
+          {/* Desktop Navigation Links (Only for authenticated users) */}
+          {user && (
+            <nav className="hidden md:flex items-center space-x-1 lg:space-x-2">
+              <button
+                onClick={() => setCurrentTab('browse')}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition flex items-center gap-1.5 ${
+                  currentTab === 'browse'
+                    ? 'bg-blue-50 text-blue-700 font-semibold'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                }`}
+              >
+                <Home className="w-4 h-4" />
+                Browse
+              </button>
 
             <button
               onClick={() => setCurrentTab('mess')}
@@ -232,7 +202,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 Chat
               </button>
             )}
-          </nav>
+            </nav>
+          )}
 
           {/* User Account / Auth Actions */}
           <div className="hidden md:flex items-center space-x-3">

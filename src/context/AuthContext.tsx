@@ -55,11 +55,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (token) {
       fetchCurrentUser(token);
     } else {
-      // Auto-login with Rahul (Student) on initial first load if no token saved
-      // so the evaluator immediately experiences the live app without a blank screen!
-      switchDemoAccount('rahul@college.edu').finally(() => {
-        setIsLoading(false);
-      });
+      setIsLoading(false);
     }
   }, []);
 

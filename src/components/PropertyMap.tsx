@@ -141,9 +141,9 @@ export const PropertyMap: React.FC<PropertyMapProps> = ({
   }, [properties, center, radiusKm, selectedPropertyId]);
 
   return (
-    <div className="relative w-full h-full min-h-[350px] rounded-xl overflow-hidden border border-gray-200 shadow-xs">
-      <div ref={mapContainerRef} className="w-full h-full min-h-[350px]" />
-      <div className="absolute bottom-3 left-3 z-[1000] bg-white/90 backdrop-blur-xs px-3 py-1.5 rounded-lg text-xs font-medium text-gray-700 shadow-xs border border-gray-200">
+    <div className="relative w-full h-full min-h-[300px] sm:min-h-[350px] rounded-xl overflow-hidden border border-gray-200 shadow-xs isolate z-0">
+      <div ref={mapContainerRef} className="w-full h-full min-h-[300px] sm:min-h-[350px]" />
+      <div className="absolute bottom-3 left-3 z-10 bg-white/95 backdrop-blur-xs px-3 py-1.5 rounded-lg text-xs font-medium text-gray-700 shadow-xs border border-gray-200 pointer-events-none">
         Showing properties within {radiusKm} km
       </div>
     </div>

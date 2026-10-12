@@ -99,7 +99,7 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
     : ['https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800'];
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5">
+    <div className="fixed inset-0 z-[100] overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5">
       <div className="relative bg-white rounded-2xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-gray-200">
         {/* Header */}
         <div className="sticky top-0 bg-white/95 backdrop-blur-xs z-10 px-6 py-4 border-b border-gray-200 flex items-center justify-between">

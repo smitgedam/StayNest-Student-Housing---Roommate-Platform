@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { ShieldAlert, UserCheck, CheckCircle2, XCircle, FileText, ExternalLink, Trash2 } from 'lucide-react';
+import { ShieldAlert, UserCheck, CheckCircle2, XCircle, FileText, ExternalLink, Trash2, Sparkles, Building, Utensils, Users, ArrowRight } from 'lucide-react';
 
 interface OwnerVerificationItem {
   id: string;
@@ -29,11 +29,11 @@ interface ReportItem {
   createdAt: string;
 }
 
-export const AdminPage: React.FC<{ initialSubTab?: 'verifications' | 'reports' }> = ({
+export const AdminPage: React.FC<{ initialSubTab?: 'verifications' | 'reports' | 'test_roles' }> = ({
   initialSubTab = 'verifications',
 }) => {
-  const { token } = useAuth();
-  const [activeTab, setActiveTab] = useState<'verifications' | 'reports'>(initialSubTab);
+  const { token, user, switchDemoAccount } = useAuth();
+  const [activeTab, setActiveTab] = useState<'verifications' | 'reports' | 'test_roles'>(initialSubTab);
   const [verificationFilter, setVerificationFilter] = useState<'pending' | 'approved' | 'rejected'>('pending');
 
   const [verifications, setVerifications] = useState<OwnerVerificationItem[]>([]);
@@ -150,10 +150,10 @@ export const AdminPage: React.FC<{ initialSubTab?: 'verifications' | 'reports' }
         </div>
 
         {/* Tab switchers */}
-        <div className="flex bg-gray-100 p-1 rounded-xl self-start sm:self-auto">
+        <div className="flex bg-gray-100 p-1 rounded-xl self-start sm:self-auto overflow-x-auto max-w-full">
           <button
             onClick={() => setActiveTab('verifications')}
-            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 ${
+            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 shrink-0 ${
               activeTab === 'verifications'
                 ? 'bg-white text-gray-900 shadow-xs'
                 : 'text-gray-600 hover:text-gray-900'
@@ -164,7 +164,7 @@ export const AdminPage: React.FC<{ initialSubTab?: 'verifications' | 'reports' }
           </button>
           <button
             onClick={() => setActiveTab('reports')}
-            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 ${
+            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 shrink-0 ${
               activeTab === 'reports'
                 ? 'bg-white text-gray-900 shadow-xs'
                 : 'text-gray-600 hover:text-gray-900'
@@ -173,10 +173,21 @@ export const AdminPage: React.FC<{ initialSubTab?: 'verifications' | 'reports' }
             <ShieldAlert className="w-4 h-4" />
             Reports ({reports.length})
           </button>
+          <button
+            onClick={() => setActiveTab('test_roles')}
+            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 shrink-0 ${
+              activeTab === 'test_roles'
+                ? 'bg-blue-600 text-white shadow-xs'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            <Sparkles className="w-4 h-4" />
+            Quick Test Roles
+          </button>
         </div>
       </div>
 
-      {activeTab === 'verifications' ? (
+      {activeTab === 'verifications' && (
         <div className="space-y-4">
           {/* Sub-tabs: Pending, Approved, Rejected */}
           <div className="flex items-center gap-2">
@@ -297,8 +308,10 @@ export const AdminPage: React.FC<{ initialSubTab?: 'verifications' | 'reports' }
             </div>
           )}
         </div>
-      ) : (
-        /* Tab 2: Reports Queue */
+      )}
+
+      {/* Tab 2: Reports Queue */}
+      {activeTab === 'reports' && (
         <div className="space-y-4">
           <div className="bg-amber-50 border border-amber-300 text-amber-900 text-xs px-4 py-2 rounded-xl">
             Live student reports on listings (Fake listings, wrong pricing, already rented). Administrators can audit or take down listings.
@@ -368,6 +381,115 @@ export const AdminPage: React.FC<{ initialSubTab?: 'verifications' | 'reports' }
               ))}
             </div>
           )}
+        </div>
+      )}
+
+      {/* Tab 3: Quick Test Roles Tab */}
+      {activeTab === 'test_roles' && (
+        <div className="space-y-5">
+          <div className="bg-blue-50 border border-blue-200 text-blue-900 text-xs p-4 rounded-xl flex items-center justify-between">
+            <div>
+              <h3 className="font-bold text-sm text-blue-950 flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-blue-600" /> Admin Role Switcher & Persona Tester
+              </h3>
+              <p className="text-xs text-blue-800 mt-0.5">
+                This tab is strictly available to Administrators to test user flows, RBAC restrictions, and real-time behavior.
+              </p>
+            </div>
+            <span className="text-[11px] font-mono bg-blue-100 px-2.5 py-1 rounded-md font-bold text-blue-800">
+              Active: {user?.role} ({user?.name})
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Student Role */}
+            <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-xs space-y-3 flex flex-col justify-between">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+                    <Users className="w-3.5 h-3.5" /> Student Persona
+                  </span>
+                  <span className="text-xs text-gray-500 font-mono">rahul@college.edu</span>
+                </div>
+                <h4 className="font-bold text-gray-900 text-base">Rahul Sharma</h4>
+                <p className="text-xs text-gray-600">
+                  Tests the student flow: browse verified listings, search radius on interactive Leaflet map, apply amenity filters, send booking requests, calculate roommate compatibility, and post verified resident reviews.
+                </p>
+              </div>
+              <button
+                onClick={() => switchDemoAccount('rahul@college.edu')}
+                className="w-full py-2 bg-slate-900 hover:bg-blue-600 text-white text-xs font-bold rounded-lg transition flex items-center justify-center gap-1.5"
+              >
+                Switch to Student <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            {/* Verified Owner Role */}
+            <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-xs space-y-3 flex flex-col justify-between">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <Building className="w-3.5 h-3.5" /> Verified Owner
+                  </span>
+                  <span className="text-xs text-gray-500 font-mono">vikram@staynest.com</span>
+                </div>
+                <h4 className="font-bold text-gray-900 text-base">Vikram Malhotra</h4>
+                <p className="text-xs text-gray-600">
+                  Tests verified property owner features: publish new listings with map picker, 1-tap live availability toggle (AVAILABLE ↔ RENTED), stale-listing confirmation, and booking request acceptance.
+                </p>
+              </div>
+              <button
+                onClick={() => switchDemoAccount('vikram@staynest.com')}
+                className="w-full py-2 bg-slate-900 hover:bg-emerald-600 text-white text-xs font-bold rounded-lg transition flex items-center justify-center gap-1.5"
+              >
+                Switch to Verified Owner <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            {/* Unverified Owner Role */}
+            <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-xs space-y-3 flex flex-col justify-between">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-300">
+                    <ShieldAlert className="w-3.5 h-3.5" /> Unverified Owner
+                  </span>
+                  <span className="text-xs text-gray-500 font-mono">suresh@staynest.com</span>
+                </div>
+                <h4 className="font-bold text-gray-900 text-base">Suresh Raina</h4>
+                <p className="text-xs text-gray-600">
+                  Tests anti-fraud verification gate: publishing is strictly blocked until an admin verifies property proof & ID. Uploads documents to the admin queue.
+                </p>
+              </div>
+              <button
+                onClick={() => switchDemoAccount('suresh@staynest.com')}
+                className="w-full py-2 bg-slate-900 hover:bg-amber-600 text-white text-xs font-bold rounded-lg transition flex items-center justify-center gap-1.5"
+              >
+                Switch to Unverified Owner <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            {/* Mess Provider Role */}
+            <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-xs space-y-3 flex flex-col justify-between">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200">
+                    <Utensils className="w-3.5 h-3.5" /> Mess Provider
+                  </span>
+                  <span className="text-xs text-gray-500 font-mono">annapurna@staynest.com</span>
+                </div>
+                <h4 className="font-bold text-gray-900 text-base">Annapurna Tiffin</h4>
+                <p className="text-xs text-gray-600">
+                  Tests food services: create and manage daily meal plans, configure delivery radius (km), kitchen map pin, trial meals, and chat with interested student tenants.
+                </p>
+              </div>
+              <button
+                onClick={() => switchDemoAccount('annapurna@staynest.com')}
+                className="w-full py-2 bg-slate-900 hover:bg-purple-600 text-white text-xs font-bold rounded-lg transition flex items-center justify-center gap-1.5"
+              >
+                Switch to Mess Provider <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

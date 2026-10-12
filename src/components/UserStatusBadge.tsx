@@ -62,37 +62,39 @@ export const UserStatusBadge: React.FC = () => {
             </span>
           </div>
 
-          <div className="pt-1.5 border-t border-gray-200">
-            <span className="block text-[10px] font-bold text-gray-400 uppercase mb-1">
-              Quick Role Switch
-            </span>
-            <div className="grid grid-cols-2 gap-1 text-[11px]">
-              <button
-                onClick={() => switchDemoAccount('rahul@college.edu')}
-                className="p-1 text-left bg-white border rounded hover:bg-gray-100"
-              >
-                Student
-              </button>
-              <button
-                onClick={() => switchDemoAccount('vikram@staynest.com')}
-                className="p-1 text-left bg-white border rounded hover:bg-gray-100"
-              >
-                Owner
-              </button>
-              <button
-                onClick={() => switchDemoAccount('suresh@staynest.com')}
-                className="p-1 text-left bg-white border rounded hover:bg-gray-100"
-              >
-                Unverified Owner
-              </button>
-              <button
-                onClick={() => switchDemoAccount('admin@staynest.com')}
-                className="p-1 text-left bg-white border rounded hover:bg-gray-100"
-              >
-                Admin
-              </button>
+          {user.role === 'admin' && (
+            <div className="pt-1.5 border-t border-gray-200">
+              <span className="block text-[10px] font-bold text-gray-400 uppercase mb-1">
+                Admin Role Switcher
+              </span>
+              <div className="grid grid-cols-2 gap-1 text-[11px]">
+                <button
+                  onClick={() => switchDemoAccount('rahul@college.edu')}
+                  className="p-1 text-left bg-white border rounded hover:bg-gray-100"
+                >
+                  Student
+                </button>
+                <button
+                  onClick={() => switchDemoAccount('vikram@staynest.com')}
+                  className="p-1 text-left bg-white border rounded hover:bg-gray-100"
+                >
+                  Owner
+                </button>
+                <button
+                  onClick={() => switchDemoAccount('suresh@staynest.com')}
+                  className="p-1 text-left bg-white border rounded hover:bg-gray-100"
+                >
+                  Unverified Owner
+                </button>
+                <button
+                  onClick={() => switchDemoAccount('admin@staynest.com')}
+                  className="p-1 text-left bg-white border rounded hover:bg-gray-100"
+                >
+                  Admin
+                </button>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       )}
     </aside>

@@ -58,7 +58,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
   }, [value]);
 
   return (
-    <div className="space-y-1.5">
+    <div className="space-y-1.5 relative isolate z-0">
       <div className="flex items-center justify-between text-xs text-gray-500">
         <span>{label}</span>
         <span className="font-mono bg-gray-100 px-2 py-0.5 rounded text-[11px]">
@@ -68,7 +68,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
       <div
         ref={containerRef}
         style={{ height }}
-        className="w-full rounded-lg border border-gray-300 overflow-hidden relative shadow-inner"
+        className="w-full rounded-lg border border-gray-300 overflow-hidden relative shadow-inner isolate z-0"
       />
     </div>
   );

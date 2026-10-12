@@ -40,6 +40,10 @@ export const BrowsePage: React.FC<BrowsePageProps> = ({
   const [parking, setParking] = useState<boolean>(false);
   const [powerBackup, setPowerBackup] = useState<boolean>(false);
 
+  // Responsive state
+  const [mobileView, setMobileView] = useState<'list' | 'map'>('list');
+  const [showFiltersMobile, setShowFiltersMobile] = useState<boolean>(false);
+
   const fetchProperties = async () => {
     setLoading(true);
     try {
@@ -145,9 +149,35 @@ export const BrowsePage: React.FC<BrowsePageProps> = ({
         )}
       </div>
 
+      {/* Mobile view and filter controls */}
+      <div className="flex lg:hidden items-center justify-between gap-2 pb-2">
+        <button
+          onClick={() => setShowFiltersMobile(!showFiltersMobile)}
+          className="px-3.5 py-2 bg-white border border-gray-300 rounded-xl text-xs font-bold text-gray-700 flex items-center gap-1.5 shadow-xs"
+        >
+          <SlidersHorizontal className="w-3.5 h-3.5 text-blue-600" />
+          {showFiltersMobile ? 'Hide Filters' : 'Filter Properties'}
+        </button>
+
+        <div className="flex md:hidden bg-gray-200 p-0.5 rounded-lg text-xs font-semibold">
+          <button
+            onClick={() => setMobileView('list')}
+            className={`px-3 py-1 rounded-md transition ${mobileView === 'list' ? 'bg-white text-gray-900 shadow-xs' : 'text-gray-600'}`}
+          >
+            List ({properties.length})
+          </button>
+          <button
+            onClick={() => setMobileView('map')}
+            className={`px-3 py-1 rounded-md transition ${mobileView === 'map' ? 'bg-white text-gray-900 shadow-xs' : 'text-gray-600'}`}
+          >
+            Map View
+          </button>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column: Filters (3 Cols) */}
-        <div className="lg:col-span-3 bg-white p-5 rounded-xl border border-gray-200 shadow-xs space-y-4">
+        <div className={`${showFiltersMobile ? 'block' : 'hidden'} lg:block lg:col-span-3 bg-white p-5 rounded-xl border border-gray-200 shadow-xs space-y-4`}>
           <div className="flex items-center justify-between border-b border-gray-100 pb-3">
             <span className="font-bold text-sm text-gray-900 flex items-center gap-1.5">
               <SlidersHorizontal className="w-4 h-4 text-blue-600" /> Filters
@@ -272,7 +302,10 @@ export const BrowsePage: React.FC<BrowsePageProps> = ({
 
           <div className="pt-2 space-y-2">
             <button
-              onClick={handleApplyFilters}
+              onClick={() => {
+                handleApplyFilters();
+                setShowFiltersMobile(false);
+              }}
               className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-lg transition shadow-xs"
             >
               Apply
@@ -319,7 +352,7 @@ export const BrowsePage: React.FC<BrowsePageProps> = ({
           {/* Split Content: Cards on left, Leaflet Map on right */}
           <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
             {/* Listing Cards (7 cols) */}
-            <div className="md:col-span-7 space-y-3">
+            <div className={`${mobileView === 'map' ? 'hidden md:block' : 'block'} md:col-span-7 space-y-3`}>
               {loading ? (
                 <div className="p-12 text-center text-xs text-gray-500 bg-white rounded-xl border">
                   Finding available nests...
@@ -348,7 +381,7 @@ export const BrowsePage: React.FC<BrowsePageProps> = ({
             </div>
 
             {/* Map (5 cols) */}
-            <div className="md:col-span-5 h-[420px] md:h-[620px] sticky top-24">
+            <div className={`${mobileView === 'list' ? 'hidden md:block' : 'block'} md:col-span-5 h-[360px] md:h-[620px] md:sticky md:top-24`}>
               <PropertyMap
                 properties={properties}
                 center={centerCoords}

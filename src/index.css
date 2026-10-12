@@ -1,1 +1,23 @@
 @import "tailwindcss";
+
+/* Leaflet Stacking Context Containment to prevent map from bleeding over Navbar or Modals */
+.leaflet-container {
+  z-index: 0 !important;
+  font-family: inherit;
+}
+
+.leaflet-pane {
+  z-index: 10 !important;
+}
+
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 20 !important;
+}
+
+/* Ensure smooth scrolling and touch targets on mobile */
+html, body {
+  overflow-x: hidden;
+  touch-action: manipulation;
+}
+

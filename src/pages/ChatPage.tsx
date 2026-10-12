@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useSocket } from '../context/SocketContext';
 import { Message, ChatThreadSummary } from '../types';
-import { Send, MessageSquare, Building, Check, CheckCheck, User } from 'lucide-react';
+import { Send, MessageSquare, Building, Check, CheckCheck, User, ArrowLeft } from 'lucide-react';
 
 interface ChatPageProps {
   initialRecipientId?: string | null;
@@ -23,6 +23,7 @@ export const ChatPage: React.FC<ChatPageProps> = ({
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
   const [loadingThreads, setLoadingThreads] = useState(true);
+  const [mobileView, setMobileView] = useState<'list' | 'chat'>(initialRecipientId ? 'chat' : 'list');
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const typingTimeoutRef = useRef<any>(null);
@@ -186,7 +187,7 @@ export const ChatPage: React.FC<ChatPageProps> = ({
 
       <div className="bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden grid grid-cols-1 md:grid-cols-12 min-h-[580px]">
         {/* Left Column: Conversations List (4 cols) */}
-        <div className="md:col-span-4 border-r border-gray-200 flex flex-col">
+        <div className={`${mobileView === 'chat' ? 'hidden md:flex' : 'flex'} md:col-span-4 border-r border-gray-200 flex-col`}>
           <div className="p-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
             <h2 className="font-bold text-gray-900 text-sm">Conversations</h2>
             <span className="text-xs text-gray-500 font-medium">{threads.length} threads</span>
@@ -210,6 +211,7 @@ export const ChatPage: React.FC<ChatPageProps> = ({
                     onClick={() => {
                       setActiveRecipientId(t.otherUser.id);
                       setActivePropertyId(t.property?.id || null);
+                      setMobileView('chat');
                     }}
                     className={`w-full text-left p-3.5 transition flex items-start gap-3 ${
                       isActive ? 'bg-blue-50/70 border-l-4 border-blue-600' : 'hover:bg-gray-50'
@@ -260,13 +262,21 @@ export const ChatPage: React.FC<ChatPageProps> = ({
         </div>
 
         {/* Right Column: Chat Window (8 cols) */}
-        <div className="md:col-span-8 flex flex-col h-[580px]">
+        <div className={`${mobileView === 'list' ? 'hidden md:flex' : 'flex'} md:col-span-8 flex-col h-[580px]`}>
           {activeRecipientId ? (
             <>
               {/* Chat Header */}
               <div className="p-4 border-b border-gray-200 flex items-center justify-between bg-white">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <button
+                    onClick={() => setMobileView('list')}
+                    className="md:hidden p-1.5 -ml-1 text-gray-500 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition"
+                    title="Back to conversations"
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                  </button>
+
+                  <div className="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs shrink-0">
                     {activePartnerName.charAt(0)}
                   </div>
                   <div>
