@@ -174,33 +174,33 @@ export const ChatPage: React.FC<ChatPageProps> = ({
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-4">
-      {/* Top Banner matching Wireframe Page 9 */}
-      <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs px-4 py-2 rounded-xl flex items-center justify-between">
-        <span className="font-semibold flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          Real-time chat active (Socket.io + JWT authenticated session)
-        </span>
-        <span className="text-[11px] text-emerald-700 hidden sm:inline">
-          Instant messaging between students, verified owners & mess providers
-        </span>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+            Messages
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+            Direct real-time conversations with verified property owners, roommates, and mess providers.
+          </p>
+        </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden grid grid-cols-1 md:grid-cols-12 min-h-[580px]">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden grid grid-cols-1 md:grid-cols-12 min-h-[580px]">
         {/* Left Column: Conversations List (4 cols) */}
-        <div className={`${mobileView === 'chat' ? 'hidden md:flex' : 'flex'} md:col-span-4 border-r border-gray-200 flex-col`}>
-          <div className="p-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
-            <h2 className="font-bold text-gray-900 text-sm">Conversations</h2>
-            <span className="text-xs text-gray-500 font-medium">{threads.length} threads</span>
+        <div className={`${mobileView === 'chat' ? 'hidden md:flex' : 'flex'} md:col-span-4 border-r border-slate-200 dark:border-slate-800 flex-col`}>
+          <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-850">
+            <h2 className="font-bold text-slate-900 dark:text-white text-sm">Conversations</h2>
+            <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">{threads.length} active</span>
           </div>
 
-          <div className="overflow-y-auto flex-1 divide-y divide-gray-100">
+          <div className="overflow-y-auto flex-1 divide-y divide-slate-100 dark:divide-slate-800">
             {loadingThreads ? (
-              <div className="p-8 text-center text-xs text-gray-500">Loading chats...</div>
+              <div className="p-8 text-center text-xs text-slate-500 dark:text-slate-400">Loading chats...</div>
             ) : threads.length === 0 ? (
-              <div className="p-8 text-center text-xs text-gray-500 space-y-1">
-                <MessageSquare className="w-6 h-6 text-gray-300 mx-auto" />
+              <div className="p-8 text-center text-xs text-slate-500 dark:text-slate-400 space-y-1">
+                <MessageSquare className="w-6 h-6 text-slate-300 dark:text-slate-600 mx-auto" />
                 <p>No conversations yet.</p>
-                <p className="text-[11px] text-gray-400">Click "Chat" on any listing or roommate card.</p>
+                <p className="text-[11px] text-slate-400 dark:text-slate-500">Click "Chat" on any listing or roommate card.</p>
               </div>
             ) : (
               threads.map((t) => {
@@ -214,35 +214,35 @@ export const ChatPage: React.FC<ChatPageProps> = ({
                       setMobileView('chat');
                     }}
                     className={`w-full text-left p-3.5 transition flex items-start gap-3 ${
-                      isActive ? 'bg-blue-50/70 border-l-4 border-blue-600' : 'hover:bg-gray-50'
+                      isActive ? 'bg-slate-100/80 dark:bg-slate-800 font-medium' : 'hover:bg-slate-50 dark:hover:bg-slate-800/50'
                     }`}
                   >
-                    <div className="w-9 h-9 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold text-xs shrink-0">
+                    <div className="w-9 h-9 rounded-full bg-slate-900 dark:bg-blue-600 text-white flex items-center justify-center font-bold text-xs shrink-0">
                       {t.otherUser.name.charAt(0)}
                     </div>
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
-                        <h4 className="font-bold text-xs text-gray-900 truncate">
+                        <h4 className="font-bold text-xs text-gray-900 dark:text-white truncate">
                           {t.otherUser.name}
                         </h4>
-                        <span className="text-[10px] text-gray-400">
+                        <span className="text-[10px] text-gray-400 dark:text-slate-500">
                           {new Date(t.lastMessage.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
                       </div>
 
-                      <p className="text-xs text-gray-500 truncate mt-0.5">
+                      <p className="text-xs text-gray-500 dark:text-slate-400 truncate mt-0.5">
                         {t.lastMessage.isMine ? 'You: ' : ''}
                         {t.lastMessage.text}
                       </p>
 
                       <div className="flex items-center gap-1.5 mt-1">
                         {t.property ? (
-                          <span className="text-[10px] bg-gray-100 text-gray-700 px-1.5 py-0.2 rounded truncate">
+                          <span className="text-[10px] bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-slate-300 px-1.5 py-0.2 rounded truncate">
                             {t.property.title}
                           </span>
                         ) : (
-                          <span className="text-[10px] bg-purple-50 text-purple-700 px-1.5 py-0.2 rounded">
+                          <span className="text-[10px] bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 px-1.5 py-0.2 rounded">
                             Roommate match
                           </span>
                         )}
@@ -266,11 +266,11 @@ export const ChatPage: React.FC<ChatPageProps> = ({
           {activeRecipientId ? (
             <>
               {/* Chat Header */}
-              <div className="p-4 border-b border-gray-200 flex items-center justify-between bg-white">
+              <div className="p-4 border-b border-gray-200 dark:border-slate-800 flex items-center justify-between bg-white dark:bg-slate-900">
                 <div className="flex items-center gap-2 sm:gap-3">
                   <button
                     onClick={() => setMobileView('list')}
-                    className="md:hidden p-1.5 -ml-1 text-gray-500 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition"
+                    className="md:hidden p-1.5 -ml-1 text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition"
                     title="Back to conversations"
                   >
                     <ArrowLeft className="w-4 h-4" />
@@ -281,15 +281,15 @@ export const ChatPage: React.FC<ChatPageProps> = ({
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <h3 className="font-bold text-sm text-gray-900">{activePartnerName}</h3>
+                      <h3 className="font-bold text-sm text-gray-900 dark:text-white">{activePartnerName}</h3>
                       {activeThreadInfo?.property && (
-                        <span className="text-[11px] font-semibold bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full flex items-center gap-1">
-                          <Building className="w-3 h-3 text-blue-600" />
+                        <span className="text-[11px] font-semibold bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-slate-300 px-2 py-0.5 rounded-full flex items-center gap-1">
+                          <Building className="w-3 h-3 text-blue-600 dark:text-blue-400" />
                           {activeThreadInfo.property.title}
                         </span>
                       )}
                     </div>
-                    <span className="text-[11px] text-emerald-600 font-medium flex items-center gap-1">
+                    <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                       online
                     </span>
@@ -298,9 +298,9 @@ export const ChatPage: React.FC<ChatPageProps> = ({
               </div>
 
               {/* Messages Stream */}
-              <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-gray-50/30">
+              <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-gray-50/30 dark:bg-slate-950/40">
                 {messages.length === 0 ? (
-                  <div className="h-full flex items-center justify-center text-xs text-gray-400">
+                  <div className="h-full flex items-center justify-center text-xs text-gray-400 dark:text-slate-500">
                     No messages yet. Send a greeting to start the conversation!
                   </div>
                 ) : (
@@ -314,13 +314,13 @@ export const ChatPage: React.FC<ChatPageProps> = ({
                         <div
                           className={`max-w-[75%] rounded-2xl px-4 py-2.5 text-xs sm:text-sm leading-relaxed ${
                             isMine
-                              ? 'bg-slate-900 text-white rounded-br-xs shadow-xs'
-                              : 'bg-white border border-gray-200 text-gray-900 rounded-bl-xs shadow-xs'
+                              ? 'bg-slate-900 dark:bg-blue-600 text-white rounded-br-xs shadow-xs'
+                              : 'bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-900 dark:text-slate-100 rounded-bl-xs shadow-xs'
                           }`}
                         >
                           {m.text}
                         </div>
-                        <span className="text-[10px] text-gray-400 mt-1 px-1">
+                        <span className="text-[10px] text-gray-400 dark:text-slate-500 mt-1 px-1">
                           {new Date(m.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
                       </div>
@@ -330,7 +330,7 @@ export const ChatPage: React.FC<ChatPageProps> = ({
 
                 {/* Real-time typing indicator */}
                 {isTyping && (
-                  <div className="text-xs text-gray-500 italic bg-white border border-gray-200 rounded-full px-3 py-1 inline-flex items-center gap-1.5 animate-pulse">
+                  <div className="text-xs text-gray-500 dark:text-slate-400 italic bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-full px-3 py-1 inline-flex items-center gap-1.5 animate-pulse">
                     <span>{activePartnerName} is typing...</span>
                   </div>
                 )}
@@ -339,18 +339,18 @@ export const ChatPage: React.FC<ChatPageProps> = ({
               </div>
 
               {/* Message Input Box */}
-              <form onSubmit={handleSendMessage} className="p-3 bg-white border-t border-gray-200 flex gap-2">
+              <form onSubmit={handleSendMessage} className="p-3 bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-800 flex gap-2">
                 <input
                   type="text"
                   value={inputText}
                   onChange={handleInputChange}
                   placeholder="Type a message..."
-                  className="flex-1 text-xs sm:text-sm rounded-xl border border-gray-300 px-3.5 py-2.5 focus:border-blue-500 focus:outline-none"
+                  className="flex-1 text-xs sm:text-sm rounded-xl border border-gray-300 dark:border-slate-700 px-3.5 py-2.5 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none"
                 />
                 <button
                   type="submit"
                   disabled={!inputText.trim()}
-                  className="px-4 py-2.5 bg-slate-900 hover:bg-blue-600 text-white rounded-xl text-xs font-bold transition shadow-xs disabled:opacity-40 flex items-center gap-1.5"
+                  className="px-4 py-2.5 bg-slate-900 dark:bg-blue-600 hover:bg-blue-600 dark:hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition shadow-xs disabled:opacity-40 flex items-center gap-1.5"
                 >
                   <span>Send</span>
                   <Send className="w-3.5 h-3.5" />
@@ -358,7 +358,7 @@ export const ChatPage: React.FC<ChatPageProps> = ({
               </form>
             </>
           ) : (
-            <div className="h-full flex items-center justify-center text-xs text-gray-400 p-8 text-center">
+            <div className="h-full flex items-center justify-center text-xs text-gray-400 dark:text-slate-500 p-8 text-center">
               Select a conversation from the left to start real-time messaging.
             </div>
           )}

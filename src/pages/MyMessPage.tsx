@@ -130,66 +130,66 @@ export const MyMessPage: React.FC = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
       {/* Title */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white tracking-tight">
           My mess
         </h1>
-        <p className="text-xs sm:text-sm text-gray-500 mt-1">
+        <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-1">
           Manage your student kitchen service, subscription tiers, and campus delivery radius.
         </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column: Create Mess Listing (7 cols) */}
-        <div className="lg:col-span-7 bg-white p-6 rounded-xl border border-gray-200 shadow-xs space-y-4">
-          <div className="border-b border-gray-100 pb-3">
-            <h2 className="font-bold text-base text-gray-900 flex items-center gap-2">
-              <Utensils className="w-4 h-4 text-amber-600" /> Create mess listing
+        <div className="lg:col-span-7 bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-slate-800 shadow-xs space-y-4">
+          <div className="border-b border-gray-100 dark:border-slate-800 pb-3">
+            <h2 className="font-bold text-base text-gray-900 dark:text-white flex items-center gap-2">
+              <Utensils className="w-4 h-4 text-amber-600 dark:text-amber-400" /> Create mess listing
             </h2>
           </div>
 
           {formError && (
-            <div className="p-3 bg-red-50 text-red-700 text-xs rounded-lg font-medium">
+            <div className="p-3 bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300 text-xs rounded-lg font-medium">
               {formError}
             </div>
           )}
 
           {formSuccess && (
-            <div className="p-3 bg-emerald-50 text-emerald-800 text-xs rounded-lg font-semibold">
+            <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 text-xs rounded-lg font-semibold">
               {formSuccess}
             </div>
           )}
 
           <form onSubmit={handleCreateMess} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-gray-700 mb-1">Name</label>
+              <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">Name</label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Business name (e.g. Annapurna Tiffin)"
-                className="w-full text-xs rounded-lg border border-gray-300 p-2.5 focus:border-blue-500 focus:outline-none"
+                className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white p-2.5 focus:border-blue-500 focus:outline-none"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-gray-700 mb-1">Description</label>
+              <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">Description</label>
               <textarea
                 rows={2}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="What you serve (homestyle north indian, roti varieties, spice options...)"
-                className="w-full text-xs rounded-lg border border-gray-300 p-2.5 focus:border-blue-500 focus:outline-none resize-none"
+                className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white p-2.5 focus:border-blue-500 focus:outline-none resize-none"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">Diet</label>
+                <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">Diet</label>
                 <select
                   value={dietType}
                   onChange={(e) => setDietType(e.target.value)}
-                  className="w-full text-xs rounded-lg border border-gray-300 p-2.5 focus:border-blue-500 focus:outline-none"
+                  className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white p-2.5 focus:border-blue-500 focus:outline-none"
                 >
                   <option value="veg">Pure Vegetarian</option>
                   <option value="non-veg">Non-vegetarian</option>
@@ -198,25 +198,25 @@ export const MyMessPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">Delivery radius (km)</label>
+                <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">Delivery radius (km)</label>
                 <input
                   type="number"
                   value={deliveryRadiusKm}
                   onChange={(e) => setDeliveryRadiusKm(e.target.value)}
-                  className="w-full text-xs rounded-lg border border-gray-300 p-2.5 focus:border-blue-500 focus:outline-none"
+                  className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white p-2.5 focus:border-blue-500 focus:outline-none"
                   required
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-gray-700 mb-1">Kitchen Address</label>
+              <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">Kitchen Address</label>
               <input
                 type="text"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 placeholder="Kitchen address"
-                className="w-full text-xs rounded-lg border border-gray-300 p-2.5 focus:border-blue-500 focus:outline-none"
+                className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white p-2.5 focus:border-blue-500 focus:outline-none"
                 required
               />
             </div>
@@ -229,29 +229,29 @@ export const MyMessPage: React.FC = () => {
             />
 
             {/* Plans Editor */}
-            <div className="space-y-3 pt-2 border-t border-gray-100">
+            <div className="space-y-3 pt-2 border-t border-gray-100 dark:border-slate-800">
               <div className="flex items-center justify-between">
-                <label className="block text-xs font-bold text-gray-800 uppercase tracking-wider">
+                <label className="block text-xs font-bold text-gray-800 dark:text-slate-200 uppercase tracking-wider">
                   Subscription Plans
                 </label>
                 <button
                   type="button"
                   onClick={handleAddPlan}
-                  className="text-xs text-blue-600 font-bold hover:underline flex items-center gap-1"
+                  className="text-xs text-blue-600 dark:text-blue-400 font-bold hover:underline flex items-center gap-1"
                 >
                   <Plus className="w-3.5 h-3.5" /> Add plan
                 </button>
               </div>
 
               {plans.map((p, idx) => (
-                <div key={idx} className="p-3 bg-gray-50 rounded-xl border border-gray-200 grid grid-cols-12 gap-2 items-center">
+                <div key={idx} className="p-3 bg-gray-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-750 grid grid-cols-12 gap-2 items-center">
                   <div className="col-span-5">
                     <input
                       type="text"
                       value={p.name}
                       onChange={(e) => handleUpdatePlan(idx, 'name', e.target.value)}
                       placeholder="Plan name"
-                      className="w-full text-xs bg-white border border-gray-300 rounded p-1.5"
+                      className="w-full text-xs bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-700 text-gray-900 dark:text-white rounded p-1.5"
                     />
                   </div>
                   <div className="col-span-3">
@@ -260,7 +260,7 @@ export const MyMessPage: React.FC = () => {
                       value={p.pricePerMonth}
                       onChange={(e) => handleUpdatePlan(idx, 'pricePerMonth', Number(e.target.value))}
                       placeholder="Rs / mo"
-                      className="w-full text-xs bg-white border border-gray-300 rounded p-1.5"
+                      className="w-full text-xs bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-700 text-gray-900 dark:text-white rounded p-1.5"
                     />
                   </div>
                   <div className="col-span-3">
@@ -271,7 +271,7 @@ export const MyMessPage: React.FC = () => {
                         handleUpdatePlan(idx, 'mealsIncluded', e.target.value.split(',').map((s) => s.trim()))
                       }
                       placeholder="lunch, dinner"
-                      className="w-full text-xs bg-white border border-gray-300 rounded p-1.5"
+                      className="w-full text-xs bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-700 text-gray-900 dark:text-white rounded p-1.5"
                     />
                   </div>
                   <div className="col-span-1 text-right">
@@ -279,7 +279,7 @@ export const MyMessPage: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => handleRemovePlan(idx)}
-                        className="text-gray-400 hover:text-red-600"
+                        className="text-gray-400 hover:text-red-600 dark:hover:text-red-400"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -291,24 +291,24 @@ export const MyMessPage: React.FC = () => {
 
             {/* Trial Meal Option */}
             <div className="flex items-center gap-4 pt-2">
-              <label className="flex items-center gap-2 text-xs font-medium text-gray-700 cursor-pointer">
+              <label className="flex items-center gap-2 text-xs font-medium text-gray-700 dark:text-slate-300 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={trialMealAvailable}
                   onChange={(e) => setTrialMealAvailable(e.target.checked)}
-                  className="rounded text-blue-600 border-gray-300"
+                  className="rounded text-blue-600 border-gray-300 dark:border-slate-700"
                 />
                 Trial meal available
               </label>
 
               {trialMealAvailable && (
                 <div className="flex items-center gap-1.5">
-                  <span className="text-xs text-gray-500">Trial Price ₹:</span>
+                  <span className="text-xs text-gray-500 dark:text-slate-400">Trial Price ₹:</span>
                   <input
                     type="number"
                     value={trialMealPrice}
                     onChange={(e) => setTrialMealPrice(e.target.value)}
-                    className="w-20 text-xs rounded border border-gray-300 p-1"
+                    className="w-20 text-xs rounded border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white p-1"
                   />
                 </div>
               )}
@@ -316,7 +316,7 @@ export const MyMessPage: React.FC = () => {
 
             <button
               type="submit"
-              className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-lg transition shadow-xs"
+              className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 dark:bg-blue-600 dark:hover:bg-blue-700 text-white font-bold text-xs rounded-lg transition shadow-xs"
             >
               Publish mess listing
             </button>
@@ -324,42 +324,42 @@ export const MyMessPage: React.FC = () => {
         </div>
 
         {/* Right Column: My Listings (5 cols) */}
-        <div className="lg:col-span-5 bg-white p-5 rounded-xl border border-gray-200 shadow-xs space-y-3">
-          <div className="flex items-center justify-between border-b border-gray-100 pb-3">
-            <h2 className="font-bold text-base text-gray-900">My listings</h2>
-            <span className="text-xs text-gray-500">{myMessList.length} services</span>
+        <div className="lg:col-span-5 bg-white dark:bg-slate-900 p-5 rounded-xl border border-gray-200 dark:border-slate-800 shadow-xs space-y-3">
+          <div className="flex items-center justify-between border-b border-gray-100 dark:border-slate-800 pb-3">
+            <h2 className="font-bold text-base text-gray-900 dark:text-white">My listings</h2>
+            <span className="text-xs text-gray-500 dark:text-slate-400">{myMessList.length} services</span>
           </div>
 
           {loading ? (
-            <p className="text-xs text-gray-500 py-4 text-center">Loading listings...</p>
+            <p className="text-xs text-gray-500 dark:text-slate-400 py-4 text-center">Loading listings...</p>
           ) : myMessList.length === 0 ? (
-            <p className="text-xs text-gray-500 py-4 text-center">No mess services listed yet.</p>
+            <p className="text-xs text-gray-500 dark:text-slate-400 py-4 text-center">No mess services listed yet.</p>
           ) : (
             <div className="space-y-3">
               {myMessList.map((m) => (
                 <div
                   key={m.id}
-                  className="p-4 rounded-xl border border-gray-200 flex items-center justify-between gap-2"
+                  className="p-4 rounded-xl border border-gray-200 dark:border-slate-800 bg-gray-50/40 dark:bg-slate-800/40 flex items-center justify-between gap-2"
                 >
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-sm text-gray-900">{m.name}</span>
-                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 uppercase">
+                      <span className="font-bold text-sm text-gray-900 dark:text-white">{m.name}</span>
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 uppercase">
                         {m.dietType}
                       </span>
                     </div>
-                    <p className="text-xs text-gray-500 mt-0.5">
+                    <p className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">
                       Rating {m.ratingAvg} • Radius: {m.deliveryRadiusKm} km
                     </p>
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 cursor-pointer">
+                    <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 dark:text-slate-300 cursor-pointer">
                       <input
                         type="checkbox"
                         checked={m.active}
                         onChange={() => handleToggleActive(m)}
-                        className="rounded text-blue-600 border-gray-300"
+                        className="rounded text-blue-600 border-gray-300 dark:border-slate-700"
                       />
                       Active
                     </label>

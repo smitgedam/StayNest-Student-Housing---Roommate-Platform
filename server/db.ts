@@ -9,6 +9,10 @@ import {
   Property,
   Review,
   User,
+  MaintenanceTicket,
+  ExpenseItem,
+  MealVote,
+  NeighborhoodSafetyReview,
 } from './types';
 
 // Default password hash for 'password123'
@@ -22,6 +26,10 @@ interface DatabaseState {
   reviews: Review[];
   messages: Message[];
   reports: ListingReport[];
+  maintenanceTickets: MaintenanceTicket[];
+  expenses: ExpenseItem[];
+  mealVotes: MealVote[];
+  safetyReviews: NeighborhoodSafetyReview[];
 }
 
 const DB_FILE = path.resolve(process.cwd(), 'data_store.json');
@@ -42,6 +50,12 @@ function getInitialData(): DatabaseState {
         diet: 'veg',
         smoking: 'no',
         studyHabits: 'quiet',
+        cleanliness: 'neat_freak',
+        guestPolicy: 'no_parties',
+        foodSharing: 'independent',
+        budgetMin: 6000,
+        budgetMax: 11000,
+        interests: ['Coding', 'Tech Projects', 'Gym & Fitness', 'Reading'],
         lookingForRoommate: true,
       },
       ratingAvg: 4.8,
@@ -63,6 +77,12 @@ function getInitialData(): DatabaseState {
         diet: 'both',
         smoking: 'occasional',
         studyHabits: 'social',
+        cleanliness: 'moderate',
+        guestPolicy: 'weekends_only',
+        foodSharing: 'cook_together',
+        budgetMin: 8000,
+        budgetMax: 14000,
+        interests: ['Music', 'Debating', 'Movies & Netflix', 'Cooking'],
         lookingForRoommate: true,
       },
       ratingAvg: 4.5,
@@ -84,12 +104,45 @@ function getInitialData(): DatabaseState {
         diet: 'veg',
         smoking: 'no',
         studyHabits: 'moderate',
+        cleanliness: 'neat_freak',
+        guestPolicy: 'weekends_only',
+        foodSharing: 'cook_together',
+        budgetMin: 7000,
+        budgetMax: 12000,
+        interests: ['Coding', 'Gaming', 'Gym & Fitness', 'Cricket'],
         lookingForRoommate: true,
       },
       ratingAvg: 4.9,
       ratingCount: 4,
       createdAt: new Date(Date.now() - 20 * 86400000).toISOString(),
       updatedAt: new Date(Date.now() - 1 * 86400000).toISOString(),
+    },
+    {
+      id: 'usr_student_4',
+      name: 'Sneha Sen',
+      email: 'sneha@college.edu',
+      passwordHash: DEFAULT_HASH,
+      role: 'student',
+      isVerified: true,
+      college: 'Delhi Technological University (DTU)',
+      phone: '+91 98101 23456',
+      roommatePrefs: {
+        sleepSchedule: 'early',
+        diet: 'veg',
+        smoking: 'no',
+        studyHabits: 'quiet',
+        cleanliness: 'neat_freak',
+        guestPolicy: 'no_parties',
+        foodSharing: 'mess_tiffin',
+        budgetMin: 6500,
+        budgetMax: 10500,
+        interests: ['Coding', 'Reading', 'Photography', 'Badminton'],
+        lookingForRoommate: true,
+      },
+      ratingAvg: 4.9,
+      ratingCount: 5,
+      createdAt: new Date(Date.now() - 18 * 86400000).toISOString(),
+      updatedAt: new Date(Date.now() - 2 * 86400000).toISOString(),
     },
     {
       id: 'usr_owner_1',
@@ -487,6 +540,201 @@ function getInitialData(): DatabaseState {
     },
   ];
 
+  const maintenanceTickets: MaintenanceTicket[] = [
+    {
+      id: 'tk_1',
+      propertyId: 'prop_1',
+      propertyTitle: 'Sunrise PG near Gate 2',
+      studentId: 'usr_student_1',
+      studentName: 'Rahul Sharma',
+      roomNo: 'Room 204',
+      category: 'plumbing',
+      priority: 'high',
+      title: 'Washroom tap dripping & slow shower pressure',
+      description: 'The cold water tap in attached washroom is constantly leaking and causing water wastage. Shower pressure dropped yesterday.',
+      status: 'in_progress',
+      assignedTechnician: 'Manoj Kumar (Plumber - +91 98112 34567)',
+      resolutionNotes: 'Technician scheduled for 4:00 PM today with replacement ceramic valve.',
+      createdAt: new Date(Date.now() - 18 * 3600000).toISOString(),
+      updatedAt: new Date(Date.now() - 4 * 3600000).toISOString(),
+    },
+    {
+      id: 'tk_2',
+      propertyId: 'prop_1',
+      propertyTitle: 'Sunrise PG near Gate 2',
+      studentId: 'usr_student_3',
+      studentName: 'Aman Patel',
+      roomNo: 'Room 205',
+      category: 'wifi',
+      priority: 'medium',
+      title: '2nd Floor Wi-Fi router packet loss',
+      description: 'The router on 2nd floor drops connection during evening study hours (8 PM - 11 PM). Please check adapter or reset channel.',
+      status: 'pending',
+      createdAt: new Date(Date.now() - 5 * 3600000).toISOString(),
+      updatedAt: new Date(Date.now() - 5 * 3600000).toISOString(),
+    },
+    {
+      id: 'tk_3',
+      propertyId: 'prop_2',
+      propertyTitle: 'Greenwood 2BHK Student Flat',
+      studentId: 'usr_student_2',
+      studentName: 'Priya Verma',
+      roomNo: 'Flat 302',
+      category: 'electrical',
+      priority: 'low',
+      title: 'Bedroom ceiling fan regulator replacement',
+      description: 'Regulator knob was loose and only running on maximum speed 5. Requested electronic stepless regulator.',
+      status: 'resolved',
+      assignedTechnician: 'Dinesh (Electrician)',
+      resolutionNotes: 'Replaced with Anchor Roma 5-step modular regulator. Tested and working fine.',
+      createdAt: new Date(Date.now() - 4 * 86400000).toISOString(),
+      updatedAt: new Date(Date.now() - 1 * 86400000).toISOString(),
+    },
+  ];
+
+  const expenses: ExpenseItem[] = [
+    {
+      id: 'exp_1',
+      title: 'October Shared 2BHK Flat Rent',
+      category: 'rent',
+      amount: 16000,
+      paidBy: {
+        id: 'usr_student_1',
+        name: 'Rahul Sharma',
+      },
+      splitAmong: [
+        { id: 'usr_student_1', name: 'Rahul Sharma', share: 8000, settled: true },
+        { id: 'usr_student_3', name: 'Aman Patel', share: 8000, settled: false },
+      ],
+      upiId: 'rahulsharma@oksbi',
+      date: '2026-10-01',
+      createdAt: new Date(Date.now() - 11 * 86400000).toISOString(),
+    },
+    {
+      id: 'exp_2',
+      title: 'BSES TPDDL Electricity & Sub-meter',
+      category: 'electricity',
+      amount: 1940,
+      paidBy: {
+        id: 'usr_student_3',
+        name: 'Aman Patel',
+      },
+      splitAmong: [
+        { id: 'usr_student_1', name: 'Rahul Sharma', share: 970, settled: true },
+        { id: 'usr_student_3', name: 'Aman Patel', share: 970, settled: true },
+      ],
+      upiId: 'amanpatel@paytm',
+      date: '2026-10-05',
+      createdAt: new Date(Date.now() - 7 * 86400000).toISOString(),
+    },
+    {
+      id: 'exp_3',
+      title: 'ACT Fibernet 150 Mbps High-Speed WiFi',
+      category: 'wifi',
+      amount: 899,
+      paidBy: {
+        id: 'usr_student_1',
+        name: 'Rahul Sharma',
+      },
+      splitAmong: [
+        { id: 'usr_student_1', name: 'Rahul Sharma', share: 450, settled: true },
+        { id: 'usr_student_3', name: 'Aman Patel', share: 449, settled: false },
+      ],
+      upiId: 'rahulsharma@oksbi',
+      date: '2026-10-08',
+      createdAt: new Date(Date.now() - 4 * 86400000).toISOString(),
+    },
+    {
+      id: 'exp_4',
+      title: 'Weekly 20L RO Water Cans & Kitchen Essentials',
+      category: 'water',
+      amount: 680,
+      paidBy: {
+        id: 'usr_student_1',
+        name: 'Rahul Sharma',
+      },
+      splitAmong: [
+        { id: 'usr_student_1', name: 'Rahul Sharma', share: 340, settled: true },
+        { id: 'usr_student_3', name: 'Aman Patel', share: 340, settled: false },
+      ],
+      upiId: 'rahulsharma@oksbi',
+      date: '2026-10-10',
+      createdAt: new Date(Date.now() - 2 * 86400000).toISOString(),
+    },
+  ];
+
+  const mealVotes: MealVote[] = [
+    {
+      id: 'mv_1',
+      messProviderId: 'mess_1',
+      mealType: 'lunch',
+      userId: 'usr_student_1',
+      vote: 'up',
+      dishFeedback: 'Paneer Butter Masala was very fresh today! Hot phulkas served on time.',
+      createdAt: new Date(Date.now() - 2 * 3600000).toISOString(),
+    },
+    {
+      id: 'mv_2',
+      messProviderId: 'mess_1',
+      mealType: 'lunch',
+      userId: 'usr_student_3',
+      vote: 'up',
+      dishFeedback: 'Dal Makhani tasted great, not too oily.',
+      createdAt: new Date(Date.now() - 1 * 3600000).toISOString(),
+    },
+    {
+      id: 'mv_3',
+      messProviderId: 'mess_2',
+      mealType: 'lunch',
+      userId: 'usr_student_2',
+      vote: 'up',
+      dishFeedback: 'Good portion size and clean packaging.',
+      createdAt: new Date(Date.now() - 3 * 3600000).toISOString(),
+    },
+  ];
+
+  const safetyReviews: NeighborhoodSafetyReview[] = [
+    {
+      id: 'sr_1',
+      propertyId: 'prop_1',
+      studentId: 'usr_student_1',
+      studentName: 'Rahul Sharma',
+      overallScore: 9.3,
+      streetLightingScore: 5,
+      securityGuardsScore: 5,
+      femaleFriendlyScore: 5,
+      nightWalkability: 'well_lit',
+      tips: 'Approach road directly faces DTU Gate 2. Brightly illuminated LED lights all night. Guard stays active at the barrier with visitor log.',
+      createdAt: new Date(Date.now() - 12 * 86400000).toISOString(),
+    },
+    {
+      id: 'sr_2',
+      propertyId: 'prop_2',
+      studentId: 'usr_student_2',
+      studentName: 'Priya Verma',
+      overallScore: 8.8,
+      streetLightingScore: 4,
+      securityGuardsScore: 4,
+      femaleFriendlyScore: 5,
+      nightWalkability: 'safe',
+      tips: 'E-rickshaws available right up to entrance till 10:30 PM. Apollo 24/7 chemist is only 150m down the lane. Very comfortable for female students.',
+      createdAt: new Date(Date.now() - 8 * 86400000).toISOString(),
+    },
+    {
+      id: 'sr_3',
+      propertyId: 'prop_3',
+      studentId: 'usr_student_3',
+      studentName: 'Aman Patel',
+      overallScore: 8.6,
+      streetLightingScore: 4,
+      securityGuardsScore: 5,
+      femaleFriendlyScore: 4,
+      nightWalkability: 'safe',
+      tips: 'Gated colony with boom barrier. CCTV camera installed at building entrance. Safe neighborhood for late library returns.',
+      createdAt: new Date(Date.now() - 5 * 86400000).toISOString(),
+    },
+  ];
+
   return {
     users,
     properties,
@@ -495,6 +743,10 @@ function getInitialData(): DatabaseState {
     reviews,
     messages,
     reports,
+    maintenanceTickets,
+    expenses,
+    mealVotes,
+    safetyReviews,
   };
 }
 
@@ -506,15 +758,23 @@ class Store {
   }
 
   private load(): DatabaseState {
+    const initial = getInitialData();
     try {
       if (fs.existsSync(DB_FILE)) {
         const content = fs.readFileSync(DB_FILE, 'utf-8');
-        return JSON.parse(content);
+        const parsed = JSON.parse(content);
+        return {
+          ...initial,
+          ...parsed,
+          maintenanceTickets: parsed.maintenanceTickets && parsed.maintenanceTickets.length > 0 ? parsed.maintenanceTickets : initial.maintenanceTickets,
+          expenses: parsed.expenses && parsed.expenses.length > 0 ? parsed.expenses : initial.expenses,
+          mealVotes: parsed.mealVotes && parsed.mealVotes.length > 0 ? parsed.mealVotes : initial.mealVotes,
+          safetyReviews: parsed.safetyReviews && parsed.safetyReviews.length > 0 ? parsed.safetyReviews : initial.safetyReviews,
+        };
       }
     } catch {
       // ignore
     }
-    const initial = getInitialData();
     this.save(initial);
     return initial;
   }
@@ -694,6 +954,106 @@ class Store {
     this.data.reports[idx] = { ...this.data.reports[idx], ...updates };
     this.save();
     return this.data.reports[idx];
+  }
+
+  // Maintenance Tickets
+  getMaintenanceTickets(): MaintenanceTicket[] {
+    return this.data.maintenanceTickets || [];
+  }
+
+  getMaintenanceTicketById(id: string): MaintenanceTicket | undefined {
+    return (this.data.maintenanceTickets || []).find(t => t.id === id);
+  }
+
+  createMaintenanceTicket(ticket: MaintenanceTicket): MaintenanceTicket {
+    if (!this.data.maintenanceTickets) this.data.maintenanceTickets = [];
+    this.data.maintenanceTickets.push(ticket);
+    this.save();
+    return ticket;
+  }
+
+  updateMaintenanceTicket(id: string, updates: Partial<MaintenanceTicket>): MaintenanceTicket | undefined {
+    if (!this.data.maintenanceTickets) this.data.maintenanceTickets = [];
+    const idx = this.data.maintenanceTickets.findIndex(t => t.id === id);
+    if (idx === -1) return undefined;
+    this.data.maintenanceTickets[idx] = {
+      ...this.data.maintenanceTickets[idx],
+      ...updates,
+      updatedAt: new Date().toISOString(),
+    };
+    this.save();
+    return this.data.maintenanceTickets[idx];
+  }
+
+  // Expenses
+  getExpenses(): ExpenseItem[] {
+    return this.data.expenses || [];
+  }
+
+  createExpense(expense: ExpenseItem): ExpenseItem {
+    if (!this.data.expenses) this.data.expenses = [];
+    this.data.expenses.push(expense);
+    this.save();
+    return expense;
+  }
+
+  updateExpense(id: string, updates: Partial<ExpenseItem>): ExpenseItem | undefined {
+    if (!this.data.expenses) this.data.expenses = [];
+    const idx = this.data.expenses.findIndex(e => e.id === id);
+    if (idx === -1) return undefined;
+    this.data.expenses[idx] = { ...this.data.expenses[idx], ...updates };
+    this.save();
+    return this.data.expenses[idx];
+  }
+
+  deleteExpense(id: string): boolean {
+    if (!this.data.expenses) this.data.expenses = [];
+    const prev = this.data.expenses.length;
+    this.data.expenses = this.data.expenses.filter(e => e.id !== id);
+    const deleted = this.data.expenses.length < prev;
+    if (deleted) this.save();
+    return deleted;
+  }
+
+  // Meal Votes
+  getMealVotes(messProviderId?: string): MealVote[] {
+    if (!this.data.mealVotes) this.data.mealVotes = [];
+    if (messProviderId) {
+      return this.data.mealVotes.filter(v => v.messProviderId === messProviderId);
+    }
+    return this.data.mealVotes;
+  }
+
+  createMealVote(vote: MealVote): MealVote {
+    if (!this.data.mealVotes) this.data.mealVotes = [];
+    // If existing vote by same user for same mess and mealType today, update it
+    const existingIdx = this.data.mealVotes.findIndex(
+      v => v.messProviderId === vote.messProviderId && v.mealType === vote.mealType && v.userId === vote.userId
+    );
+    if (existingIdx !== -1) {
+      this.data.mealVotes[existingIdx] = { ...this.data.mealVotes[existingIdx], ...vote, createdAt: new Date().toISOString() };
+      this.save();
+      return this.data.mealVotes[existingIdx];
+    }
+    this.data.mealVotes.push(vote);
+    this.save();
+    return vote;
+  }
+
+  // Neighborhood Safety Reviews
+  getSafetyReviews(propertyId?: string): NeighborhoodSafetyReview[] {
+    if (!this.data.safetyReviews) this.data.safetyReviews = [];
+    if (propertyId) {
+      return this.data.safetyReviews.filter(s => s.propertyId === propertyId);
+    }
+    return this.data.safetyReviews;
+  }
+
+  createSafetyReview(rev: NeighborhoodSafetyReview): NeighborhoodSafetyReview {
+    if (!this.data.safetyReviews) this.data.safetyReviews = [];
+    this.data.safetyReviews.push(rev);
+    this.save();
+    return rev;
   }
 
   resetToDefault() {

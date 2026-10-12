@@ -18,6 +18,7 @@ interface AuthContextType {
   logout: () => void;
   switchDemoAccount: (email: string) => Promise<boolean>;
   refreshUser: () => Promise<void>;
+  updateUser: (user: User) => void;
   clearError: () => void;
 }
 
@@ -128,6 +129,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
+  const updateUser = (updatedUser: User) => {
+    setUser(updatedUser);
+  };
+
   const clearError = () => setError(null);
 
   return (
@@ -142,6 +147,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         logout,
         switchDemoAccount,
         refreshUser,
+        updateUser,
         clearError,
       }}
     >

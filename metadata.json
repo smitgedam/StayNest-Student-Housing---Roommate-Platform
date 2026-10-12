@@ -1,6 +1,6 @@
 {
-  "name": "StayNest - Student Housing & Roommate Platform",
-  "description": "Verified student rental housing, live availability tracking, roommate matching, nearby mess and tiffin services, and real-time messaging.",
+  "name": "StayNest - Student Housing, Roommates & Campus Living Ecosystem",
+  "description": "Verified student housing, smart roommate compatibility matching, campus commute calculator, flatmate expense splitter, maintenance ticket tracker, live daily mess menu & ratings, virtual rent agreement generator, and neighborhood safety radar.",
   "requestFramePermissions": ["geolocation"],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

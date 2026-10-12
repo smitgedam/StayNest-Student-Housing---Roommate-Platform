@@ -65,41 +65,41 @@ export const ReportModal: React.FC<ReportModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/50 p-4 backdrop-blur-xs">
-      <div className="bg-white rounded-xl max-w-md w-full shadow-xl border border-gray-200 overflow-hidden">
-        <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+    <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 dark:bg-black/80 p-4 backdrop-blur-xs">
+      <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full shadow-xl border border-gray-200 dark:border-slate-800 overflow-hidden text-gray-900 dark:text-white">
+        <div className="p-4 border-b border-gray-100 dark:border-slate-800 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <ShieldAlert className="w-5 h-5 text-red-500" />
-            <h3 className="font-bold text-gray-900 text-lg">Report this listing</h3>
+            <h3 className="font-bold text-gray-900 dark:text-white text-lg">Report this listing</h3>
           </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         <div className="p-5">
-          <p className="text-xs text-gray-600 mb-4">
-            Listing: <span className="font-semibold text-gray-900">{propertyTitle}</span>
+          <p className="text-xs text-gray-600 dark:text-slate-400 mb-4">
+            Listing: <span className="font-semibold text-gray-900 dark:text-white">{propertyTitle}</span>
           </p>
 
           {successMessage ? (
-            <div className="p-3 bg-emerald-50 text-emerald-800 rounded-lg text-sm font-medium text-center">
+            <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 rounded-lg text-sm font-medium text-center">
               {successMessage}
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               {errorMessage && (
-                <div className="p-2.5 bg-red-50 text-red-700 rounded-lg text-xs font-medium">
+                <div className="p-2.5 bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300 rounded-lg text-xs font-medium">
                   {errorMessage}
                 </div>
               )}
 
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">Reason</label>
+                <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">Reason</label>
                 <select
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
-                  className="w-full text-sm rounded-lg border border-gray-300 p-2.5 focus:border-blue-500 focus:outline-none"
+                  className="w-full text-sm rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white p-2.5 focus:border-blue-500 focus:outline-none"
                 >
                   <option value="Fake listing">Fake listing</option>
                   <option value="Already rented">Already rented</option>
@@ -110,18 +110,18 @@ export const ReportModal: React.FC<ReportModalProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">Details</label>
+                <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">Details</label>
                 <textarea
                   rows={3}
                   value={details}
                   onChange={(e) => setDetails(e.target.value)}
                   placeholder="What is wrong with this listing?"
-                  className="w-full text-sm rounded-lg border border-gray-300 p-2.5 focus:border-blue-500 focus:outline-none resize-none"
+                  className="w-full text-sm rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white p-2.5 focus:border-blue-500 focus:outline-none resize-none"
                   required
                 />
               </div>
 
-              <div className="bg-amber-50 border border-amber-200 text-amber-800 text-[11px] p-2 rounded">
+              <div className="bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-300 text-[11px] p-2 rounded">
                 Reports are audited by StayNest administrators to guarantee trust & safety.
               </div>
 
@@ -129,14 +129,14 @@ export const ReportModal: React.FC<ReportModalProps> = ({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 rounded-lg border border-gray-300"
+                  className="px-4 py-2 text-sm text-gray-600 dark:text-slate-400 hover:text-gray-800 dark:hover:text-white rounded-lg border border-gray-300 dark:border-slate-700"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-4 py-2 text-sm font-semibold text-white bg-slate-900 hover:bg-slate-800 rounded-lg disabled:opacity-50"
+                  className="px-4 py-2 text-sm font-semibold text-white bg-slate-900 hover:bg-slate-800 dark:bg-blue-600 dark:hover:bg-blue-700 rounded-lg disabled:opacity-50"
                 >
                   {isSubmitting ? 'Submitting...' : 'Submit report'}
                 </button>

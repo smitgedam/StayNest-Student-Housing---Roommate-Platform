@@ -5,6 +5,12 @@ export interface RoommatePrefs {
   diet?: 'veg' | 'non-veg' | 'both';
   smoking?: 'no' | 'yes' | 'occasional';
   studyHabits?: 'quiet' | 'moderate' | 'social';
+  cleanliness?: 'neat_freak' | 'moderate' | 'relaxed';
+  guestPolicy?: 'no_parties' | 'weekends_only' | 'flexible';
+  foodSharing?: 'cook_together' | 'independent' | 'mess_tiffin';
+  budgetMin?: number;
+  budgetMax?: number;
+  interests?: string[];
   lookingForRoommate?: boolean;
 }
 
@@ -193,4 +199,85 @@ export interface RoommateCandidate {
   ratingAvg?: number;
   roommatePrefs: RoommatePrefs;
   compatibility: number;
+  matchReasons: string[];
+  breakdown: {
+    lifestyle: number;
+    habits: number;
+    study: number;
+    interests: number;
+    budget: number;
+  };
+}
+
+export interface MaintenanceTicket {
+  id: string;
+  propertyId?: string;
+  propertyTitle?: string;
+  studentId: string;
+  studentName?: string;
+  roomNo: string;
+  category: 'plumbing' | 'electrical' | 'wifi' | 'appliance' | 'carpentry' | 'other';
+  priority: 'low' | 'medium' | 'high' | 'urgent';
+  title: string;
+  description: string;
+  status: 'pending' | 'in_progress' | 'resolved' | 'closed';
+  assignedTechnician?: string;
+  resolutionNotes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ExpenseParticipant {
+  id: string;
+  name: string;
+  share: number;
+  settled: boolean;
+}
+
+export interface ExpenseItem {
+  id: string;
+  title: string;
+  category: 'rent' | 'electricity' | 'wifi' | 'water' | 'maid' | 'groceries' | 'other';
+  amount: number;
+  paidBy: {
+    id: string;
+    name: string;
+  };
+  splitAmong: ExpenseParticipant[];
+  upiId?: string;
+  date: string;
+  createdAt: string;
+}
+
+export interface MealTimetableDay {
+  day: string;
+  breakfast: string;
+  lunch: string;
+  eveningSnacks: string;
+  dinner: string;
+  todaySpecial?: string;
+}
+
+export interface MealVote {
+  id: string;
+  messProviderId: string;
+  mealType: 'breakfast' | 'lunch' | 'dinner';
+  userId: string;
+  vote: 'up' | 'down';
+  dishFeedback?: string;
+  createdAt: string;
+}
+
+export interface NeighborhoodSafetyReview {
+  id: string;
+  propertyId: string;
+  studentId: string;
+  studentName: string;
+  overallScore: number;
+  streetLightingScore: number;
+  securityGuardsScore: number;
+  femaleFriendlyScore: number;
+  nightWalkability: 'safe' | 'caution' | 'well_lit';
+  tips: string;
+  createdAt: string;
 }

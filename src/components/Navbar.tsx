@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useSocket } from '../context/SocketContext';
+import { ThemeToggle } from './ThemeToggle';
 import {
   Home,
   UtensilsCrossed,
@@ -29,40 +30,30 @@ export const Navbar: React.FC<NavbarProps> = ({
   setCurrentTab,
   openBookingCount = 0,
 }) => {
-  const { user, logout, switchDemoAccount } = useAuth();
-  const { isConnected } = useSocket();
-  const [demoMenuOpen, setDemoMenuOpen] = useState(false);
+  const { user, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const role = user?.role || 'guest';
 
-  const demoAccounts = [
-    { name: 'Rahul Sharma', role: 'Student', email: 'rahul@college.edu', badge: 'Student' },
-    { name: 'Vikram Malhotra', role: 'Owner (Verified)', email: 'vikram@staynest.com', badge: 'Verified Owner' },
-    { name: 'Suresh Raina', role: 'Owner (Unverified)', email: 'suresh@staynest.com', badge: 'Unverified Owner' },
-    { name: 'Annapurna Tiffin', role: 'Mess Provider', email: 'annapurna@staynest.com', badge: 'Mess Provider' },
-    { name: 'Admin Moderator', role: 'Admin', email: 'admin@staynest.com', badge: 'Admin' },
-  ];
-
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-xs">
+    <header className="sticky top-0 z-50 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 shadow-xs transition-colors duration-200">
       {/* Main Navigation Bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Brand + Role Badge */}
+          {/* Brand + Role */}
           <div className="flex items-center gap-3">
             <button
               onClick={() => setCurrentTab(user ? 'browse' : 'login')}
-              className="flex items-center gap-2 text-xl font-bold text-gray-900 tracking-tight hover:opacity-90 transition"
+              className="flex items-center gap-2 text-xl font-extrabold text-slate-900 dark:text-white tracking-tight hover:opacity-90 transition"
             >
               <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-black shadow-xs">
                 S
               </div>
-              <span>StayNest</span>
+              <span className="font-extrabold">StayNest</span>
             </button>
 
             {user && (
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 capitalize">
+              <span className="hidden sm:inline-block text-xs font-medium text-slate-500 dark:text-slate-400 capitalize bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md border border-slate-200 dark:border-slate-700">
                 {user.role === 'mess_provider' ? 'Mess Provider' : user.role}
               </span>
             )}
@@ -75,149 +66,164 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={() => setCurrentTab('browse')}
                 className={`px-3 py-2 rounded-md text-sm font-medium transition flex items-center gap-1.5 ${
                   currentTab === 'browse'
-                    ? 'bg-blue-50 text-blue-700 font-semibold'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                    ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300 font-semibold'
+                    : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
                 }`}
               >
                 <Home className="w-4 h-4" />
                 Browse
               </button>
 
-            <button
-              onClick={() => setCurrentTab('mess')}
-              className={`px-3 py-2 rounded-md text-sm font-medium transition flex items-center gap-1.5 ${
-                currentTab === 'mess'
-                  ? 'bg-blue-50 text-blue-700 font-semibold'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-              }`}
-            >
-              <UtensilsCrossed className="w-4 h-4" />
-              Mess
-            </button>
+              <button
+                onClick={() => setCurrentTab('mess')}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition flex items-center gap-1.5 ${
+                  currentTab === 'mess'
+                    ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300 font-semibold'
+                    : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
+                }`}
+              >
+                <UtensilsCrossed className="w-4 h-4" />
+                Mess
+              </button>
 
-            {role === 'student' && (
-              <>
-                <button
-                  onClick={() => setCurrentTab('roommates')}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition flex items-center gap-1.5 ${
-                    currentTab === 'roommates'
-                      ? 'bg-blue-50 text-blue-700 font-semibold'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                  }`}
-                >
-                  <Users className="w-4 h-4" />
-                  Roommates
-                </button>
+              {role === 'student' && (
+                <>
+                  <button
+                    onClick={() => setCurrentTab('roommates')}
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition flex items-center gap-1.5 ${
+                      currentTab === 'roommates'
+                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300 font-semibold'
+                        : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
+                    }`}
+                  >
+                    <Users className="w-4 h-4" />
+                    Roommates
+                  </button>
 
+                  <button
+                    onClick={() => setCurrentTab('bookings')}
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition flex items-center gap-1.5 relative ${
+                      currentTab === 'bookings'
+                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300 font-semibold'
+                        : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
+                    }`}
+                  >
+                    <CalendarCheck className="w-4 h-4" />
+                    My Bookings
+                    {openBookingCount > 0 && (
+                      <span className="ml-1 px-1.5 py-0.2 bg-blue-600 text-white rounded-full text-[10px] font-bold">
+                        {openBookingCount}
+                      </span>
+                    )}
+                  </button>
+
+                  <button
+                    onClick={() => setCurrentTab('tools')}
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition flex items-center gap-1.5 ${
+                      currentTab === 'tools'
+                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300 font-semibold'
+                        : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
+                    }`}
+                  >
+                    <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                    Campus Tools
+                  </button>
+                </>
+              )}
+
+              {role === 'owner' && (
                 <button
-                  onClick={() => setCurrentTab('bookings')}
+                  onClick={() => setCurrentTab('dashboard')}
                   className={`px-3 py-2 rounded-md text-sm font-medium transition flex items-center gap-1.5 relative ${
-                    currentTab === 'bookings'
-                      ? 'bg-blue-50 text-blue-700 font-semibold'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                    currentTab === 'dashboard'
+                      ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300 font-semibold'
+                      : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
                   }`}
                 >
-                  <CalendarCheck className="w-4 h-4" />
-                  My Bookings
+                  <Building className="w-4 h-4" />
+                  Dashboard
                   {openBookingCount > 0 && (
-                    <span className="ml-1 px-1.5 py-0.2 bg-blue-600 text-white rounded-full text-[10px] font-bold">
+                    <span className="ml-1 px-1.5 py-0.2 bg-amber-500 text-white rounded-full text-[10px] font-bold">
                       {openBookingCount}
                     </span>
                   )}
                 </button>
-              </>
-            )}
+              )}
 
-            {role === 'owner' && (
-              <button
-                onClick={() => setCurrentTab('dashboard')}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition flex items-center gap-1.5 relative ${
-                  currentTab === 'dashboard'
-                    ? 'bg-blue-50 text-blue-700 font-semibold'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                }`}
-              >
-                <Building className="w-4 h-4" />
-                Dashboard
-                {openBookingCount > 0 && (
-                  <span className="ml-1 px-1.5 py-0.2 bg-amber-500 text-white rounded-full text-[10px] font-bold">
-                    {openBookingCount}
-                  </span>
-                )}
-              </button>
-            )}
-
-            {role === 'mess_provider' && (
-              <button
-                onClick={() => setCurrentTab('mymess')}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition flex items-center gap-1.5 ${
-                  currentTab === 'mymess'
-                    ? 'bg-blue-50 text-blue-700 font-semibold'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                }`}
-              >
-                <UtensilsCrossed className="w-4 h-4" />
-                My Mess
-              </button>
-            )}
-
-            {role === 'admin' && (
-              <>
+              {role === 'mess_provider' && (
                 <button
-                  onClick={() => setCurrentTab('admin_verifications')}
+                  onClick={() => setCurrentTab('mymess')}
                   className={`px-3 py-2 rounded-md text-sm font-medium transition flex items-center gap-1.5 ${
-                    currentTab === 'admin_verifications'
-                      ? 'bg-blue-50 text-blue-700 font-semibold'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                    currentTab === 'mymess'
+                      ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300 font-semibold'
+                      : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
                   }`}
                 >
-                  <UserCheck className="w-4 h-4" />
-                  Verification Queue
+                  <UtensilsCrossed className="w-4 h-4" />
+                  My Mess
                 </button>
+              )}
 
+              {role === 'admin' && (
+                <>
+                  <button
+                    onClick={() => setCurrentTab('admin_verifications')}
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition flex items-center gap-1.5 ${
+                      currentTab === 'admin_verifications'
+                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300 font-semibold'
+                        : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
+                    }`}
+                  >
+                    <UserCheck className="w-4 h-4" />
+                    Verification Queue
+                  </button>
+
+                  <button
+                    onClick={() => setCurrentTab('admin_reports')}
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition flex items-center gap-1.5 ${
+                      currentTab === 'admin_reports'
+                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300 font-semibold'
+                        : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
+                    }`}
+                  >
+                    <ShieldAlert className="w-4 h-4" />
+                    Reports
+                  </button>
+                </>
+              )}
+
+              {user && (
                 <button
-                  onClick={() => setCurrentTab('admin_reports')}
+                  onClick={() => setCurrentTab('chat')}
                   className={`px-3 py-2 rounded-md text-sm font-medium transition flex items-center gap-1.5 ${
-                    currentTab === 'admin_reports'
-                      ? 'bg-blue-50 text-blue-700 font-semibold'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                    currentTab === 'chat'
+                      ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300 font-semibold'
+                      : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
                   }`}
                 >
-                  <ShieldAlert className="w-4 h-4" />
-                  Reports
+                  <MessageSquare className="w-4 h-4" />
+                  Chat
                 </button>
-              </>
-            )}
-
-            {user && (
-              <button
-                onClick={() => setCurrentTab('chat')}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition flex items-center gap-1.5 ${
-                  currentTab === 'chat'
-                    ? 'bg-blue-50 text-blue-700 font-semibold'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                }`}
-              >
-                <MessageSquare className="w-4 h-4" />
-                Chat
-              </button>
-            )}
+              )}
             </nav>
           )}
 
-          {/* User Account / Auth Actions */}
-          <div className="hidden md:flex items-center space-x-3">
+          {/* User Account / Dark Mode Toggle Actions */}
+          <div className="hidden md:flex items-center space-x-2 lg:space-x-3">
+            {/* Dark Mode Button */}
+            <ThemeToggle />
+
             {user ? (
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setCurrentTab('profile')}
                   className={`px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-2 border transition ${
                     currentTab === 'profile'
-                      ? 'border-blue-600 bg-blue-50 text-blue-700'
-                      : 'border-gray-200 text-gray-700 hover:bg-gray-50'
+                      ? 'border-blue-600 bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300'
+                      : 'border-gray-200 dark:border-slate-700 text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-800/80'
                   }`}
                 >
-                  <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold">
+                  <div className="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 flex items-center justify-center text-xs font-bold">
                     {user.name.charAt(0)}
                   </div>
                   <span className="truncate max-w-[120px]">{user.name}</span>
@@ -226,7 +232,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   onClick={logout}
                   title="Logout"
-                  className="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-gray-100 transition"
+                  className="p-2 text-gray-400 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition"
                 >
                   <LogOut className="w-4 h-4" />
                 </button>
@@ -235,7 +241,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setCurrentTab('login')}
-                  className="px-3.5 py-1.5 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition"
+                  className="px-3.5 py-1.5 text-sm font-medium text-gray-700 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition"
                 >
                   Login
                 </button>
@@ -249,11 +255,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             )}
           </div>
 
-          {/* Mobile Menu Hamburger */}
+          {/* Mobile Menu Actions & Hamburger */}
           <div className="flex md:hidden items-center gap-2">
+            <ThemeToggle />
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+              className="p-2 rounded-md text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -263,16 +270,16 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-gray-200 px-4 pt-2 pb-4 space-y-1 bg-white">
+        <div className="md:hidden border-t border-gray-200 dark:border-slate-800 px-4 pt-2 pb-4 space-y-1 bg-white dark:bg-slate-900">
           <button
             onClick={() => { setCurrentTab('browse'); setMobileMenuOpen(false); }}
-            className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 flex items-center gap-2"
+            className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center gap-2"
           >
             <Home className="w-4 h-4" /> Browse
           </button>
           <button
             onClick={() => { setCurrentTab('mess'); setMobileMenuOpen(false); }}
-            className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 flex items-center gap-2"
+            className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center gap-2"
           >
             <UtensilsCrossed className="w-4 h-4" /> Mess Directory
           </button>
@@ -281,15 +288,21 @@ export const Navbar: React.FC<NavbarProps> = ({
             <>
               <button
                 onClick={() => { setCurrentTab('roommates'); setMobileMenuOpen(false); }}
-                className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 flex items-center gap-2"
+                className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center gap-2"
               >
                 <Users className="w-4 h-4" /> Roommates
               </button>
               <button
                 onClick={() => { setCurrentTab('bookings'); setMobileMenuOpen(false); }}
-                className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 flex items-center gap-2"
+                className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center gap-2"
               >
                 <CalendarCheck className="w-4 h-4" /> My Bookings
+              </button>
+              <button
+                onClick={() => { setCurrentTab('tools'); setMobileMenuOpen(false); }}
+                className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center gap-2"
+              >
+                <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400" /> Campus Tools
               </button>
             </>
           )}
@@ -297,7 +310,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {role === 'owner' && (
             <button
               onClick={() => { setCurrentTab('dashboard'); setMobileMenuOpen(false); }}
-              className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 flex items-center gap-2"
+              className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center gap-2"
             >
               <Building className="w-4 h-4" /> Owner Dashboard
             </button>
@@ -306,7 +319,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {role === 'mess_provider' && (
             <button
               onClick={() => { setCurrentTab('mymess'); setMobileMenuOpen(false); }}
-              className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 flex items-center gap-2"
+              className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center gap-2"
             >
               <UtensilsCrossed className="w-4 h-4" /> My Mess Listings
             </button>
@@ -316,13 +329,13 @@ export const Navbar: React.FC<NavbarProps> = ({
             <>
               <button
                 onClick={() => { setCurrentTab('admin_verifications'); setMobileMenuOpen(false); }}
-                className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 flex items-center gap-2"
+                className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center gap-2"
               >
                 <UserCheck className="w-4 h-4" /> Verification Queue
               </button>
               <button
                 onClick={() => { setCurrentTab('admin_reports'); setMobileMenuOpen(false); }}
-                className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 flex items-center gap-2"
+                className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center gap-2"
               >
                 <ShieldAlert className="w-4 h-4" /> Reports
               </button>
@@ -332,24 +345,24 @@ export const Navbar: React.FC<NavbarProps> = ({
           {user && (
             <button
               onClick={() => { setCurrentTab('chat'); setMobileMenuOpen(false); }}
-              className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 flex items-center gap-2"
+              className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center gap-2"
             >
               <MessageSquare className="w-4 h-4" /> Chat
             </button>
           )}
 
-          <div className="pt-2 border-t border-gray-100 flex items-center justify-between">
+          <div className="pt-2 border-t border-gray-100 dark:border-slate-800 flex items-center justify-between">
             {user ? (
               <>
                 <button
                   onClick={() => { setCurrentTab('profile'); setMobileMenuOpen(false); }}
-                  className="text-sm font-medium text-gray-800"
+                  className="text-sm font-medium text-gray-800 dark:text-slate-200"
                 >
                   Profile: {user.name}
                 </button>
                 <button
                   onClick={() => { logout(); setMobileMenuOpen(false); }}
-                  className="text-xs text-red-600 font-semibold"
+                  className="text-xs text-red-600 dark:text-red-400 font-semibold"
                 >
                   Logout
                 </button>
@@ -358,7 +371,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <div className="flex gap-2 w-full">
                 <button
                   onClick={() => { setCurrentTab('login'); setMobileMenuOpen(false); }}
-                  className="flex-1 py-1.5 text-center text-sm border rounded"
+                  className="flex-1 py-1.5 text-center text-sm border border-gray-300 dark:border-slate-700 text-gray-700 dark:text-slate-200 rounded"
                 >
                   Login
                 </button>
@@ -376,3 +389,4 @@ export const Navbar: React.FC<NavbarProps> = ({
     </header>
   );
 };
+

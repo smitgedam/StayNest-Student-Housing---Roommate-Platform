@@ -48,7 +48,19 @@ usersRouter.put('/me/roommate-prefs', authMiddleware, (req: AuthenticatedRequest
     return;
   }
 
-  const { sleepSchedule, diet, smoking, studyHabits, lookingForRoommate } = req.body;
+  const {
+    sleepSchedule,
+    diet,
+    smoking,
+    studyHabits,
+    cleanliness,
+    guestPolicy,
+    foodSharing,
+    budgetMin,
+    budgetMax,
+    interests,
+    lookingForRoommate,
+  } = req.body;
   const currentPrefs: RoommatePrefs = req.user.roommatePrefs || {};
 
   const updatedPrefs: RoommatePrefs = {
@@ -57,6 +69,12 @@ usersRouter.put('/me/roommate-prefs', authMiddleware, (req: AuthenticatedRequest
     ...(diet !== undefined && { diet }),
     ...(smoking !== undefined && { smoking }),
     ...(studyHabits !== undefined && { studyHabits }),
+    ...(cleanliness !== undefined && { cleanliness }),
+    ...(guestPolicy !== undefined && { guestPolicy }),
+    ...(foodSharing !== undefined && { foodSharing }),
+    ...(budgetMin !== undefined && { budgetMin: Number(budgetMin) }),
+    ...(budgetMax !== undefined && { budgetMax: Number(budgetMax) }),
+    ...(interests !== undefined && { interests: Array.isArray(interests) ? interests : [] }),
     ...(lookingForRoommate !== undefined && { lookingForRoommate: Boolean(lookingForRoommate) }),
   };
 
@@ -100,7 +118,7 @@ usersRouter.post('/submit-verification', authMiddleware, (req: AuthenticatedRequ
   });
 });
 
-// Scored Roommate Matching
+// Advanced Multi-Vector Roommate Recommendation Algorithm
 usersRouter.get('/roommates/find', authMiddleware, (req: AuthenticatedRequest, res: Response): void => {
   if (!req.user) {
     res.status(401).json({ error: 'Unauthorized' });
@@ -110,7 +128,15 @@ usersRouter.get('/roommates/find', authMiddleware, (req: AuthenticatedRequest, r
   const currentUser = req.user;
   const myPrefs = currentUser.roommatePrefs || {};
 
-  const { sleepSchedule, diet, smoking, studyHabits } = req.query as Record<string, string>;
+  const {
+    sleepSchedule,
+    diet,
+    smoking,
+    studyHabits,
+    cleanliness,
+    interest,
+    college,
+  } = req.query as Record<string, string>;
 
   const allUsers = db.getUsers();
 
@@ -123,38 +149,144 @@ usersRouter.get('/roommates/find', authMiddleware, (req: AuthenticatedRequest, r
 
   const scoredResults = candidates.map(other => {
     const oPrefs = other.roommatePrefs || {};
-    let score = 50; // base score
+    const matchReasons: string[] = [];
 
-    // Sleep schedule match (up to 20 pts)
+    // 1. Lifestyle Vector (Sleep schedule + Cleanliness) -> 0-100 scale
+    let lifestyleScore = 70;
     if (myPrefs.sleepSchedule && oPrefs.sleepSchedule) {
-      if (myPrefs.sleepSchedule === oPrefs.sleepSchedule) score += 20;
-      else if (myPrefs.sleepSchedule === 'flexible' || oPrefs.sleepSchedule === 'flexible') score += 12;
-      else score -= 10;
+      if (myPrefs.sleepSchedule === oPrefs.sleepSchedule) {
+        lifestyleScore += 18;
+        matchReasons.push(
+          myPrefs.sleepSchedule === 'early'
+            ? 'Both early risers with morning focus'
+            : myPrefs.sleepSchedule === 'late'
+            ? 'Both night owls studying late'
+            : 'Flexible sleeping schedules'
+        );
+      } else if (myPrefs.sleepSchedule === 'flexible' || oPrefs.sleepSchedule === 'flexible') {
+        lifestyleScore += 8;
+      } else {
+        lifestyleScore -= 18;
+      }
     }
 
-    // Diet match (up to 15 pts)
-    if (myPrefs.diet && oPrefs.diet) {
-      if (myPrefs.diet === oPrefs.diet) score += 15;
-      else if (myPrefs.diet === 'both' || oPrefs.diet === 'both') score += 10;
-      else score -= 5;
+    if (myPrefs.cleanliness && oPrefs.cleanliness) {
+      if (myPrefs.cleanliness === oPrefs.cleanliness) {
+        lifestyleScore += 12;
+        if (myPrefs.cleanliness === 'neat_freak') {
+          matchReasons.push('Mutual commitment to neat & tidy flat');
+        }
+      } else if (
+        (myPrefs.cleanliness === 'neat_freak' && oPrefs.cleanliness === 'relaxed') ||
+        (myPrefs.cleanliness === 'relaxed' && oPrefs.cleanliness === 'neat_freak')
+      ) {
+        lifestyleScore -= 20;
+      }
     }
+    const finalLifestyle = Math.min(100, Math.max(30, lifestyleScore));
 
-    // Smoking match (up to 20 pts)
-    if (myPrefs.smoking && oPrefs.smoking) {
-      if (myPrefs.smoking === oPrefs.smoking) score += 20;
-      else if (myPrefs.smoking === 'no' && oPrefs.smoking === 'yes') score -= 25;
-      else score -= 5;
-    }
-
-    // Study habits match (up to 15 pts)
+    // 2. Study & Social Vibe (Study habits + Guest policy) -> 0-100 scale
+    let studyScore = 65;
     if (myPrefs.studyHabits && oPrefs.studyHabits) {
-      if (myPrefs.studyHabits === oPrefs.studyHabits) score += 15;
-      else if (myPrefs.studyHabits === 'moderate' || oPrefs.studyHabits === 'moderate') score += 10;
-      else score -= 5;
+      if (myPrefs.studyHabits === oPrefs.studyHabits) {
+        studyScore += 20;
+        matchReasons.push(`Harmonious ${myPrefs.studyHabits} study environment`);
+      } else if (myPrefs.studyHabits === 'moderate' || oPrefs.studyHabits === 'moderate') {
+        studyScore += 10;
+      } else {
+        studyScore -= 12;
+      }
     }
 
-    // Clamp score 0 - 99%
-    const compatibility = Math.min(99, Math.max(25, score));
+    if (myPrefs.guestPolicy && oPrefs.guestPolicy) {
+      if (myPrefs.guestPolicy === oPrefs.guestPolicy) {
+        studyScore += 15;
+      } else if (myPrefs.guestPolicy === 'flexible' || oPrefs.guestPolicy === 'flexible') {
+        studyScore += 8;
+      }
+    }
+    const finalStudy = Math.min(100, Math.max(30, studyScore));
+
+    // 3. Habits & Diet Vector (Diet + Smoking + Food sharing) -> 0-100 scale
+    let habitsScore = 70;
+    if (myPrefs.diet && oPrefs.diet) {
+      if (myPrefs.diet === oPrefs.diet) {
+        habitsScore += 15;
+        if (myPrefs.diet === 'veg') matchReasons.push('Both prefer vegetarian kitchen');
+      } else if (myPrefs.diet === 'both' || oPrefs.diet === 'both') {
+        habitsScore += 8;
+      } else {
+        habitsScore -= 8;
+      }
+    }
+
+    if (myPrefs.smoking && oPrefs.smoking) {
+      if (myPrefs.smoking === oPrefs.smoking) {
+        habitsScore += 15;
+        if (myPrefs.smoking === 'no') matchReasons.push('100% smoke-free flat preference');
+      } else if (myPrefs.smoking === 'no' && oPrefs.smoking === 'yes') {
+        habitsScore -= 30; // heavy mismatch
+      } else {
+        habitsScore -= 5;
+      }
+    }
+
+    if (myPrefs.foodSharing && oPrefs.foodSharing) {
+      if (myPrefs.foodSharing === oPrefs.foodSharing) {
+        habitsScore += 10;
+        if (myPrefs.foodSharing === 'cook_together') {
+          matchReasons.push('Excited to cook meals together');
+        }
+      }
+    }
+    const finalHabits = Math.min(100, Math.max(25, habitsScore));
+
+    // 4. Interests & Passions Vector
+    let interestsScore = 50;
+    const myInterests = myPrefs.interests || [];
+    const oInterests = oPrefs.interests || [];
+    const sharedInterests = myInterests.filter(i => oInterests.includes(i));
+
+    if (sharedInterests.length > 0) {
+      interestsScore += Math.min(45, sharedInterests.length * 15);
+      matchReasons.push(`Common passions: ${sharedInterests.join(', ')}`);
+    }
+    const finalInterests = Math.min(100, Math.max(40, interestsScore));
+
+    // 5. Budget Compatibility Vector
+    let budgetScore = 75;
+    const myMin = myPrefs.budgetMin || 5000;
+    const myMax = myPrefs.budgetMax || 15000;
+    const oMin = oPrefs.budgetMin || 5000;
+    const oMax = oPrefs.budgetMax || 15000;
+
+    // Check overlap of [myMin, myMax] and [oMin, oMax]
+    const overlapMin = Math.max(myMin, oMin);
+    const overlapMax = Math.min(myMax, oMax);
+    if (overlapMax >= overlapMin) {
+      budgetScore += 20;
+      matchReasons.push(`Overlapping rent budget (₹${overlapMin.toLocaleString()} - ₹${overlapMax.toLocaleString()}/mo)`);
+    } else {
+      budgetScore -= 25;
+    }
+    const finalBudget = Math.min(100, Math.max(30, budgetScore));
+
+    // College connection bonus
+    if (currentUser.college && other.college && currentUser.college.toLowerCase().trim() === other.college.toLowerCase().trim()) {
+      matchReasons.push(`Attends same campus: ${other.college}`);
+    }
+
+    // Weighted Overall Compatibility Percentage
+    // Weights: Lifestyle (25%), Study (25%), Habits (20%), Interests (15%), Budget (15%)
+    const weightedTotal = Math.round(
+      finalLifestyle * 0.25 +
+      finalStudy * 0.25 +
+      finalHabits * 0.20 +
+      finalInterests * 0.15 +
+      finalBudget * 0.15
+    );
+
+    const compatibility = Math.min(99, Math.max(35, weightedTotal));
 
     return {
       id: other.id,
@@ -163,15 +295,26 @@ usersRouter.get('/roommates/find', authMiddleware, (req: AuthenticatedRequest, r
       ratingAvg: other.ratingAvg,
       roommatePrefs: oPrefs,
       compatibility,
+      matchReasons,
+      breakdown: {
+        lifestyle: finalLifestyle,
+        habits: finalHabits,
+        study: finalStudy,
+        interests: finalInterests,
+        budget: finalBudget,
+      },
     };
   });
 
-  // Apply optional exact query filters if user clicked filter chips
+  // Apply optional filters
   const filtered = scoredResults.filter(item => {
     if (sleepSchedule && sleepSchedule !== 'any' && item.roommatePrefs.sleepSchedule !== sleepSchedule) return false;
     if (diet && diet !== 'any' && item.roommatePrefs.diet !== diet) return false;
     if (smoking && smoking !== 'any' && item.roommatePrefs.smoking !== smoking) return false;
     if (studyHabits && studyHabits !== 'any' && item.roommatePrefs.studyHabits !== studyHabits) return false;
+    if (cleanliness && cleanliness !== 'any' && item.roommatePrefs.cleanliness !== cleanliness) return false;
+    if (interest && interest !== 'any' && !item.roommatePrefs.interests?.includes(interest)) return false;
+    if (college && college !== 'any' && item.college !== college) return false;
     return true;
   });
 

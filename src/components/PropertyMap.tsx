@@ -40,11 +40,17 @@ export const PropertyMap: React.FC<PropertyMapProps> = ({
       }).addTo(map);
 
       mapInstanceRef.current = map;
-    }
 
-    return () => {
-      // Keep map or clean up on unmount
-    };
+      // Handle resize events so map tiles adapt cleanly to responsive viewport changes
+      const resizeObserver = new ResizeObserver(() => {
+        map.invalidateSize();
+      });
+      resizeObserver.observe(mapContainerRef.current);
+
+      return () => {
+        resizeObserver.disconnect();
+      };
+    }
   }, []);
 
   // Update map center, radius circle, and markers
@@ -123,10 +129,10 @@ export const PropertyMap: React.FC<PropertyMapProps> = ({
       const marker = L.marker([lat, lng], { icon: customIcon }).addTo(map);
 
       marker.bindPopup(`
-        <div style="padding: 4px; min-width: 170px;">
-          <h4 style="font-weight: 700; font-size: 13px; margin: 0 0 4px 0; color: #0f172a;">${prop.title}</h4>
-          <p style="font-size: 12px; margin: 0 0 4px 0; color: #475569;">₹${prop.rentPerMonth.toLocaleString()} / month</p>
-          <p style="font-size: 11px; margin: 0; color: #64748b;">${prop.propertyType.replace('_', ' ')}</p>
+        <div class="p-1 min-w-[170px]">
+          <h4 class="font-bold text-sm text-slate-900 dark:text-white mb-1">${prop.title}</h4>
+          <p class="text-xs text-slate-600 dark:text-slate-300 mb-1">₹${prop.rentPerMonth.toLocaleString()} / month</p>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 capitalize">${prop.propertyType.replace('_', ' ')}</p>
         </div>
       `);
 
@@ -141,9 +147,9 @@ export const PropertyMap: React.FC<PropertyMapProps> = ({
   }, [properties, center, radiusKm, selectedPropertyId]);
 
   return (
-    <div className="relative w-full h-full min-h-[300px] sm:min-h-[350px] rounded-xl overflow-hidden border border-gray-200 shadow-xs isolate z-0">
+    <div className="relative w-full h-full min-h-[300px] sm:min-h-[350px] rounded-xl overflow-hidden border border-gray-200 dark:border-slate-800 shadow-xs isolate z-0">
       <div ref={mapContainerRef} className="w-full h-full min-h-[300px] sm:min-h-[350px]" />
-      <div className="absolute bottom-3 left-3 z-10 bg-white/95 backdrop-blur-xs px-3 py-1.5 rounded-lg text-xs font-medium text-gray-700 shadow-xs border border-gray-200 pointer-events-none">
+      <div className="absolute bottom-3 left-3 z-10 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xs px-3 py-1.5 rounded-lg text-xs font-medium text-gray-700 dark:text-slate-300 shadow-xs border border-gray-200 dark:border-slate-700 pointer-events-none">
         Showing properties within {radiusKm} km
       </div>
     </div>

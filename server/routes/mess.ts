@@ -198,3 +198,136 @@ messRouter.put('/:id', authMiddleware, requireRole('mess_provider', 'admin'), (r
     mess: updated,
   });
 });
+
+// Default 7-day meal timetable for student messes
+const DEFAULT_TIMETABLES: Record<string, any[]> = {
+  default: [
+    {
+      day: 'Monday',
+      breakfast: 'Aloo Pyaz Paratha with fresh curd, butter & ginger chai',
+      lunch: 'Rajma Rasila, steamed Jeera Rice, Tawa Roti, Cucumber Salad',
+      eveningSnacks: 'Vegetable Cutlet with hot tea',
+      dinner: 'Shahi Paneer, Dal Tadka, Tandoori Roti, Boondi Raita',
+      todaySpecial: 'Shahi Paneer & Hot Gulab Jamun',
+    },
+    {
+      day: 'Tuesday',
+      breakfast: 'Poha with roasted peanuts, Sev & Lemon Chai',
+      lunch: 'Kadhi Pakoda, steamed rice, Aloo Gobhi dry, papad',
+      eveningSnacks: 'Crispy Samosa with mint chutney',
+      dinner: 'Kadhai Paneer / Egg Curry, Arhar Dal, Phulkas, Green Salad',
+      todaySpecial: 'Special Kadhi Pakoda with Ghee Rice',
+    },
+    {
+      day: 'Wednesday',
+      breakfast: 'Masala Idli with coconut chutney & piping hot Sambhar',
+      lunch: 'Chole Bhature / Chole Kulche with pickled onions and mint raita',
+      eveningSnacks: 'Bread Pakora with tea',
+      dinner: 'Matar Paneer, Chana Dal, Jeera Rice, Chapati',
+      todaySpecial: 'Amritsari Chole with fluffy Bhature',
+    },
+    {
+      day: 'Thursday',
+      breakfast: 'Methi Paratha with tomato chutney and masala chai',
+      lunch: 'Dal Makhani (slow-cooked 12 hrs), Jeera Rice, Mix Veg sabzi',
+      eveningSnacks: 'Pao Bhaji / Maggi with tea',
+      dinner: 'Paneer Butter Masala, Yellow Dal, Butter Naan / Tawa Roti',
+      todaySpecial: 'Authentic Dal Makhani & Jeera Rice',
+    },
+    {
+      day: 'Friday',
+      breakfast: 'Uttapam / Besan Chilla with coconut dip & tea',
+      lunch: 'Kashmiri Dum Aloo, Dal Fry, Basmati Rice, Onion Salad',
+      eveningSnacks: 'Aloo Tikki Chaat with sweet tamarind chutney',
+      dinner: 'Paneer Do Pyaza / Chicken Masala, Moong Dal, Roti',
+      todaySpecial: 'Paneer Do Pyaza & Kheer',
+    },
+    {
+      day: 'Saturday',
+      breakfast: 'Poori Bhaji (Spicy Aloo curry) with Halwa',
+      lunch: 'Veg Pulao with crunchy Boondi Raita & Dal Fry',
+      eveningSnacks: 'Onion & Paneer Pakoras with Chai',
+      dinner: 'Palak Paneer, Rajma curry, Tawa Roti, Papad',
+      todaySpecial: 'Poori Bhaji & Suji Halwa for Breakfast',
+    },
+    {
+      day: 'Sunday',
+      breakfast: 'Special Masala Dosa / Bedmi Poori with Aloo Sabzi',
+      lunch: 'Hyderabadi Veg Biryani / Chicken Biryani with Mirchi ka Salan & Raita',
+      eveningSnacks: 'Bun Maska with Kadak Chai',
+      dinner: 'Chef Special Paneer Lababdar, Dal Tadka, Gulaab Jamun',
+      todaySpecial: 'Dum Biryani with Mirchi ka Salan & Gulab Jamun Feast',
+    },
+  ],
+};
+
+// GET /api/mess/:id/menu - Get weekly meal timetable and today's voting stats
+messRouter.get('/:id/menu', optionalAuthMiddleware, (req: AuthenticatedRequest, res: Response): void => {
+  const { id } = req.params;
+  const mess = db.getMessProviderById(id);
+  if (!mess) {
+    res.status(404).json({ error: 'Mess not found' });
+    return;
+  }
+
+  const timetable = DEFAULT_TIMETABLES[id] || DEFAULT_TIMETABLES.default;
+  const votes = db.getMealVotes(id);
+
+  const totalVotes = votes.length;
+  const upVotes = votes.filter(v => v.vote === 'up').length;
+  const approvalRate = totalVotes > 0 ? Math.round((upVotes / totalVotes) * 100) : 94;
+
+  const currentDayName = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+  const todaysMenu = timetable.find((m: any) => m.day === currentDayName) || timetable[0];
+
+  res.json({
+    messId: id,
+    messName: mess.name,
+    currentDay: currentDayName,
+    todaysMenu,
+    timetable,
+    stats: {
+      approvalRate,
+      totalVotes: Math.max(12, totalVotes),
+      upVotes: Math.max(11, upVotes),
+    },
+    recentFeedbacks: votes.filter(v => v.dishFeedback).map(v => ({
+      userId: v.userId,
+      mealType: v.mealType,
+      feedback: v.dishFeedback,
+      date: v.createdAt,
+    })),
+  });
+});
+
+// POST /api/mess/:id/vote - Student community meal rating / vote
+messRouter.post('/:id/vote', authMiddleware, (req: AuthenticatedRequest, res: Response): void => {
+  if (!req.user) {
+    res.status(401).json({ error: 'Unauthorized' });
+    return;
+  }
+
+  const { id } = req.params;
+  const { mealType, vote, dishFeedback } = req.body;
+
+  if (!mealType || !vote) {
+    res.status(400).json({ error: 'Meal type and vote (up/down) are required' });
+    return;
+  }
+
+  const newVote = db.createMealVote({
+    id: `mv_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+    messProviderId: id,
+    mealType,
+    userId: req.user.id,
+    vote: vote === 'down' ? 'down' : 'up',
+    dishFeedback: dishFeedback ? dishFeedback.trim() : undefined,
+    createdAt: new Date().toISOString(),
+  });
+
+  res.status(201).json({
+    message: 'Meal feedback recorded. Thank you for voting!',
+    vote: newVote,
+  });
+});
+

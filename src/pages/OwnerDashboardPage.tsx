@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Property, BookingRequest } from '../types';
 import { useAuth } from '../context/AuthContext';
 import { MapPicker } from '../components/MapPicker';
+import { MaintenanceModal } from '../components/MaintenanceModal';
+import { RentAgreementModal } from '../components/RentAgreementModal';
 import {
   Building,
   CheckCircle2,
@@ -14,6 +16,8 @@ import {
   MapPin,
   ShieldCheck,
   ShieldAlert,
+  Wrench,
+  FileText,
 } from 'lucide-react';
 
 export const OwnerDashboardPage: React.FC = () => {
@@ -21,6 +25,10 @@ export const OwnerDashboardPage: React.FC = () => {
   const [properties, setProperties] = useState<Property[]>([]);
   const [bookingRequests, setBookingRequests] = useState<BookingRequest[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // New Modals State
+  const [showMaintenanceModal, setShowMaintenanceModal] = useState(false);
+  const [showAgreementModal, setShowAgreementModal] = useState(false);
 
   // New property form state
   const [title, setTitle] = useState('');
@@ -268,26 +276,44 @@ export const OwnerDashboardPage: React.FC = () => {
       {/* Title */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white tracking-tight">
             Owner Dashboard
           </h1>
-          <p className="text-xs sm:text-sm text-gray-500 mt-1">
+          <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-1">
             Manage your properties, live availability toggle, and incoming student booking requests.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setShowMaintenanceModal(true)}
+            className="px-3 py-1.5 bg-orange-50 dark:bg-orange-950/40 text-orange-800 dark:text-orange-300 border border-orange-200 dark:border-orange-800/60 rounded-xl text-xs font-bold hover:bg-orange-100 transition flex items-center gap-1.5 shadow-2xs"
+          >
+            <Wrench className="w-3.5 h-3.5 text-orange-600" />
+            Maintenance Tickets
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setShowAgreementModal(true)}
+            className="px-3 py-1.5 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-800 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/60 rounded-xl text-xs font-bold hover:bg-indigo-100 transition flex items-center gap-1.5 shadow-2xs"
+          >
+            <FileText className="w-3.5 h-3.5 text-indigo-600" />
+            Draft Lease Agreement
+          </button>
+
           {user?.isVerified ? (
-            <span className="px-3 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-full text-xs font-semibold flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-emerald-600" />
+            <span className="px-3 py-1 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 rounded-full text-xs font-semibold flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               Verified Owner
             </span>
           ) : (
             <button
               onClick={() => setShowVerificationModal(true)}
-              className="px-3 py-1 bg-amber-50 text-amber-800 border border-amber-300 rounded-full text-xs font-semibold flex items-center gap-1.5 hover:bg-amber-100 transition"
+              className="px-3 py-1 bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800 rounded-full text-xs font-semibold flex items-center gap-1.5 hover:bg-amber-100 dark:hover:bg-amber-900/50 transition"
             >
-              <ShieldAlert className="w-4 h-4 text-amber-600" />
+              <ShieldAlert className="w-4 h-4 text-amber-600 dark:text-amber-400" />
               Verification: {user?.verificationStatus === 'pending' ? 'Pending Admin Review' : 'Action Required'}
             </button>
           )}
@@ -296,17 +322,17 @@ export const OwnerDashboardPage: React.FC = () => {
 
       {/* Stale Listing Nudge Banner (Page 14 Wireframe) */}
       {staleListing && (
-        <div className="p-4 bg-amber-50 border-2 border-amber-300 rounded-xl space-y-3 shadow-xs">
+        <div className="p-4 bg-amber-50 dark:bg-amber-950/40 border-2 border-amber-300 dark:border-amber-700 rounded-xl space-y-3 shadow-xs">
           <div className="flex items-start justify-between">
             <div>
-              <h3 className="font-bold text-amber-900 text-sm flex items-center gap-1.5">
-                <AlertTriangle className="w-4 h-4 text-amber-600" /> Still available?
+              <h3 className="font-bold text-amber-900 dark:text-amber-200 text-sm flex items-center gap-1.5">
+                <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400" /> Still available?
               </h3>
-              <p className="text-xs text-amber-800 mt-0.5">
+              <p className="text-xs text-amber-800 dark:text-amber-300 mt-0.5">
                 <span className="font-semibold">{staleListing.title}</span> had no activity for {staleListing.daysSinceConfirmed ?? 7} days. Confirm so students see live data.
               </p>
             </div>
-            <span className="text-[11px] text-amber-700 italic hidden sm:block">
+            <span className="text-[11px] text-amber-700 dark:text-amber-400 italic hidden sm:block">
               No reply in 3 more days: listing auto-hides
             </span>
           </div>
@@ -314,19 +340,19 @@ export const OwnerDashboardPage: React.FC = () => {
           <div className="flex flex-wrap items-center gap-2 pt-1">
             <button
               onClick={() => handleConfirmStillAvailable(staleListing.id)}
-              className="px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold shadow-xs transition"
+              className="px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg text-xs font-bold shadow-xs transition"
             >
               Yes, still available
             </button>
             <button
               onClick={() => handleToggleStatus(staleListing.id, staleListing.status)}
-              className="px-3.5 py-1.5 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-lg text-xs font-semibold transition"
+              className="px-3.5 py-1.5 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700 rounded-lg text-xs font-semibold transition"
             >
               Mark rented
             </button>
             <button
               onClick={() => handleDeleteProperty(staleListing.id)}
-              className="px-3.5 py-1.5 bg-white border border-red-200 text-red-600 hover:bg-red-50 rounded-lg text-xs font-semibold transition"
+              className="px-3.5 py-1.5 bg-white dark:bg-slate-800 border border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg text-xs font-semibold transition"
             >
               Remove listing
             </button>
@@ -336,23 +362,23 @@ export const OwnerDashboardPage: React.FC = () => {
 
       {/* Main Grid Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left Column: List New Property Form (7 Cols) */}
-        <div className="lg:col-span-6 bg-white p-6 rounded-xl border border-gray-200 shadow-xs space-y-4">
-          <div className="flex items-center justify-between border-b border-gray-100 pb-3">
-            <h2 className="font-bold text-base text-gray-900 flex items-center gap-2">
-              <Building className="w-4 h-4 text-blue-600" /> List new property
+        {/* Left Column: List New Property Form (6 Cols) */}
+        <div className="lg:col-span-6 bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-slate-800 shadow-xs space-y-4">
+          <div className="flex items-center justify-between border-b border-gray-100 dark:border-slate-800 pb-3">
+            <h2 className="font-bold text-base text-gray-900 dark:text-white flex items-center gap-2">
+              <Building className="w-4 h-4 text-blue-600 dark:text-blue-400" /> List new property
             </h2>
-            <span className="text-xs text-gray-500">Live instantly upon publish</span>
+            <span className="text-xs text-gray-500 dark:text-slate-400">Live instantly upon publish</span>
           </div>
 
           {formError && (
-            <div className="p-3 bg-red-50 border border-red-200 text-red-800 rounded-lg text-xs font-medium space-y-1">
+            <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 text-red-800 dark:text-red-200 rounded-lg text-xs font-medium space-y-1">
               <div>{formError}</div>
               {!user?.isVerified && (
                 <button
                   type="button"
                   onClick={() => setShowVerificationModal(true)}
-                  className="font-bold underline hover:text-red-900"
+                  className="font-bold underline hover:text-red-900 dark:hover:text-red-100"
                 >
                   Submit Property Proof & ID Document for Admin Review
                 </button>
@@ -361,31 +387,31 @@ export const OwnerDashboardPage: React.FC = () => {
           )}
 
           {formSuccess && (
-            <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg text-xs font-semibold">
+            <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 rounded-lg text-xs font-semibold">
               {formSuccess}
             </div>
           )}
 
           <form onSubmit={handleCreateProperty} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-gray-700 mb-1">Title</label>
+              <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">Title</label>
               <input
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Listing headline (e.g. Sunrise PG near Gate 2)"
-                className="w-full text-xs rounded-lg border border-gray-300 p-2.5 focus:border-blue-500 focus:outline-none"
+                className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white p-2.5 focus:border-blue-500 focus:outline-none"
                 required
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">Type</label>
+                <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">Type</label>
                 <select
                   value={propertyType}
                   onChange={(e) => setPropertyType(e.target.value)}
-                  className="w-full text-xs rounded-lg border border-gray-300 p-2.5 focus:border-blue-500 focus:outline-none"
+                  className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white p-2.5 focus:border-blue-500 focus:outline-none"
                 >
                   <option value="single_room">Single room</option>
                   <option value="shared_room">Shared room</option>
@@ -397,34 +423,34 @@ export const OwnerDashboardPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">Rent (₹/mo)</label>
+                <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">Rent (₹/mo)</label>
                 <input
                   type="number"
                   value={rentPerMonth}
                   onChange={(e) => setRentPerMonth(e.target.value)}
-                  className="w-full text-xs rounded-lg border border-gray-300 p-2.5 focus:border-blue-500 focus:outline-none"
+                  className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white p-2.5 focus:border-blue-500 focus:outline-none"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">Deposit (₹)</label>
+                <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">Deposit (₹)</label>
                 <input
                   type="number"
                   value={depositAmount}
                   onChange={(e) => setDepositAmount(e.target.value)}
-                  className="w-full text-xs rounded-lg border border-gray-300 p-2.5 focus:border-blue-500 focus:outline-none"
+                  className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white p-2.5 focus:border-blue-500 focus:outline-none"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">Gender Policy</label>
+                <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">Gender Policy</label>
                 <select
                   value={genderPolicy}
                   onChange={(e) => setGenderPolicy(e.target.value)}
-                  className="w-full text-xs rounded-lg border border-gray-300 p-2.5 focus:border-blue-500 focus:outline-none"
+                  className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white p-2.5 focus:border-blue-500 focus:outline-none"
                 >
                   <option value="any">Any</option>
                   <option value="male_only">Male only</option>
@@ -433,25 +459,25 @@ export const OwnerDashboardPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">Nearest College</label>
+                <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">Nearest College</label>
                 <input
                   type="text"
                   value={nearestCollege}
                   onChange={(e) => setNearestCollege(e.target.value)}
                   placeholder="e.g. DTU Gate 2 (200m)"
-                  className="w-full text-xs rounded-lg border border-gray-300 p-2.5 focus:border-blue-500 focus:outline-none"
+                  className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white p-2.5 focus:border-blue-500 focus:outline-none"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-gray-700 mb-1">Address</label>
+              <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">Address</label>
               <input
                 type="text"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 placeholder="Street, area, city"
-                className="w-full text-xs rounded-lg border border-gray-300 p-2.5 focus:border-blue-500 focus:outline-none"
+                className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white p-2.5 focus:border-blue-500 focus:outline-none"
                 required
               />
             </div>
@@ -465,14 +491,14 @@ export const OwnerDashboardPage: React.FC = () => {
 
             {/* Amenities Checkboxes */}
             <div className="pt-2">
-              <label className="block text-xs font-semibold text-gray-700 mb-2">Amenities</label>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+              <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-2">Amenities</label>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs text-gray-700 dark:text-slate-300">
                 <label className="flex items-center gap-1.5 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={amenities.wifi}
                     onChange={(e) => setAmenities({ ...amenities, wifi: e.target.checked })}
-                    className="rounded border-gray-300 text-blue-600"
+                    className="rounded border-gray-300 dark:border-slate-700 text-blue-600"
                   />
                   WiFi
                 </label>
@@ -481,7 +507,7 @@ export const OwnerDashboardPage: React.FC = () => {
                     type="checkbox"
                     checked={amenities.ac}
                     onChange={(e) => setAmenities({ ...amenities, ac: e.target.checked })}
-                    className="rounded border-gray-300 text-blue-600"
+                    className="rounded border-gray-300 dark:border-slate-700 text-blue-600"
                   />
                   AC
                 </label>
@@ -490,7 +516,7 @@ export const OwnerDashboardPage: React.FC = () => {
                     type="checkbox"
                     checked={amenities.furnished}
                     onChange={(e) => setAmenities({ ...amenities, furnished: e.target.checked })}
-                    className="rounded border-gray-300 text-blue-600"
+                    className="rounded border-gray-300 dark:border-slate-700 text-blue-600"
                   />
                   Furnished
                 </label>
@@ -499,7 +525,7 @@ export const OwnerDashboardPage: React.FC = () => {
                     type="checkbox"
                     checked={amenities.foodIncluded}
                     onChange={(e) => setAmenities({ ...amenities, foodIncluded: e.target.checked })}
-                    className="rounded border-gray-300 text-blue-600"
+                    className="rounded border-gray-300 dark:border-slate-700 text-blue-600"
                   />
                   Food
                 </label>
@@ -508,7 +534,7 @@ export const OwnerDashboardPage: React.FC = () => {
                     type="checkbox"
                     checked={amenities.parking}
                     onChange={(e) => setAmenities({ ...amenities, parking: e.target.checked })}
-                    className="rounded border-gray-300 text-blue-600"
+                    className="rounded border-gray-300 dark:border-slate-700 text-blue-600"
                   />
                   Parking
                 </label>
@@ -517,7 +543,7 @@ export const OwnerDashboardPage: React.FC = () => {
                     type="checkbox"
                     checked={amenities.laundry}
                     onChange={(e) => setAmenities({ ...amenities, laundry: e.target.checked })}
-                    className="rounded border-gray-300 text-blue-600"
+                    className="rounded border-gray-300 dark:border-slate-700 text-blue-600"
                   />
                   Laundry
                 </label>
@@ -526,7 +552,7 @@ export const OwnerDashboardPage: React.FC = () => {
                     type="checkbox"
                     checked={amenities.powerBackup}
                     onChange={(e) => setAmenities({ ...amenities, powerBackup: e.target.checked })}
-                    className="rounded border-gray-300 text-blue-600"
+                    className="rounded border-gray-300 dark:border-slate-700 text-blue-600"
                   />
                   Power backup
                 </label>
@@ -535,7 +561,7 @@ export const OwnerDashboardPage: React.FC = () => {
                     type="checkbox"
                     checked={amenities.attachedBathroom}
                     onChange={(e) => setAmenities({ ...amenities, attachedBathroom: e.target.checked })}
-                    className="rounded border-gray-300 text-blue-600"
+                    className="rounded border-gray-300 dark:border-slate-700 text-blue-600"
                   />
                   Attached bath
                 </label>
@@ -545,14 +571,14 @@ export const OwnerDashboardPage: React.FC = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-lg transition shadow-xs disabled:opacity-50"
+              className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 dark:bg-blue-600 dark:hover:bg-blue-700 text-white font-bold text-xs rounded-lg transition shadow-xs disabled:opacity-50"
             >
               {isSubmitting ? 'Publishing...' : 'Publish listing'}
             </button>
 
             {/* Wireframe Page 5 yellow indicator */}
             {!user?.isVerified && (
-              <div className="bg-amber-50 border border-amber-300 text-amber-900 text-xs p-3 rounded-lg flex items-center justify-between">
+              <div className="bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700 text-amber-900 dark:text-amber-200 text-xs p-3 rounded-lg flex items-center justify-between">
                 <span>Blocked until an admin verifies the owner</span>
                 <button
                   type="button"
@@ -569,37 +595,37 @@ export const OwnerDashboardPage: React.FC = () => {
         {/* Right Column: My Properties & Booking Requests (6 Cols) */}
         <div className="lg:col-span-6 space-y-6">
           {/* My Properties Section */}
-          <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-xs space-y-3">
-            <div className="flex items-center justify-between border-b border-gray-100 pb-3">
-              <h2 className="font-bold text-base text-gray-900">My properties</h2>
-              <span className="text-xs text-gray-500">{properties.length} listings</span>
+          <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-gray-200 dark:border-slate-800 shadow-xs space-y-3">
+            <div className="flex items-center justify-between border-b border-gray-100 dark:border-slate-800 pb-3">
+              <h2 className="font-bold text-base text-gray-900 dark:text-white">My properties</h2>
+              <span className="text-xs text-gray-500 dark:text-slate-400">{properties.length} listings</span>
             </div>
 
             {loading ? (
-              <p className="text-xs text-gray-500 py-4 text-center">Loading properties...</p>
+              <p className="text-xs text-gray-500 dark:text-slate-400 py-4 text-center">Loading properties...</p>
             ) : properties.length === 0 ? (
-              <p className="text-xs text-gray-500 py-4 text-center">No properties listed yet.</p>
+              <p className="text-xs text-gray-500 dark:text-slate-400 py-4 text-center">No properties listed yet.</p>
             ) : (
               <div className="space-y-2.5">
                 {properties.map((prop) => (
                   <div
                     key={prop.id}
-                    className="p-3.5 rounded-xl border border-gray-200 hover:border-gray-300 flex items-center justify-between gap-2"
+                    className="p-3.5 rounded-xl border border-gray-200 dark:border-slate-800 bg-gray-50/40 dark:bg-slate-800/40 hover:border-gray-300 dark:hover:border-slate-700 flex items-center justify-between gap-2"
                   >
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-sm text-gray-900">{prop.title}</span>
+                        <span className="font-bold text-sm text-gray-900 dark:text-white">{prop.title}</span>
                         <span
                           className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
                             prop.status === 'available'
-                              ? 'bg-emerald-100 text-emerald-800'
-                              : 'bg-gray-100 text-gray-700'
+                              ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
+                              : 'bg-gray-100 text-gray-700 dark:bg-slate-700 dark:text-slate-300'
                           }`}
                         >
                           {prop.status}
                         </span>
                       </div>
-                      <p className="text-xs text-gray-500 mt-0.5">
+                      <p className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">
                         ₹{prop.rentPerMonth.toLocaleString()} / mo • {prop.address}
                       </p>
                     </div>
@@ -609,15 +635,15 @@ export const OwnerDashboardPage: React.FC = () => {
                         onClick={() => handleToggleStatus(prop.id, prop.status)}
                         className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
                           prop.status === 'available'
-                            ? 'bg-amber-50 text-amber-900 border border-amber-300 hover:bg-amber-100'
-                            : 'bg-emerald-50 text-emerald-900 border border-emerald-300 hover:bg-emerald-100'
+                            ? 'bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-700 hover:bg-amber-100 dark:hover:bg-amber-900/50'
+                            : 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200 border border-emerald-300 dark:border-emerald-700 hover:bg-emerald-100 dark:hover:bg-emerald-900/50'
                         }`}
                       >
                         {prop.status === 'available' ? 'Mark rented' : 'Relist'}
                       </button>
                       <button
                         onClick={() => handleDeleteProperty(prop.id)}
-                        className="p-1.5 text-gray-400 hover:text-red-600 rounded-lg transition"
+                        className="p-1.5 text-gray-400 hover:text-red-600 dark:hover:text-red-400 rounded-lg transition"
                         title="Delete listing"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -630,30 +656,30 @@ export const OwnerDashboardPage: React.FC = () => {
           </div>
 
           {/* Booking Requests Section */}
-          <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-xs space-y-3">
-            <div className="flex items-center justify-between border-b border-gray-100 pb-3">
-              <h2 className="font-bold text-base text-gray-900">Booking requests</h2>
-              <span className="text-xs text-gray-500">{bookingRequests.length} requests</span>
+          <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-gray-200 dark:border-slate-800 shadow-xs space-y-3">
+            <div className="flex items-center justify-between border-b border-gray-100 dark:border-slate-800 pb-3">
+              <h2 className="font-bold text-base text-gray-900 dark:text-white">Booking requests</h2>
+              <span className="text-xs text-gray-500 dark:text-slate-400">{bookingRequests.length} requests</span>
             </div>
 
             {loading ? (
-              <p className="text-xs text-gray-500 py-4 text-center">Loading requests...</p>
+              <p className="text-xs text-gray-500 dark:text-slate-400 py-4 text-center">Loading requests...</p>
             ) : bookingRequests.length === 0 ? (
-              <p className="text-xs text-gray-500 py-4 text-center">No booking requests received yet.</p>
+              <p className="text-xs text-gray-500 dark:text-slate-400 py-4 text-center">No booking requests received yet.</p>
             ) : (
               <div className="space-y-3">
                 {bookingRequests.map((bk) => (
                   <div
                     key={bk.id}
-                    className="p-4 rounded-xl border border-gray-200 space-y-2.5 bg-gray-50/50"
+                    className="p-4 rounded-xl border border-gray-200 dark:border-slate-800 space-y-2.5 bg-gray-50/50 dark:bg-slate-800/40"
                   >
                     <div className="flex items-start justify-between">
                       <div>
-                        <h4 className="font-bold text-sm text-gray-900">{bk.studentName}</h4>
-                        <p className="text-xs text-gray-600">
+                        <h4 className="font-bold text-sm text-gray-900 dark:text-white">{bk.studentName}</h4>
+                        <p className="text-xs text-gray-600 dark:text-slate-400">
                           {bk.studentCollege} | move-in {new Date(bk.moveInDate).toLocaleDateString()} | {bk.durationMonths} months | {bk.headcount} {bk.headcount === 1 ? 'person' : 'people'}
                         </p>
-                        <p className="text-xs text-blue-700 font-medium mt-0.5">
+                        <p className="text-xs text-blue-700 dark:text-blue-400 font-medium mt-0.5">
                           Listing: {bk.propertyTitle}
                         </p>
                       </div>
@@ -661,12 +687,12 @@ export const OwnerDashboardPage: React.FC = () => {
                       <span
                         className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
                           bk.status === 'pending'
-                            ? 'bg-amber-100 text-amber-800'
+                            ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300'
                             : bk.status === 'accepted'
-                            ? 'bg-blue-100 text-blue-800'
+                            ? 'bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300'
                             : bk.status === 'completed_stay'
-                            ? 'bg-emerald-100 text-emerald-800'
-                            : 'bg-red-100 text-red-800'
+                            ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
+                            : 'bg-red-100 text-red-800 dark:bg-red-950/60 dark:text-red-300'
                         }`}
                       >
                         {bk.status.replace('_', ' ')}
@@ -674,7 +700,7 @@ export const OwnerDashboardPage: React.FC = () => {
                     </div>
 
                     {bk.message && (
-                      <p className="text-xs text-gray-700 bg-white p-2.5 rounded-lg border border-gray-100 italic">
+                      <p className="text-xs text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-900 p-2.5 rounded-lg border border-gray-100 dark:border-slate-800 italic">
                         "{bk.message}"
                       </p>
                     )}
@@ -685,13 +711,13 @@ export const OwnerDashboardPage: React.FC = () => {
                         <>
                           <button
                             onClick={() => handleAcceptBooking(bk.id)}
-                            className="px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs"
+                            className="px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition shadow-xs"
                           >
                             Accept
                           </button>
                           <button
                             onClick={() => handleDeclineBooking(bk.id)}
-                            className="px-3.5 py-1.5 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-lg text-xs font-semibold transition"
+                            className="px-3.5 py-1.5 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700 rounded-lg text-xs font-semibold transition"
                           >
                             Decline
                           </button>
@@ -708,7 +734,7 @@ export const OwnerDashboardPage: React.FC = () => {
                       )}
 
                       {bk.status === 'completed_stay' && (
-                        <span className="text-xs text-emerald-700 font-semibold flex items-center gap-1">
+                        <span className="text-xs text-emerald-700 dark:text-emerald-400 font-semibold flex items-center gap-1">
                           <CheckCircle2 className="w-4 h-4" /> Tenancy completed (Reviews unlocked)
                         </span>
                       )}
@@ -723,38 +749,38 @@ export const OwnerDashboardPage: React.FC = () => {
 
       {/* Owner Verification Modal */}
       {showVerificationModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-xs">
-          <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-xl border border-gray-200 space-y-4">
-            <div className="flex items-center justify-between border-b pb-2">
-              <h3 className="font-bold text-gray-900 text-base flex items-center gap-2">
-                <Upload className="w-5 h-5 text-blue-600" /> Owner Verification Submission
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 dark:bg-black/80 p-4 backdrop-blur-xs">
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-xl border border-gray-200 dark:border-slate-800 space-y-4 text-gray-900 dark:text-white">
+            <div className="flex items-center justify-between border-b border-gray-100 dark:border-slate-800 pb-2">
+              <h3 className="font-bold text-gray-900 dark:text-white text-base flex items-center gap-2">
+                <Upload className="w-5 h-5 text-blue-600 dark:text-blue-400" /> Owner Verification Submission
               </h3>
-              <button onClick={() => setShowVerificationModal(false)} className="text-gray-400 hover:text-gray-600">
+              <button onClick={() => setShowVerificationModal(false)} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
                 ✕
               </button>
             </div>
 
-            <p className="text-xs text-gray-600">
+            <p className="text-xs text-gray-600 dark:text-slate-400">
               StayNest gates rental listings to verified owners to prevent scams. Please provide proof of property ownership (electricity bill, property tax receipt, or ownership deed) and ID.
             </p>
 
             <div>
-              <label className="block text-xs font-semibold text-gray-700 mb-1">
+              <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">
                 Document URL / Proof Link
               </label>
               <input
                 type="text"
                 value={verificationDocUrl}
                 onChange={(e) => setVerificationDocUrl(e.target.value)}
-                className="w-full text-xs rounded-lg border border-gray-300 p-2.5 focus:border-blue-500 focus:outline-none"
+                className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white p-2.5 focus:border-blue-500 focus:outline-none"
                 placeholder="https://..."
               />
             </div>
 
-            <div className="p-3 bg-blue-50 rounded-lg text-xs text-blue-800">
+            <div className="p-3 bg-blue-50 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/50 rounded-lg text-xs text-blue-800 dark:text-blue-300">
               Current Status: <span className="font-bold capitalize">{user?.verificationStatus || 'None'}</span>
               {user?.verificationRejectReason && (
-                <div className="mt-1 text-red-600 font-semibold">
+                <div className="mt-1 text-red-600 dark:text-red-400 font-semibold">
                   Reason for rejection: {user.verificationRejectReason}
                 </div>
               )}
@@ -764,7 +790,7 @@ export const OwnerDashboardPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowVerificationModal(false)}
-                className="px-4 py-2 text-xs text-gray-600 border rounded-lg"
+                className="px-4 py-2 text-xs text-gray-600 dark:text-slate-400 border border-gray-200 dark:border-slate-700 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800"
               >
                 Cancel
               </button>
@@ -772,7 +798,7 @@ export const OwnerDashboardPage: React.FC = () => {
                 type="button"
                 disabled={verificationSubmitting}
                 onClick={handleSubmitVerification}
-                className="px-4 py-2 text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-lg disabled:opacity-50"
+                className="px-4 py-2 text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 dark:bg-blue-600 dark:hover:bg-blue-700 rounded-lg disabled:opacity-50"
               >
                 {verificationSubmitting ? 'Submitting...' : 'Submit to Admin Queue'}
               </button>
@@ -780,6 +806,17 @@ export const OwnerDashboardPage: React.FC = () => {
           </div>
         </div>
       )}
+
+      <MaintenanceModal
+        isOpen={showMaintenanceModal}
+        onClose={() => setShowMaintenanceModal(false)}
+      />
+
+      <RentAgreementModal
+        property={properties[0] || null}
+        isOpen={showAgreementModal}
+        onClose={() => setShowAgreementModal(false)}
+      />
     </div>
   );
 };

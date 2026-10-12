@@ -3,7 +3,7 @@ import { Property, MessProvider } from '../types';
 import { PropertyCard } from '../components/PropertyCard';
 import { PropertyMap } from '../components/PropertyMap';
 import { PropertyDetailModal } from '../components/PropertyDetailModal';
-import { Search, MapPin, SlidersHorizontal, RotateCcw, AlertCircle } from 'lucide-react';
+import { Search, MapPin, SlidersHorizontal, RotateCcw, AlertCircle, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useSocket } from '../context/SocketContext';
 
@@ -131,10 +131,10 @@ export const BrowsePage: React.FC<BrowsePageProps> = ({
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white tracking-tight">
             Find your nest
           </h1>
-          <p className="text-xs sm:text-sm text-gray-500 mt-1">
+          <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-1">
             Real-time accurate student rentals, mapped & verified near your college.
           </p>
         </div>
@@ -142,7 +142,7 @@ export const BrowsePage: React.FC<BrowsePageProps> = ({
         {user?.role === 'student' && (
           <button
             onClick={onOpenBookings}
-            className="self-start sm:self-auto px-4 py-2 border border-gray-300 hover:border-blue-600 rounded-lg text-xs font-bold text-gray-700 hover:text-blue-600 bg-white shadow-xs transition"
+            className="self-start sm:self-auto px-4 py-2 border border-gray-300 dark:border-slate-700 hover:border-blue-600 dark:hover:border-blue-400 rounded-lg text-xs font-bold text-gray-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 bg-white dark:bg-slate-900 shadow-xs transition"
           >
             My Requests / Bookings
           </button>
@@ -150,25 +150,25 @@ export const BrowsePage: React.FC<BrowsePageProps> = ({
       </div>
 
       {/* Mobile view and filter controls */}
-      <div className="flex lg:hidden items-center justify-between gap-2 pb-2">
+      <div className="flex lg:hidden items-center justify-between gap-2 pb-4">
         <button
           onClick={() => setShowFiltersMobile(!showFiltersMobile)}
-          className="px-3.5 py-2 bg-white border border-gray-300 rounded-xl text-xs font-bold text-gray-700 flex items-center gap-1.5 shadow-xs"
+          className="px-3.5 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-200 flex items-center gap-1.5 shadow-xs hover:bg-slate-50 dark:hover:bg-slate-800 transition"
         >
-          <SlidersHorizontal className="w-3.5 h-3.5 text-blue-600" />
+          <SlidersHorizontal className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
           {showFiltersMobile ? 'Hide Filters' : 'Filter Properties'}
         </button>
 
-        <div className="flex md:hidden bg-gray-200 p-0.5 rounded-lg text-xs font-semibold">
+        <div className="flex md:hidden bg-slate-100 dark:bg-slate-800 p-1 rounded-lg text-xs font-medium border border-slate-200 dark:border-slate-700">
           <button
             onClick={() => setMobileView('list')}
-            className={`px-3 py-1 rounded-md transition ${mobileView === 'list' ? 'bg-white text-gray-900 shadow-xs' : 'text-gray-600'}`}
+            className={`px-3 py-1.5 rounded-md transition ${mobileView === 'list' ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
           >
             List ({properties.length})
           </button>
           <button
             onClick={() => setMobileView('map')}
-            className={`px-3 py-1 rounded-md transition ${mobileView === 'map' ? 'bg-white text-gray-900 shadow-xs' : 'text-gray-600'}`}
+            className={`px-3 py-1.5 rounded-md transition ${mobileView === 'map' ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
           >
             Map View
           </button>
@@ -177,25 +177,35 @@ export const BrowsePage: React.FC<BrowsePageProps> = ({
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column: Filters (3 Cols) */}
-        <div className={`${showFiltersMobile ? 'block' : 'hidden'} lg:block lg:col-span-3 bg-white p-5 rounded-xl border border-gray-200 shadow-xs space-y-4`}>
-          <div className="flex items-center justify-between border-b border-gray-100 pb-3">
-            <span className="font-bold text-sm text-gray-900 flex items-center gap-1.5">
-              <SlidersHorizontal className="w-4 h-4 text-blue-600" /> Filters
+        <div className={`${showFiltersMobile ? 'block' : 'hidden'} lg:block lg:col-span-3 bg-white dark:bg-slate-900 p-5 rounded-xl border border-gray-200 dark:border-slate-800 shadow-xs space-y-4`}>
+          <div className="flex items-center justify-between border-b border-gray-100 dark:border-slate-800 pb-3">
+            <span className="font-bold text-sm text-gray-900 dark:text-white flex items-center gap-1.5">
+              <SlidersHorizontal className="w-4 h-4 text-blue-600 dark:text-blue-400" /> Filters
             </span>
-            <button
-              onClick={handleResetFilters}
-              className="text-xs text-gray-500 hover:text-gray-900 flex items-center gap-1"
-            >
-              <RotateCcw className="w-3 h-3" /> Reset
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleResetFilters}
+                className="text-xs text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white flex items-center gap-1"
+              >
+                <RotateCcw className="w-3 h-3" /> Reset
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowFiltersMobile(false)}
+                className="lg:hidden text-gray-400 hover:text-gray-700 dark:hover:text-slate-200 p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                aria-label="Close filters"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-gray-700 mb-1">Property type</label>
+            <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">Property type</label>
             <select
               value={propertyType}
               onChange={(e) => setPropertyType(e.target.value)}
-              className="w-full text-xs rounded-lg border border-gray-300 p-2.5 bg-gray-50 focus:bg-white focus:outline-none focus:border-blue-500"
+              className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 p-2.5 bg-gray-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-850 focus:outline-none focus:border-blue-500"
             >
               <option value="any">Any</option>
               <option value="single_room">Single room</option>
@@ -209,31 +219,31 @@ export const BrowsePage: React.FC<BrowsePageProps> = ({
 
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="block text-xs font-semibold text-gray-700 mb-1">Min rent</label>
+              <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">Min rent</label>
               <input
                 type="number"
                 value={minRent}
                 onChange={(e) => setMinRent(e.target.value)}
-                className="w-full text-xs rounded-lg border border-gray-300 p-2 bg-gray-50 focus:bg-white focus:outline-none focus:border-blue-500"
+                className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 p-2 bg-gray-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-850 focus:outline-none focus:border-blue-500"
                 placeholder="0"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-gray-700 mb-1">Max rent</label>
+              <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">Max rent</label>
               <input
                 type="number"
                 value={maxRent}
                 onChange={(e) => setMaxRent(e.target.value)}
-                className="w-full text-xs rounded-lg border border-gray-300 p-2 bg-gray-50 focus:bg-white focus:outline-none focus:border-blue-500"
+                className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 p-2 bg-gray-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-850 focus:outline-none focus:border-blue-500"
                 placeholder="15000"
               />
             </div>
           </div>
 
           <div>
-            <div className="flex justify-between text-xs font-semibold text-gray-700 mb-1">
+            <div className="flex justify-between text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">
               <span>Radius</span>
-              <span className="text-blue-600 font-bold">{radiusKm} km</span>
+              <span className="text-blue-600 dark:text-blue-400 font-bold">{radiusKm} km</span>
             </div>
             <input
               type="range"
@@ -246,55 +256,55 @@ export const BrowsePage: React.FC<BrowsePageProps> = ({
           </div>
 
           {/* Amenity Checkboxes */}
-          <div className="space-y-2 pt-2 border-t border-gray-100">
-            <span className="block text-xs font-semibold text-gray-700">Amenities</span>
+          <div className="space-y-2 pt-2 border-t border-gray-100 dark:border-slate-800">
+            <span className="block text-xs font-semibold text-gray-700 dark:text-slate-300">Amenities</span>
 
-            <label className="flex items-center gap-2 text-xs text-gray-700 cursor-pointer">
+            <label className="flex items-center gap-2 text-xs text-gray-700 dark:text-slate-300 cursor-pointer">
               <input
                 type="checkbox"
                 checked={wifi}
                 onChange={(e) => setWifi(e.target.checked)}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="rounded border-gray-300 dark:border-slate-700 text-blue-600 focus:ring-blue-500"
               />
               WiFi
             </label>
 
-            <label className="flex items-center gap-2 text-xs text-gray-700 cursor-pointer">
+            <label className="flex items-center gap-2 text-xs text-gray-700 dark:text-slate-300 cursor-pointer">
               <input
                 type="checkbox"
                 checked={ac}
                 onChange={(e) => setAc(e.target.checked)}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="rounded border-gray-300 dark:border-slate-700 text-blue-600 focus:ring-blue-500"
               />
               AC
             </label>
 
-            <label className="flex items-center gap-2 text-xs text-gray-700 cursor-pointer">
+            <label className="flex items-center gap-2 text-xs text-gray-700 dark:text-slate-300 cursor-pointer">
               <input
                 type="checkbox"
                 checked={foodIncluded}
                 onChange={(e) => setFoodIncluded(e.target.checked)}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="rounded border-gray-300 dark:border-slate-700 text-blue-600 focus:ring-blue-500"
               />
               Food included
             </label>
 
-            <label className="flex items-center gap-2 text-xs text-gray-700 cursor-pointer">
+            <label className="flex items-center gap-2 text-xs text-gray-700 dark:text-slate-300 cursor-pointer">
               <input
                 type="checkbox"
                 checked={parking}
                 onChange={(e) => setParking(e.target.checked)}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="rounded border-gray-300 dark:border-slate-700 text-blue-600 focus:ring-blue-500"
               />
               Parking
             </label>
 
-            <label className="flex items-center gap-2 text-xs text-gray-700 cursor-pointer">
+            <label className="flex items-center gap-2 text-xs text-gray-700 dark:text-slate-300 cursor-pointer">
               <input
                 type="checkbox"
                 checked={powerBackup}
                 onChange={(e) => setPowerBackup(e.target.checked)}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="rounded border-gray-300 dark:border-slate-700 text-blue-600 focus:ring-blue-500"
               />
               Power backup
             </label>
@@ -306,13 +316,13 @@ export const BrowsePage: React.FC<BrowsePageProps> = ({
                 handleApplyFilters();
                 setShowFiltersMobile(false);
               }}
-              className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-lg transition shadow-xs"
+              className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-bold text-xs rounded-lg transition shadow-xs"
             >
               Apply
             </button>
             <button
               onClick={handleResetFilters}
-              className="w-full py-2 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 font-medium text-xs rounded-lg transition"
+              className="w-full py-2 bg-white hover:bg-gray-50 dark:bg-slate-800 dark:hover:bg-slate-750 text-gray-700 dark:text-slate-200 border border-gray-300 dark:border-slate-700 font-medium text-xs rounded-lg transition"
             >
               Reset
             </button>
@@ -320,7 +330,7 @@ export const BrowsePage: React.FC<BrowsePageProps> = ({
         </div>
 
         {/* Center/Right Columns: Search, Listings, Map (9 Cols) */}
-        <div className="lg:col-span-9 space-y-4">
+        <div className="lg:col-span-9 space-y-4 min-w-0">
           {/* Search Bar + Near Me */}
           <div className="flex gap-2">
             <div className="relative flex-1">
@@ -331,39 +341,39 @@ export const BrowsePage: React.FC<BrowsePageProps> = ({
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleApplyFilters()}
                 placeholder="Search address, title, or nearest campus (e.g. Rohini, Gate 2, DTU)"
-                className="w-full pl-10 pr-4 py-2.5 text-xs sm:text-sm bg-white rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500 shadow-xs"
+                className="w-full pl-10 pr-4 py-2.5 text-xs sm:text-sm bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-xl border border-gray-200 dark:border-slate-800 focus:outline-none focus:border-blue-500 shadow-xs"
               />
             </div>
             <button
               onClick={handleNearMe}
-              className="px-4 py-2.5 bg-white border border-gray-200 hover:border-blue-500 text-xs sm:text-sm font-semibold text-gray-800 hover:text-blue-600 rounded-xl flex items-center gap-1.5 shadow-xs transition shrink-0"
+              className="px-4 py-2.5 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-400 text-xs sm:text-sm font-semibold text-gray-800 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 rounded-xl flex items-center gap-1.5 shadow-xs transition shrink-0"
             >
-              <MapPin className="w-4 h-4 text-blue-600" />
+              <MapPin className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               Near me
             </button>
           </div>
 
           {/* Yellow Banner matching Wireframe Page 3 */}
-          <div className="bg-amber-50 border border-amber-200 text-amber-900 text-xs px-3.5 py-2 rounded-xl flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
+          <div className="bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/60 text-amber-900 dark:text-amber-200 text-xs px-3.5 py-2 rounded-xl flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
             <span>Only status = available listings appear in real-time search.</span>
           </div>
 
           {/* Split Content: Cards on left, Leaflet Map on right */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-5 min-w-0">
             {/* Listing Cards (7 cols) */}
-            <div className={`${mobileView === 'map' ? 'hidden md:block' : 'block'} md:col-span-7 space-y-3`}>
+            <div className={`${mobileView === 'map' ? 'hidden md:block' : 'block'} md:col-span-7 min-w-0 space-y-3`}>
               {loading ? (
-                <div className="p-12 text-center text-xs text-gray-500 bg-white rounded-xl border">
+                <div className="p-12 text-center text-xs text-gray-500 dark:text-slate-400 bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-800">
                   Finding available nests...
                 </div>
               ) : properties.length === 0 ? (
-                <div className="p-10 text-center bg-white rounded-xl border border-gray-200 space-y-2">
-                  <p className="text-sm font-semibold text-gray-700">No properties matched this filter.</p>
-                  <p className="text-xs text-gray-500">Try widening your rent range or radius slider.</p>
+                <div className="p-10 text-center bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-800 space-y-2">
+                  <p className="text-sm font-semibold text-gray-700 dark:text-slate-300">No properties matched this filter.</p>
+                  <p className="text-xs text-gray-500 dark:text-slate-400">Try widening your rent range or radius slider.</p>
                   <button
                     onClick={handleResetFilters}
-                    className="mt-2 px-3 py-1.5 text-xs font-semibold text-blue-600 border border-blue-200 rounded-lg"
+                    className="mt-2 px-3 py-1.5 text-xs font-semibold text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-900 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950"
                   >
                     Reset all filters
                   </button>
@@ -381,7 +391,7 @@ export const BrowsePage: React.FC<BrowsePageProps> = ({
             </div>
 
             {/* Map (5 cols) */}
-            <div className={`${mobileView === 'list' ? 'hidden md:block' : 'block'} md:col-span-5 h-[360px] md:h-[620px] md:sticky md:top-24`}>
+            <div className={`${mobileView === 'list' ? 'hidden md:block' : 'block'} md:col-span-5 min-w-0 h-[calc(100vh-280px)] min-h-[380px] md:h-[calc(100vh-140px)] md:sticky md:top-20 z-0 isolate`}>
               <PropertyMap
                 properties={properties}
                 center={centerCoords}

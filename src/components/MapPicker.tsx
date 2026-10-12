@@ -49,6 +49,15 @@ export const MapPicker: React.FC<MapPickerProps> = ({
       });
 
       mapRef.current = map;
+
+      const resizeObserver = new ResizeObserver(() => {
+        map.invalidateSize();
+      });
+      resizeObserver.observe(containerRef.current);
+
+      return () => {
+        resizeObserver.disconnect();
+      };
     } else {
       if (markerRef.current) {
         markerRef.current.setLatLng([initialLat, initialLng]);
@@ -59,16 +68,16 @@ export const MapPicker: React.FC<MapPickerProps> = ({
 
   return (
     <div className="space-y-1.5 relative isolate z-0">
-      <div className="flex items-center justify-between text-xs text-gray-500">
+      <div className="flex items-center justify-between text-xs text-gray-500 dark:text-slate-400">
         <span>{label}</span>
-        <span className="font-mono bg-gray-100 px-2 py-0.5 rounded text-[11px]">
+        <span className="font-mono bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-slate-300 px-2 py-0.5 rounded text-[11px] border border-gray-200 dark:border-slate-700">
           [{value[0]?.toFixed(4)}, {value[1]?.toFixed(4)}]
         </span>
       </div>
       <div
         ref={containerRef}
         style={{ height }}
-        className="w-full rounded-lg border border-gray-300 overflow-hidden relative shadow-inner isolate z-0"
+        className="w-full rounded-lg border border-gray-300 dark:border-slate-700 overflow-hidden relative shadow-inner isolate z-0"
       />
     </div>
   );

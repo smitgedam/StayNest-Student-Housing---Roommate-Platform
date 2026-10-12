@@ -12,6 +12,9 @@ import { reviewsRouter } from './server/routes/reviews';
 import { chatRouter } from './server/routes/chat';
 import { adminRouter } from './server/routes/admin';
 import { reportsRouter } from './server/routes/reports';
+import { maintenanceRouter } from './server/routes/maintenance';
+import { expensesRouter } from './server/routes/expenses';
+import { safetyRouter } from './server/routes/safety';
 import { setupSocketIO } from './server/socket';
 import { db } from './server/db';
 
@@ -47,6 +50,9 @@ async function startServer() {
   app.use('/api/chat', chatRouter);
   app.use('/api/admin', adminRouter);
   app.use('/api/reports', reportsRouter);
+  app.use('/api/maintenance', maintenanceRouter);
+  app.use('/api/expenses', expensesRouter);
+  app.use('/api/safety', safetyRouter);
 
   // Health and demo reset endpoints
   app.get('/api/health', (_req, res) => {

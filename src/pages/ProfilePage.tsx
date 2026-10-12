@@ -91,36 +91,38 @@ export const ProfilePage: React.FC = () => {
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white tracking-tight">
           Profile
         </h1>
-        <p className="text-xs sm:text-sm text-gray-500 mt-1">
+        <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-1">
           Manage your personal details and roommate matching criteria.
         </p>
       </div>
 
-      <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-xs space-y-5">
+      <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-slate-800 shadow-xs space-y-5">
         {/* Verification Status Card */}
-        <div className="p-3.5 bg-gray-50 rounded-xl border border-gray-200 flex items-center justify-between">
+        <div className="p-3.5 bg-gray-50 dark:bg-slate-800/80 rounded-xl border border-gray-200 dark:border-slate-700 flex items-center justify-between">
           <div className="flex items-center gap-2">
             {user?.isVerified ? (
-              <ShieldCheck className="w-5 h-5 text-emerald-600" />
+              <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
             ) : (
-              <ShieldAlert className="w-5 h-5 text-amber-600" />
+              <ShieldAlert className="w-5 h-5 text-amber-600 dark:text-amber-400" />
             )}
             <div>
-              <div className="text-xs font-bold text-gray-900">
+              <div className="text-xs font-bold text-gray-900 dark:text-white">
                 {user?.isVerified ? 'Verified Account' : 'Unverified Account'}
               </div>
-              <div className="text-[11px] text-gray-500">
-                Role: <span className="capitalize font-semibold text-gray-700">{user?.role}</span>
+              <div className="text-[11px] text-gray-500 dark:text-slate-400">
+                Role: <span className="capitalize font-semibold text-gray-700 dark:text-slate-300">{user?.role}</span>
               </div>
             </div>
           </div>
 
           <span
             className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${
-              user?.isVerified ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+              user?.isVerified
+                ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300'
+                : 'bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300'
             }`}
           >
             {user?.isVerified ? 'Verified' : 'Pending verification'}
@@ -128,60 +130,60 @@ export const ProfilePage: React.FC = () => {
         </div>
 
         {message && (
-          <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold rounded-lg">
+          <div className="p-3 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-xs font-semibold rounded-lg">
             {message}
           </div>
         )}
 
         <form onSubmit={handleSave} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-gray-700 mb-1">Name</label>
+            <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">Name</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Full name"
-              className="w-full text-xs rounded-lg border border-gray-300 p-2.5 focus:border-blue-500 focus:outline-none"
+              className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 p-2.5 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none"
               required
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-gray-700 mb-1">College</label>
+            <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">College</label>
             <input
               type="text"
               value={college}
               onChange={(e) => setCollege(e.target.value)}
               placeholder="Institution (e.g. DTU, NSUT)"
-              className="w-full text-xs rounded-lg border border-gray-300 p-2.5 focus:border-blue-500 focus:outline-none"
+              className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 p-2.5 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-gray-700 mb-1">Phone</label>
+            <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">Phone</label>
             <input
               type="text"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="Contact number"
-              className="w-full text-xs rounded-lg border border-gray-300 p-2.5 focus:border-blue-500 focus:outline-none"
+              className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 p-2.5 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none"
             />
           </div>
 
           {/* Roommate Preferences Section (matching Wireframe Page 8) */}
           {user?.role === 'student' && (
-            <div className="pt-4 border-t border-gray-100 space-y-4">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-gray-900">
+            <div className="pt-4 border-t border-gray-100 dark:border-slate-800 space-y-4">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-white">
                 Roommate preferences
               </h3>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-1">Sleep schedule</label>
+                  <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">Sleep schedule</label>
                   <select
                     value={sleepSchedule}
                     onChange={(e) => setSleepSchedule(e.target.value as any)}
-                    className="w-full text-xs rounded-lg border border-gray-300 p-2 focus:border-blue-500 focus:outline-none"
+                    className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 p-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none"
                   >
                     <option value="early">Early bird</option>
                     <option value="late">Night owl</option>
@@ -190,11 +192,11 @@ export const ProfilePage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-1">Diet</label>
+                  <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">Diet</label>
                   <select
                     value={diet}
                     onChange={(e) => setDiet(e.target.value as any)}
-                    className="w-full text-xs rounded-lg border border-gray-300 p-2 focus:border-blue-500 focus:outline-none"
+                    className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 p-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none"
                   >
                     <option value="veg">Vegetarian</option>
                     <option value="non-veg">Non-vegetarian</option>
@@ -205,11 +207,11 @@ export const ProfilePage: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-1">Smoking</label>
+                  <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">Smoking</label>
                   <select
                     value={smoking}
                     onChange={(e) => setSmoking(e.target.value as any)}
-                    className="w-full text-xs rounded-lg border border-gray-300 p-2 focus:border-blue-500 focus:outline-none"
+                    className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 p-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none"
                   >
                     <option value="no">No</option>
                     <option value="yes">Yes</option>
@@ -218,11 +220,11 @@ export const ProfilePage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-1">Study habits</label>
+                  <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">Study habits</label>
                   <select
                     value={studyHabits}
                     onChange={(e) => setStudyHabits(e.target.value as any)}
-                    className="w-full text-xs rounded-lg border border-gray-300 p-2 focus:border-blue-500 focus:outline-none"
+                    className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 p-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none"
                   >
                     <option value="quiet">Quiet</option>
                     <option value="moderate">Moderate</option>
@@ -232,12 +234,12 @@ export const ProfilePage: React.FC = () => {
               </div>
 
               <div className="pt-1">
-                <label className="flex items-center gap-2 text-xs font-semibold text-gray-800 cursor-pointer">
+                <label className="flex items-center gap-2 text-xs font-semibold text-gray-800 dark:text-slate-200 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={lookingForRoommate}
                     onChange={(e) => setLookingForRoommate(e.target.checked)}
-                    className="rounded text-blue-600 border-gray-300"
+                    className="rounded text-blue-600 border-gray-300 dark:border-slate-700"
                   />
                   I am looking for a roommate (Opt-in to appear in roommate finder)
                 </label>
@@ -249,7 +251,7 @@ export const ProfilePage: React.FC = () => {
             <button
               type="submit"
               disabled={isSaving}
-              className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-lg transition shadow-xs disabled:opacity-50"
+              className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-bold text-xs rounded-lg transition shadow-xs disabled:opacity-50"
             >
               {isSaving ? 'Saving...' : 'Save'}
             </button>
