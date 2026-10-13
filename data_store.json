@@ -7,6 +7,7 @@
       "passwordHash": "$2b$10$xbAyWDKw2EZBD6s8S/VVmOgdcnUmbfXfLG664NJsQGaU9UsMgvzyi",
       "role": "student",
       "isVerified": true,
+      "verificationStatus": "none",
       "college": "Delhi Technological University (DTU)",
       "phone": "+91 98765 43210",
       "roommatePrefs": {
@@ -30,7 +31,8 @@
       "ratingAvg": 4.8,
       "ratingCount": 3,
       "createdAt": "2026-09-13T04:51:57.758Z",
-      "updatedAt": "2026-10-08T04:51:57.759Z"
+      "updatedAt": "2026-10-08T04:51:57.759Z",
+      "__v": 0
     },
     {
       "id": "usr_student_2",
@@ -39,6 +41,7 @@
       "passwordHash": "$2b$10$xbAyWDKw2EZBD6s8S/VVmOgdcnUmbfXfLG664NJsQGaU9UsMgvzyi",
       "role": "student",
       "isVerified": true,
+      "verificationStatus": "none",
       "college": "Netaji Subhas University of Technology (NSUT)",
       "phone": "+91 98123 45678",
       "roommatePrefs": {
@@ -62,7 +65,8 @@
       "ratingAvg": 4.5,
       "ratingCount": 2,
       "createdAt": "2026-09-18T04:51:57.759Z",
-      "updatedAt": "2026-10-11T04:51:57.759Z"
+      "updatedAt": "2026-10-11T04:51:57.759Z",
+      "__v": 0
     },
     {
       "id": "usr_student_3",
@@ -71,6 +75,7 @@
       "passwordHash": "$2b$10$xbAyWDKw2EZBD6s8S/VVmOgdcnUmbfXfLG664NJsQGaU9UsMgvzyi",
       "role": "student",
       "isVerified": true,
+      "verificationStatus": "none",
       "college": "Delhi Technological University (DTU)",
       "phone": "+91 99222 33445",
       "roommatePrefs": {
@@ -94,7 +99,8 @@
       "ratingAvg": 4.9,
       "ratingCount": 4,
       "createdAt": "2026-09-23T04:51:57.759Z",
-      "updatedAt": "2026-10-12T04:51:57.759Z"
+      "updatedAt": "2026-10-12T04:51:57.759Z",
+      "__v": 0
     },
     {
       "id": "usr_student_4",
@@ -103,6 +109,7 @@
       "passwordHash": "$2b$10$xbAyWDKw2EZBD6s8S/VVmOgdcnUmbfXfLG664NJsQGaU9UsMgvzyi",
       "role": "student",
       "isVerified": true,
+      "verificationStatus": "none",
       "college": "Delhi Technological University (DTU)",
       "phone": "+91 98101 23456",
       "roommatePrefs": {
@@ -126,7 +133,8 @@
       "ratingAvg": 4.9,
       "ratingCount": 5,
       "createdAt": "2026-09-25T04:51:57.759Z",
-      "updatedAt": "2026-10-11T04:51:57.759Z"
+      "updatedAt": "2026-10-11T04:51:57.759Z",
+      "__v": 0
     },
     {
       "id": "usr_owner_1",
@@ -135,14 +143,19 @@
       "passwordHash": "$2b$10$xbAyWDKw2EZBD6s8S/VVmOgdcnUmbfXfLG664NJsQGaU9UsMgvzyi",
       "role": "owner",
       "isVerified": true,
-      "verificationStatus": "approved",
       "verificationDocUrl": "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600",
+      "verificationStatus": "approved",
       "college": "DTU Alum",
       "phone": "+91 98990 11223",
+      "roommatePrefs": {
+        "interests": [],
+        "lookingForRoommate": false
+      },
       "ratingAvg": 4.2,
       "ratingCount": 6,
       "createdAt": "2026-08-14T04:51:57.759Z",
-      "updatedAt": "2026-10-11T04:51:57.759Z"
+      "updatedAt": "2026-10-11T04:51:57.759Z",
+      "__v": 0
     },
     {
       "id": "usr_owner_2",
@@ -151,14 +164,19 @@
       "passwordHash": "$2b$10$xbAyWDKw2EZBD6s8S/VVmOgdcnUmbfXfLG664NJsQGaU9UsMgvzyi",
       "role": "owner",
       "isVerified": false,
-      "verificationStatus": "pending",
       "verificationDocUrl": "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=600",
+      "verificationStatus": "pending",
       "college": "Rohini Estate Owner",
       "phone": "+91 97110 55443",
+      "roommatePrefs": {
+        "interests": [],
+        "lookingForRoommate": false
+      },
       "ratingAvg": 0,
       "ratingCount": 0,
       "createdAt": "2026-10-03T04:51:57.759Z",
-      "updatedAt": "2026-10-12T04:51:57.759Z"
+      "updatedAt": "2026-10-12T04:51:57.759Z",
+      "__v": 0
     },
     {
       "id": "usr_mess_1",
@@ -167,12 +185,18 @@
       "passwordHash": "$2b$10$xbAyWDKw2EZBD6s8S/VVmOgdcnUmbfXfLG664NJsQGaU9UsMgvzyi",
       "role": "mess_provider",
       "isVerified": true,
+      "verificationStatus": "none",
       "college": "Campus Kitchen Partner",
       "phone": "+91 98111 22334",
+      "roommatePrefs": {
+        "interests": [],
+        "lookingForRoommate": false
+      },
       "ratingAvg": 4.3,
       "ratingCount": 14,
       "createdAt": "2026-09-03T04:51:57.759Z",
-      "updatedAt": "2026-10-13T04:51:57.759Z"
+      "updatedAt": "2026-10-13T04:51:57.759Z",
+      "__v": 0
     },
     {
       "id": "usr_admin_1",
@@ -181,10 +205,18 @@
       "passwordHash": "$2b$10$xbAyWDKw2EZBD6s8S/VVmOgdcnUmbfXfLG664NJsQGaU9UsMgvzyi",
       "role": "admin",
       "isVerified": true,
+      "verificationStatus": "none",
       "college": "StayNest Administration",
       "phone": "+91 11 2345 6789",
+      "roommatePrefs": {
+        "interests": [],
+        "lookingForRoommate": false
+      },
+      "ratingAvg": 0,
+      "ratingCount": 0,
       "createdAt": "2026-07-05T04:51:57.759Z",
-      "updatedAt": "2026-10-13T04:51:57.759Z"
+      "updatedAt": "2026-10-13T04:51:57.759Z",
+      "__v": 0
     },
     {
       "id": "usr_1791871147485_lp6pg",
@@ -196,10 +228,15 @@
       "verificationStatus": "approved",
       "college": "",
       "phone": "",
+      "roommatePrefs": {
+        "interests": [],
+        "lookingForRoommate": false
+      },
       "ratingAvg": 0,
       "ratingCount": 0,
       "createdAt": "2026-10-13T05:59:07.485Z",
-      "updatedAt": "2026-10-13T05:59:07.485Z"
+      "updatedAt": "2026-10-13T05:59:07.485Z",
+      "__v": 0
     }
   ],
   "properties": [
@@ -245,7 +282,8 @@
       "ratingCount": 3,
       "lastConfirmedAt": "2026-10-12T04:51:57.759Z",
       "createdAt": "2026-09-18T04:51:57.759Z",
-      "updatedAt": "2026-10-13T04:51:57.759Z"
+      "updatedAt": "2026-10-13T04:51:57.759Z",
+      "__v": 0
     },
     {
       "id": "prop_2",
@@ -288,7 +326,8 @@
       "ratingCount": 2,
       "lastConfirmedAt": "2026-10-09T04:51:57.759Z",
       "createdAt": "2026-09-25T04:51:57.759Z",
-      "updatedAt": "2026-10-13T04:51:57.759Z"
+      "updatedAt": "2026-10-13T04:51:57.759Z",
+      "__v": 0
     },
     {
       "id": "prop_3",
@@ -331,7 +370,8 @@
       "ratingCount": 4,
       "lastConfirmedAt": "2026-10-05T04:51:57.759Z",
       "createdAt": "2026-09-08T04:51:57.759Z",
-      "updatedAt": "2026-10-13T04:51:57.759Z"
+      "updatedAt": "2026-10-13T04:51:57.759Z",
+      "__v": 0
     }
   ],
   "messProviders": [
@@ -357,7 +397,8 @@
           "mealsIncluded": [
             "Lunch",
             "Dinner"
-          ]
+          ],
+          "_id": "6ace91f4b300e61c3eb5df96"
         },
         {
           "name": "Full Day (3 Meals + Sunday Special)",
@@ -366,7 +407,8 @@
             "Breakfast",
             "Lunch",
             "Dinner"
-          ]
+          ],
+          "_id": "6ace91f4b300e61c3eb5df97"
         }
       ],
       "trialMealAvailable": true,
@@ -374,8 +416,6 @@
       "ratingAvg": 4.3,
       "ratingCount": 22,
       "active": true,
-      "createdAt": "2026-09-13T04:51:57.759Z",
-      "updatedAt": "2026-10-13T05:32:49.073Z",
       "menuTimetable": [
         {
           "day": "Monday",
@@ -383,7 +423,8 @@
           "lunch": "Rajma Rasila, steamed Jeera Rice, Tawa Roti, Cucumber Salad",
           "eveningSnacks": "Vegetable Cutlet with hot tea",
           "dinner": "Shahi Paneer, Dal Tadka, Tandoori Roti, Boondi Raita",
-          "todaySpecial": "Shahi Paneer & Hot Gulab Jamun"
+          "todaySpecial": "Shahi Paneer & Hot Gulab Jamun",
+          "_id": "6ace91f4b300e61c3eb5df98"
         },
         {
           "day": "Tuesday",
@@ -391,7 +432,8 @@
           "lunch": "Kadhi Pakoda, steamed rice, Aloo Gobhi dry, papad",
           "eveningSnacks": "Crispy Samosa with mint chutney",
           "dinner": "Kadhai Paneer / Egg Curry, Arhar Dal, Phulkas, Green Salad",
-          "todaySpecial": "Special Kadhi Pakoda with Ghee Rice"
+          "todaySpecial": "Special Kadhi Pakoda with Ghee Rice",
+          "_id": "6ace91f4b300e61c3eb5df99"
         },
         {
           "day": "Wednesday",
@@ -399,7 +441,8 @@
           "lunch": "Chole Bhature / Chole Kulche with pickled onions and mint raita",
           "eveningSnacks": "Bread Pakora with tea",
           "dinner": "Matar Paneer, Chana Dal, Jeera Rice, Chapati",
-          "todaySpecial": "Amritsari Chole with fluffy Bhature"
+          "todaySpecial": "Amritsari Chole with fluffy Bhature",
+          "_id": "6ace91f4b300e61c3eb5df9a"
         },
         {
           "day": "Thursday",
@@ -407,7 +450,8 @@
           "lunch": "Dal Makhani (slow-cooked 12 hrs), Jeera Rice, Mix Veg sabzi",
           "eveningSnacks": "Pao Bhaji / Maggi with tea",
           "dinner": "Paneer Butter Masala, Yellow Dal, Butter Naan / Tawa Roti",
-          "todaySpecial": "Authentic Dal Makhani & Jeera Rice"
+          "todaySpecial": "Authentic Dal Makhani & Jeera Rice",
+          "_id": "6ace91f4b300e61c3eb5df9b"
         },
         {
           "day": "Friday",
@@ -415,7 +459,8 @@
           "lunch": "Kashmiri Dum Aloo, Dal Fry, Basmati Rice, Onion Salad",
           "eveningSnacks": "Aloo Tikki Chaat with sweet tamarind chutney",
           "dinner": "Paneer Do Pyaza / Chicken Masala, Moong Dal, Roti",
-          "todaySpecial": "Paneer Do Pyaza & Kheer"
+          "todaySpecial": "Paneer Do Pyaza & Kheer",
+          "_id": "6ace91f4b300e61c3eb5df9c"
         },
         {
           "day": "Saturday",
@@ -423,7 +468,8 @@
           "lunch": "Veg Pulao with crunchy Boondi Raita & Dal Fry",
           "eveningSnacks": "Onion & Paneer Pakoras with Chai",
           "dinner": "Palak Paneer, Rajma curry, Tawa Roti, Papad",
-          "todaySpecial": "Poori Bhaji & Suji Halwa for Breakfast"
+          "todaySpecial": "Poori Bhaji & Suji Halwa for Breakfast",
+          "_id": "6ace91f4b300e61c3eb5df9d"
         },
         {
           "day": "Sunday",
@@ -431,9 +477,13 @@
           "lunch": "Hyderabadi Veg Biryani / Chicken Biryani with Mirchi ka Salan & Raita",
           "eveningSnacks": "Bun Maska with Kadak Chai",
           "dinner": "Chef Special Paneer Lababdar, Dal Tadka, Gulaab Jamun",
-          "todaySpecial": "Dum Biryani with Mirchi ka Salan & Gulab Jamun Feast"
+          "todaySpecial": "Dum Biryani with Mirchi ka Salan & Gulab Jamun Feast",
+          "_id": "6ace91f4b300e61c3eb5df9e"
         }
-      ]
+      ],
+      "createdAt": "2026-09-13T04:51:57.759Z",
+      "updatedAt": "2026-10-13T05:32:49.073Z",
+      "__v": 0
     },
     {
       "id": "mess_2",
@@ -456,7 +506,8 @@
           "pricePerMonth": 1900,
           "mealsIncluded": [
             "Dinner"
-          ]
+          ],
+          "_id": "6ace91f4b300e61c3eb5dfa0"
         },
         {
           "name": "Lunch + Dinner Special",
@@ -464,7 +515,8 @@
           "mealsIncluded": [
             "Lunch",
             "Dinner"
-          ]
+          ],
+          "_id": "6ace91f4b300e61c3eb5dfa1"
         }
       ],
       "trialMealAvailable": true,
@@ -473,7 +525,9 @@
       "ratingCount": 16,
       "active": true,
       "createdAt": "2026-09-21T04:51:57.759Z",
-      "updatedAt": "2026-10-13T04:51:57.759Z"
+      "updatedAt": "2026-10-13T04:51:57.759Z",
+      "menuTimetable": [],
+      "__v": 0
     },
     {
       "id": "mess_3",
@@ -498,7 +552,8 @@
             "Breakfast",
             "Lunch",
             "Dinner"
-          ]
+          ],
+          "_id": "6ace91f4b300e61c3eb5dfa3"
         }
       ],
       "trialMealAvailable": false,
@@ -506,7 +561,9 @@
       "ratingCount": 9,
       "active": true,
       "createdAt": "2026-09-28T04:51:57.759Z",
-      "updatedAt": "2026-10-13T04:51:57.759Z"
+      "updatedAt": "2026-10-13T04:51:57.759Z",
+      "menuTimetable": [],
+      "__v": 0
     }
   ],
   "bookingRequests": [
@@ -521,7 +578,8 @@
       "message": "Hi Vikram ji, I am a 3rd year B.Tech student at DTU. Looking to shift by 1st Nov. Can we arrange a visit this weekend?",
       "status": "pending",
       "createdAt": "2026-10-11T04:51:57.759Z",
-      "updatedAt": "2026-10-11T04:51:57.759Z"
+      "updatedAt": "2026-10-11T04:51:57.759Z",
+      "__v": 0
     },
     {
       "id": "bk_2",
@@ -534,7 +592,8 @@
       "message": "Looking for a 2BHK for me and my classmate. We are quiet and focused on studies.",
       "status": "accepted",
       "createdAt": "2026-10-06T04:51:57.759Z",
-      "updatedAt": "2026-10-10T04:51:57.759Z"
+      "updatedAt": "2026-10-10T04:51:57.759Z",
+      "__v": 0
     },
     {
       "id": "bk_3",
@@ -547,7 +606,8 @@
       "message": "Completed internship stay for 2 months near DTU.",
       "status": "completed_stay",
       "createdAt": "2026-08-14T04:51:57.759Z",
-      "updatedAt": "2026-10-03T04:51:57.759Z"
+      "updatedAt": "2026-10-03T04:51:57.759Z",
+      "__v": 0
     }
   ],
   "reviews": [
@@ -559,7 +619,8 @@
       "score": 5,
       "text": "Great stay! Clean rooms, cooperative owner, and WiFi was very stable throughout exam week.",
       "createdAt": "2026-10-04T04:51:57.759Z",
-      "updatedAt": "2026-10-04T04:51:57.759Z"
+      "updatedAt": "2026-10-04T04:51:57.759Z",
+      "__v": 0
     },
     {
       "id": "rev_2",
@@ -569,7 +630,8 @@
       "score": 4,
       "text": "Super close to Gate 2. Food included was hearty and landlord responded quickly to power backup switch.",
       "createdAt": "2026-09-23T04:51:57.759Z",
-      "updatedAt": "2026-09-23T04:51:57.759Z"
+      "updatedAt": "2026-09-23T04:51:57.759Z",
+      "__v": 0
     }
   ],
   "messages": [
@@ -581,7 +643,8 @@
       "propertyId": "prop_1",
       "text": "Is the room still free for next semester?",
       "readAt": "2026-10-13T03:45:17.759Z",
-      "createdAt": "2026-10-13T03:28:37.759Z"
+      "createdAt": "2026-10-13T03:28:37.759Z",
+      "__v": 0
     },
     {
       "id": "msg_2",
@@ -591,7 +654,8 @@
       "propertyId": "prop_1",
       "text": "Yes Rahul, you can visit this week to check the room.",
       "readAt": "2026-10-13T04:18:37.759Z",
-      "createdAt": "2026-10-13T04:01:57.759Z"
+      "createdAt": "2026-10-13T04:01:57.759Z",
+      "__v": 0
     },
     {
       "id": "msg_3",
@@ -601,7 +665,8 @@
       "propertyId": "prop_1",
       "text": "Great, I will send a booking request through the portal!",
       "readAt": null,
-      "createdAt": "2026-10-13T04:35:17.759Z"
+      "createdAt": "2026-10-13T04:35:17.759Z",
+      "__v": 0
     },
     {
       "id": "msg_4",
@@ -610,7 +675,8 @@
       "recipientId": "usr_student_1",
       "text": "Hey Rahul, saw you also have early sleep schedule and quiet study habits. Want to team up for a 2BHK?",
       "readAt": null,
-      "createdAt": "2026-10-13T04:38:37.759Z"
+      "createdAt": "2026-10-13T04:38:37.759Z",
+      "__v": 0
     }
   ],
   "reports": [
@@ -621,7 +687,8 @@
       "reason": "Wrong details",
       "details": "The deposit listed was different when I spoke over call. Please verify.",
       "status": "pending",
-      "createdAt": "2026-10-12T04:51:57.759Z"
+      "createdAt": "2026-10-12T04:51:57.759Z",
+      "__v": 0
     }
   ],
   "maintenanceTickets": [
@@ -640,7 +707,8 @@
       "assignedTechnician": "Manoj Kumar (Plumber - +91 98112 34567)",
       "resolutionNotes": "Technician scheduled for 4:00 PM today with replacement ceramic valve.",
       "createdAt": "2026-10-12T10:51:57.759Z",
-      "updatedAt": "2026-10-13T00:51:57.759Z"
+      "updatedAt": "2026-10-13T00:51:57.759Z",
+      "__v": 0
     },
     {
       "id": "tk_2",
@@ -655,7 +723,8 @@
       "description": "The router on 2nd floor drops connection during evening study hours (8 PM - 11 PM). Please check adapter or reset channel.",
       "status": "pending",
       "createdAt": "2026-10-12T23:51:57.759Z",
-      "updatedAt": "2026-10-12T23:51:57.759Z"
+      "updatedAt": "2026-10-12T23:51:57.759Z",
+      "__v": 0
     },
     {
       "id": "tk_3",
@@ -672,7 +741,8 @@
       "assignedTechnician": "Dinesh (Electrician)",
       "resolutionNotes": "Replaced with Anchor Roma 5-step modular regulator. Tested and working fine.",
       "createdAt": "2026-10-09T04:51:57.759Z",
-      "updatedAt": "2026-10-12T04:51:57.759Z"
+      "updatedAt": "2026-10-12T04:51:57.759Z",
+      "__v": 0
     }
   ],
   "expenses": [
@@ -690,18 +760,21 @@
           "id": "usr_student_1",
           "name": "Rahul Sharma",
           "share": 8000,
-          "settled": true
+          "settled": true,
+          "_id": "6ace91f4b300e61c3eb5dfb2"
         },
         {
           "id": "usr_student_3",
           "name": "Aman Patel",
           "share": 8000,
-          "settled": false
+          "settled": false,
+          "_id": "6ace91f4b300e61c3eb5dfb3"
         }
       ],
       "upiId": "rahulsharma@oksbi",
       "date": "2026-10-01",
-      "createdAt": "2026-10-02T04:51:57.759Z"
+      "createdAt": "2026-10-02T04:51:57.759Z",
+      "__v": 0
     },
     {
       "id": "exp_2",
@@ -717,18 +790,21 @@
           "id": "usr_student_1",
           "name": "Rahul Sharma",
           "share": 970,
-          "settled": true
+          "settled": true,
+          "_id": "6ace91f4b300e61c3eb5dfb5"
         },
         {
           "id": "usr_student_3",
           "name": "Aman Patel",
           "share": 970,
-          "settled": true
+          "settled": true,
+          "_id": "6ace91f4b300e61c3eb5dfb6"
         }
       ],
       "upiId": "amanpatel@paytm",
       "date": "2026-10-05",
-      "createdAt": "2026-10-06T04:51:57.759Z"
+      "createdAt": "2026-10-06T04:51:57.759Z",
+      "__v": 0
     },
     {
       "id": "exp_3",
@@ -744,18 +820,21 @@
           "id": "usr_student_1",
           "name": "Rahul Sharma",
           "share": 450,
-          "settled": true
+          "settled": true,
+          "_id": "6ace91f4b300e61c3eb5dfb8"
         },
         {
           "id": "usr_student_3",
           "name": "Aman Patel",
           "share": 449,
-          "settled": false
+          "settled": false,
+          "_id": "6ace91f4b300e61c3eb5dfb9"
         }
       ],
       "upiId": "rahulsharma@oksbi",
       "date": "2026-10-08",
-      "createdAt": "2026-10-09T04:51:57.759Z"
+      "createdAt": "2026-10-09T04:51:57.759Z",
+      "__v": 0
     },
     {
       "id": "exp_4",
@@ -771,18 +850,21 @@
           "id": "usr_student_1",
           "name": "Rahul Sharma",
           "share": 340,
-          "settled": true
+          "settled": true,
+          "_id": "6ace91f4b300e61c3eb5dfbb"
         },
         {
           "id": "usr_student_3",
           "name": "Aman Patel",
           "share": 340,
-          "settled": false
+          "settled": false,
+          "_id": "6ace91f4b300e61c3eb5dfbc"
         }
       ],
       "upiId": "rahulsharma@oksbi",
       "date": "2026-10-10",
-      "createdAt": "2026-10-11T04:51:57.759Z"
+      "createdAt": "2026-10-11T04:51:57.759Z",
+      "__v": 0
     }
   ],
   "mealVotes": [
@@ -793,7 +875,8 @@
       "userId": "usr_student_1",
       "vote": "up",
       "dishFeedback": "Paneer Butter Masala was very fresh today! Hot phulkas served on time.",
-      "createdAt": "2026-10-13T02:51:57.759Z"
+      "createdAt": "2026-10-13T02:51:57.759Z",
+      "__v": 0
     },
     {
       "id": "mv_2",
@@ -802,7 +885,8 @@
       "userId": "usr_student_3",
       "vote": "up",
       "dishFeedback": "Dal Makhani tasted great, not too oily.",
-      "createdAt": "2026-10-13T03:51:57.759Z"
+      "createdAt": "2026-10-13T03:51:57.759Z",
+      "__v": 0
     },
     {
       "id": "mv_3",
@@ -811,7 +895,17 @@
       "userId": "usr_student_2",
       "vote": "up",
       "dishFeedback": "Good portion size and clean packaging.",
-      "createdAt": "2026-10-13T01:51:57.759Z"
+      "createdAt": "2026-10-13T01:51:57.759Z",
+      "__v": 0
+    },
+    {
+      "id": "mv_1791917301477_5kyr",
+      "messProviderId": "mess_3",
+      "mealType": "lunch",
+      "userId": "usr_student_1",
+      "vote": "down",
+      "createdAt": "2026-10-13T18:48:21.477Z",
+      "__v": 0
     }
   ],
   "safetyReviews": [
@@ -826,7 +920,8 @@
       "femaleFriendlyScore": 5,
       "nightWalkability": "well_lit",
       "tips": "Approach road directly faces DTU Gate 2. Brightly illuminated LED lights all night. Guard stays active at the barrier with visitor log.",
-      "createdAt": "2026-10-01T04:51:57.759Z"
+      "createdAt": "2026-10-01T04:51:57.759Z",
+      "__v": 0
     },
     {
       "id": "sr_2",
@@ -839,7 +934,8 @@
       "femaleFriendlyScore": 5,
       "nightWalkability": "safe",
       "tips": "E-rickshaws available right up to entrance till 10:30 PM. Apollo 24/7 chemist is only 150m down the lane. Very comfortable for female students.",
-      "createdAt": "2026-10-05T04:51:57.759Z"
+      "createdAt": "2026-10-05T04:51:57.759Z",
+      "__v": 0
     },
     {
       "id": "sr_3",
@@ -852,7 +948,8 @@
       "femaleFriendlyScore": 4,
       "nightWalkability": "safe",
       "tips": "Gated colony with boom barrier. CCTV camera installed at building entrance. Safe neighborhood for late library returns.",
-      "createdAt": "2026-10-08T04:51:57.759Z"
+      "createdAt": "2026-10-08T04:51:57.759Z",
+      "__v": 0
     }
   ]
 }

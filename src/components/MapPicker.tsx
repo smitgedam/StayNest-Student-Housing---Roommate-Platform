@@ -73,16 +73,36 @@ export const MapPicker: React.FC<MapPickerProps> = ({
   // Move marker to coordinates
   const moveMarkerToCoords = useCallback(
     (lat: number, lng: number, labelName?: string) => {
+      const numLat = Number(lat);
+      const numLng = Number(lng);
+      if (!Number.isFinite(numLat) || Number.isNaN(numLat) || !Number.isFinite(numLng) || Number.isNaN(numLng)) return;
+      if (numLat < -90 || numLat > 90 || numLng < -180 || numLng > 180) return;
       if (mapRef.current) {
-        mapRef.current.flyTo([lat, lng], 15, { duration: 0.7 });
+        try {
+          mapRef.current.stop();
+          const size = mapRef.current.getSize();
+          const container = containerRef.current;
+          const isVisible = container && container.offsetWidth > 0 && container.offsetHeight > 0;
+          if (isVisible && size && size.x > 0 && size.y > 0) {
+            mapRef.current.flyTo([numLat, numLng], 15, { duration: 0.7 });
+          } else {
+            mapRef.current.setView([numLat, numLng], 15, { animate: false });
+          }
+        } catch {
+          try {
+            mapRef.current.setView([numLat, numLng], 15, { animate: false });
+          } catch {
+            // Safe fallback
+          }
+        }
       }
       if (markerRef.current) {
-        markerRef.current.setLatLng([lat, lng]);
+        markerRef.current.setLatLng([numLat, numLng]);
         if (labelName) {
           markerRef.current.bindTooltip(`📍 ${labelName}`, { direction: 'top' }).openTooltip();
         }
       }
-      onChange([Number(lng.toFixed(5)), Number(lat.toFixed(5))]);
+      onChange([Number(numLng.toFixed(5)), Number(numLat.toFixed(5))]);
     },
     [onChange]
   );
@@ -185,9 +205,10 @@ export const MapPicker: React.FC<MapPickerProps> = ({
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const [lng, lat] = value;
-    const initialLat = lat || 28.7495;
-    const initialLng = lng || 77.1175;
+    const rawLng = value?.[0];
+    const rawLat = value?.[1];
+    const initialLat = typeof rawLat === 'number' && isFinite(rawLat) && !isNaN(rawLat) ? rawLat : 28.7495;
+    const initialLng = typeof rawLng === 'number' && isFinite(rawLng) && !isNaN(rawLng) ? rawLng : 77.1175;
 
     if (!mapRef.current) {
       const map = L.map(containerRef.current, {
@@ -205,12 +226,14 @@ export const MapPicker: React.FC<MapPickerProps> = ({
       // Drag and drop marker anywhere on map: address is filled automatically!
       marker.on('dragend', () => {
         const pos = marker.getLatLng();
+        if (!pos || !isFinite(pos.lat) || !isFinite(pos.lng) || isNaN(pos.lat) || isNaN(pos.lng)) return;
         onChange([Number(pos.lng.toFixed(5)), Number(pos.lat.toFixed(5))]);
         handleMarkerMoved(pos.lat, pos.lng);
       });
 
       // Clicking anywhere on map also places marker and fills address automatically
       map.on('click', (e: L.LeafletMouseEvent) => {
+        if (!e.latlng || !isFinite(e.latlng.lat) || !isFinite(e.latlng.lng) || isNaN(e.latlng.lat) || isNaN(e.latlng.lng)) return;
         marker.setLatLng(e.latlng);
         onChange([Number(e.latlng.lng.toFixed(5)), Number(e.latlng.lat.toFixed(5))]);
         handleMarkerMoved(e.latlng.lat, e.latlng.lng);
@@ -225,6 +248,14 @@ export const MapPicker: React.FC<MapPickerProps> = ({
 
       return () => {
         resizeObserver.disconnect();
+        try {
+          map.stop();
+          map.remove();
+        } catch {
+          // Safe ignore
+        }
+        mapRef.current = null;
+        markerRef.current = null;
       };
     } else {
       if (markerRef.current) {

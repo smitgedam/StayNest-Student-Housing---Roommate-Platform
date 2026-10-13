@@ -13,6 +13,20 @@ interface PropertyMapProps {
   onAddressResolved?: (address: string, coords: [number, number]) => void;
 }
 
+// Safely sanitize coordinates, falling back to DTU campus center if invalid or NaN
+export const sanitizeCoords = (coords: any, fallback: [number, number] = [28.7495, 77.1175]): [number, number] => {
+  if (!coords || !Array.isArray(coords) || coords.length < 2) return fallback;
+  const lat = Number(coords[0]);
+  const lng = Number(coords[1]);
+  if (!Number.isFinite(lat) || Number.isNaN(lat) || !Number.isFinite(lng) || Number.isNaN(lng)) {
+    return fallback;
+  }
+  if (lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+    return fallback;
+  }
+  return [lat, lng];
+};
+
 export const PropertyMap: React.FC<PropertyMapProps> = ({
   properties,
   center,
@@ -32,51 +46,68 @@ export const PropertyMap: React.FC<PropertyMapProps> = ({
   useEffect(() => {
     if (!mapContainerRef.current) return;
 
-    if (!mapInstanceRef.current) {
-      const map = L.map(mapContainerRef.current, {
-        center: [center[0], center[1]],
-        zoom: 13,
-        zoomControl: true,
-      });
+    const [initLat, initLng] = sanitizeCoords(center);
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors',
-        maxZoom: 19,
-      }).addTo(map);
+    const map = L.map(mapContainerRef.current, {
+      center: [initLat, initLng],
+      zoom: 13,
+      zoomControl: true,
+    });
 
-      // Clicking anywhere on map places marker, updates 10km radius circle, and resolves address
-      map.on('click', async (e: L.LeafletMouseEvent) => {
-        const coords: [number, number] = [Number(e.latlng.lat.toFixed(5)), Number(e.latlng.lng.toFixed(5))];
-        if (centerMarkerRef.current) {
-          centerMarkerRef.current.setLatLng(e.latlng);
-        }
-        if (circleRef.current) {
-          circleRef.current.setLatLng(e.latlng);
-        }
-        if (onCenterChange) {
-          onCenterChange(coords);
-        }
-        const resolvedAddress = await reverseGeocodeCoords(coords[0], coords[1]);
-        if (centerMarkerRef.current) {
-          centerMarkerRef.current.setTooltipContent(`📍 ${resolvedAddress}`).openTooltip();
-        }
-        if (onAddressResolved) {
-          onAddressResolved(resolvedAddress, coords);
-        }
-      });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors',
+      maxZoom: 19,
+    }).addTo(map);
 
-      mapInstanceRef.current = map;
+    // Clicking anywhere on map places marker, updates 10km radius circle, and resolves address
+    map.on('click', async (e: L.LeafletMouseEvent) => {
+      if (!e.latlng || !Number.isFinite(e.latlng.lat) || !Number.isFinite(e.latlng.lng) || Number.isNaN(e.latlng.lat) || Number.isNaN(e.latlng.lng)) {
+        return;
+      }
+      const coords: [number, number] = [Number(e.latlng.lat.toFixed(5)), Number(e.latlng.lng.toFixed(5))];
+      if (centerMarkerRef.current) {
+        centerMarkerRef.current.setLatLng(e.latlng);
+      }
+      if (circleRef.current) {
+        circleRef.current.setLatLng(e.latlng);
+      }
+      if (onCenterChange) {
+        onCenterChange(coords);
+      }
+      const resolvedAddress = await reverseGeocodeCoords(coords[0], coords[1]);
+      if (centerMarkerRef.current) {
+        centerMarkerRef.current.setTooltipContent(`📍 ${resolvedAddress}`).openTooltip();
+      }
+      if (onAddressResolved) {
+        onAddressResolved(resolvedAddress, coords);
+      }
+    });
 
-      // Handle resize events so map tiles adapt cleanly to responsive viewport changes
-      const resizeObserver = new ResizeObserver(() => {
-        map.invalidateSize();
-      });
-      resizeObserver.observe(mapContainerRef.current);
+    mapInstanceRef.current = map;
 
-      return () => {
-        resizeObserver.disconnect();
-      };
-    }
+    // Handle resize events so map tiles adapt cleanly to responsive viewport changes
+    const resizeObserver = new ResizeObserver(() => {
+      if (mapInstanceRef.current && mapContainerRef.current) {
+        if (mapContainerRef.current.offsetWidth > 0 && mapContainerRef.current.offsetHeight > 0) {
+          mapInstanceRef.current.invalidateSize({ pan: false });
+        }
+      }
+    });
+    resizeObserver.observe(mapContainerRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
+      try {
+        map.stop();
+        map.remove();
+      } catch {
+        // Safe ignore
+      }
+      mapInstanceRef.current = null;
+      circleRef.current = null;
+      centerMarkerRef.current = null;
+      markersRef.current = [];
+    };
   }, []);
 
   // Update map center, radius circle, and markers
@@ -84,14 +115,34 @@ export const PropertyMap: React.FC<PropertyMapProps> = ({
     const map = mapInstanceRef.current;
     if (!map) return;
 
-    // Smoothly fly map to new center coordinates when changed
-    map.flyTo([center[0], center[1]], Math.max(map.getZoom() || 13, 13), {
-      duration: 0.8,
-    });
+    const [flyLat, flyLng] = sanitizeCoords(center);
+
+    // Smoothly fly map to new center coordinates when container is rendered and sized
+    try {
+      map.stop();
+      const container = mapContainerRef.current;
+      const size = map.getSize();
+      const isVisible = container && container.offsetWidth > 0 && container.offsetHeight > 0;
+      const targetZoom = Math.max(map.getZoom() || 13, 13);
+
+      if (isVisible && size && size.x > 0 && size.y > 0) {
+        map.flyTo([flyLat, flyLng], targetZoom, {
+          duration: 0.8,
+        });
+      } else {
+        map.setView([flyLat, flyLng], targetZoom, { animate: false });
+      }
+    } catch {
+      try {
+        map.setView([flyLat, flyLng], 13, { animate: false });
+      } catch {
+        // Fallback ignore
+      }
+    }
 
     // Update or create draggable center marker
     if (centerMarkerRef.current) {
-      centerMarkerRef.current.setLatLng([center[0], center[1]]);
+      centerMarkerRef.current.setLatLng([flyLat, flyLng]);
     } else {
       const centerIcon = L.divIcon({
         className: 'user-center-marker',
@@ -104,7 +155,7 @@ export const PropertyMap: React.FC<PropertyMapProps> = ({
         iconAnchor: [11, 11],
       });
 
-      const centerMarker = L.marker([center[0], center[1]], {
+      const centerMarker = L.marker([flyLat, flyLng], {
         icon: centerIcon,
         draggable: true,
         title: 'Search Center (10 km range)',
@@ -115,6 +166,7 @@ export const PropertyMap: React.FC<PropertyMapProps> = ({
       // When user drags marker anywhere on map, auto-resolve address and notify parent
       centerMarker.on('dragend', async () => {
         const pos = centerMarker.getLatLng();
+        if (!pos || !Number.isFinite(pos.lat) || !Number.isFinite(pos.lng) || Number.isNaN(pos.lat) || Number.isNaN(pos.lng)) return;
         const coords: [number, number] = [Number(pos.lat.toFixed(5)), Number(pos.lng.toFixed(5))];
         if (circleRef.current) {
           circleRef.current.setLatLng(pos);
@@ -136,15 +188,14 @@ export const PropertyMap: React.FC<PropertyMapProps> = ({
     if (circleRef.current) {
       circleRef.current.remove();
     }
-    if (radiusKm > 0) {
-      circleRef.current = L.circle([center[0], center[1]], {
-        radius: radiusKm * 1000,
-        color: '#3b82f6',
-        fillColor: '#93c5fd',
-        fillOpacity: 0.15,
-        weight: 1.5,
-      }).addTo(map);
-    }
+    const safeRadius = typeof radiusKm === 'number' && isFinite(radiusKm) && radiusKm > 0 ? radiusKm : 10;
+    circleRef.current = L.circle([flyLat, flyLng], {
+      radius: safeRadius * 1000,
+      color: '#3b82f6',
+      fillColor: '#93c5fd',
+      fillOpacity: 0.15,
+      weight: 1.5,
+    }).addTo(map);
 
     // Clear previous property markers
     markersRef.current.forEach(m => m.remove());
@@ -154,6 +205,10 @@ export const PropertyMap: React.FC<PropertyMapProps> = ({
     properties.forEach(prop => {
       if (!prop.location?.coordinates || prop.location.coordinates.length < 2) return;
       const [lng, lat] = prop.location.coordinates;
+      const numLat = Number(lat);
+      const numLng = Number(lng);
+      if (!isFinite(numLat) || isNaN(numLat) || !isFinite(numLng) || isNaN(numLng)) return;
+
       const isSelected = selectedPropertyId === prop.id;
 
       const markerHtml = `
@@ -181,7 +236,7 @@ export const PropertyMap: React.FC<PropertyMapProps> = ({
         iconAnchor: [25, 12],
       });
 
-      const marker = L.marker([lat, lng], { icon: customIcon }).addTo(map);
+      const marker = L.marker([numLat, numLng], { icon: customIcon }).addTo(map);
 
       marker.bindPopup(`
         <div class="p-1 min-w-[170px]">

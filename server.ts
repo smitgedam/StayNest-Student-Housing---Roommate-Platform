@@ -16,8 +16,10 @@ import { maintenanceRouter } from './server/routes/maintenance';
 import { expensesRouter } from './server/routes/expenses';
 import { safetyRouter } from './server/routes/safety';
 import { geocodeRouter } from './server/routes/geocode';
+import { databaseRouter } from './server/routes/database';
 import { setupSocketIO } from './server/socket';
 import { db } from './server/db';
+import { connectMongo, seedMongoIfEmpty } from './server/mongodb';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -55,11 +57,36 @@ async function startServer() {
   app.use('/api/expenses', expensesRouter);
   app.use('/api/safety', safetyRouter);
   app.use('/api/geocode', geocodeRouter);
+  app.use('/api/db', databaseRouter);
 
   // Health and demo reset endpoints
   app.get('/api/health', (_req, res) => {
     res.json({ status: 'ok', time: new Date().toISOString() });
   });
+
+  // Attempt MongoDB connection if configured in environment
+  if (process.env.MONGODB_URI) {
+    connectMongo()
+      .then(async (res) => {
+        if (res.success) {
+          try {
+            const seeded = await seedMongoIfEmpty(db.getRawData());
+            if (!seeded) {
+              await db.syncFromMongo();
+            }
+          } catch (e: any) {
+            console.warn('[MongoDB] Initialization sync warning:', e.message);
+          }
+        } else {
+          console.log(`[Database] MongoDB not reachable (${res.message}). Running smoothly in Local Persistent Store mode.`);
+        }
+      })
+      .catch((err) => {
+        console.log(`[Database] MongoDB connection bypassed (${err.message}). Running smoothly in Local Persistent Store mode.`);
+      });
+  } else {
+    console.log('[Database] Running in Local Persistent Store mode. To enable live MongoDB, set MONGODB_URI in your environment.');
+  }
 
   app.post('/api/reset-demo', (_req, res) => {
     db.resetToDefault();

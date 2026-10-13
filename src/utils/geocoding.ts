@@ -241,11 +241,15 @@ export async function geocodeAddress(query: string): Promise<{ coords: [number, 
     const res = await fetch(`/api/geocode/search?q=${encodeURIComponent(query)}`);
     if (res.ok) {
       const data = await res.json();
-      if (data && data.coords) {
-        return {
-          coords: [data.coords[0], data.coords[1]],
-          label: data.label || query,
-        };
+      if (data && data.coords && Array.isArray(data.coords) && data.coords.length >= 2) {
+        const numLat = Number(data.coords[0]);
+        const numLng = Number(data.coords[1]);
+        if (isFinite(numLat) && isFinite(numLng) && !isNaN(numLat) && !isNaN(numLng)) {
+          return {
+            coords: [numLat, numLng],
+            label: data.label || query,
+          };
+        }
       }
     }
   } catch {
@@ -260,13 +264,17 @@ export async function geocodeAddress(query: string): Promise<{ coords: [number, 
       const pData = await res.json();
       if (pData && pData.features && pData.features.length > 0) {
         const feat = pData.features[0];
-        const [lon, lat] = feat.geometry.coordinates;
-        const props = feat.properties || {};
-        const labelParts = [props.name, props.city, props.state, props.country].filter(Boolean);
-        return {
-          coords: [lat, lon],
-          label: labelParts.join(', ') || query,
-        };
+        const [lon, lat] = feat.geometry?.coordinates || [];
+        const numLat = Number(lat);
+        const numLon = Number(lon);
+        if (isFinite(numLat) && isFinite(numLon) && !isNaN(numLat) && !isNaN(numLon)) {
+          const props = feat.properties || {};
+          const labelParts = [props.name, props.city, props.state, props.country].filter(Boolean);
+          return {
+            coords: [numLat, numLon],
+            label: labelParts.join(', ') || query,
+          };
+        }
       }
     }
   } catch {

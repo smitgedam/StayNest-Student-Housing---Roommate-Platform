@@ -14,6 +14,20 @@ import {
   MealVote,
   NeighborhoodSafetyReview,
 } from './types';
+import { isMongoConnected } from './mongodb';
+import {
+  UserModel,
+  PropertyModel,
+  MessProviderModel,
+  BookingRequestModel,
+  ReviewModel,
+  MessageModel,
+  ListingReportModel,
+  MaintenanceTicketModel,
+  ExpenseItemModel,
+  MealVoteModel,
+  SafetyReviewModel,
+} from './models';
 
 // Default password hash for 'password123'
 const DEFAULT_HASH = bcrypt.hashSync('password123', 10);
@@ -1066,6 +1080,80 @@ class Store {
     this.data.safetyReviews.push(rev);
     this.save();
     return rev;
+  }
+
+  getRawData(): DatabaseState {
+    return this.data;
+  }
+
+  async syncFromMongo(): Promise<void> {
+    if (!isMongoConnected()) return;
+    try {
+      const [
+        users,
+        properties,
+        messProviders,
+        bookingRequests,
+        reviews,
+        messages,
+        reports,
+        maintenanceTickets,
+        expenses,
+        mealVotes,
+        safetyReviews,
+      ] = await Promise.all([
+        UserModel.find().lean().exec(),
+        PropertyModel.find().lean().exec(),
+        MessProviderModel.find().lean().exec(),
+        BookingRequestModel.find().lean().exec(),
+        ReviewModel.find().lean().exec(),
+        MessageModel.find().lean().exec(),
+        ListingReportModel.find().lean().exec(),
+        MaintenanceTicketModel.find().lean().exec(),
+        ExpenseItemModel.find().lean().exec(),
+        MealVoteModel.find().lean().exec(),
+        SafetyReviewModel.find().lean().exec(),
+      ]);
+
+      if (users && users.length > 0) {
+        this.data.users = users.map((u: any) => ({ ...u, _id: undefined }));
+      }
+      if (properties && properties.length > 0) {
+        this.data.properties = properties.map((p: any) => ({ ...p, _id: undefined }));
+      }
+      if (messProviders && messProviders.length > 0) {
+        this.data.messProviders = messProviders.map((m: any) => ({ ...m, _id: undefined }));
+      }
+      if (bookingRequests && bookingRequests.length > 0) {
+        this.data.bookingRequests = bookingRequests.map((b: any) => ({ ...b, _id: undefined }));
+      }
+      if (reviews && reviews.length > 0) {
+        this.data.reviews = reviews.map((r: any) => ({ ...r, _id: undefined }));
+      }
+      if (messages && messages.length > 0) {
+        this.data.messages = messages.map((m: any) => ({ ...m, _id: undefined }));
+      }
+      if (reports && reports.length > 0) {
+        this.data.reports = reports.map((rep: any) => ({ ...rep, _id: undefined }));
+      }
+      if (maintenanceTickets && maintenanceTickets.length > 0) {
+        this.data.maintenanceTickets = maintenanceTickets.map((t: any) => ({ ...t, _id: undefined }));
+      }
+      if (expenses && expenses.length > 0) {
+        this.data.expenses = expenses.map((e: any) => ({ ...e, _id: undefined }));
+      }
+      if (mealVotes && mealVotes.length > 0) {
+        this.data.mealVotes = mealVotes.map((v: any) => ({ ...v, _id: undefined }));
+      }
+      if (safetyReviews && safetyReviews.length > 0) {
+        this.data.safetyReviews = safetyReviews.map((s: any) => ({ ...s, _id: undefined }));
+      }
+
+      this.save();
+      console.log(`[MongoDB] Memory cache synced from MongoDB successfully.`);
+    } catch (err: any) {
+      console.warn('[MongoDB] syncFromMongo error:', err.message);
+    }
   }
 
   resetToDefault() {

@@ -151,13 +151,17 @@ geocodeRouter.get('/search', async (req: Request, res: Response) => {
       const pData = await pRes.json();
       if (pData && pData.features && pData.features.length > 0) {
         const feat = pData.features[0];
-        const [lon, lat] = feat.geometry.coordinates;
-        const props = feat.properties || {};
-        const label = [props.name, props.city, props.state, props.country].filter(Boolean).join(', ') || query;
-        return res.json({
-          coords: [lat, lon],
-          label,
-        });
+        const [lon, lat] = feat.geometry?.coordinates || [];
+        const numLat = parseFloat(lat);
+        const numLon = parseFloat(lon);
+        if (!isNaN(numLat) && !isNaN(numLon) && isFinite(numLat) && isFinite(numLon)) {
+          const props = feat.properties || {};
+          const label = [props.name, props.city, props.state, props.country].filter(Boolean).join(', ') || query;
+          return res.json({
+            coords: [numLat, numLon],
+            label,
+          });
+        }
       }
     }
   } catch (err) {

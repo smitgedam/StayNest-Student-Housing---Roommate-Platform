@@ -78,7 +78,7 @@ export const BrowsePage: React.FC<BrowsePageProps> = ({
     setIsGeocodingCity(true);
     try {
       const result = await geocodeAddress(trimmed);
-      if (result) {
+      if (result && isFinite(result.coords[0]) && isFinite(result.coords[1]) && !isNaN(result.coords[0]) && !isNaN(result.coords[1])) {
         setCenterCoords(result.coords);
         setGeocodedLabel(result.label || `${trimmed} Center`);
         setSearchQuery('');
@@ -149,7 +149,7 @@ export const BrowsePage: React.FC<BrowsePageProps> = ({
     setIsGeocoding(true);
     try {
       const result = await geocodeAddress(addressText);
-      if (result) {
+      if (result && isFinite(result.coords[0]) && isFinite(result.coords[1]) && !isNaN(result.coords[0]) && !isNaN(result.coords[1])) {
         setCenterCoords(result.coords);
         setGeocodedLabel(result.label);
         setLocationNotFound(false);
@@ -161,11 +161,17 @@ export const BrowsePage: React.FC<BrowsePageProps> = ({
             p.nearestCollege?.toLowerCase().includes(addressText.toLowerCase()) ||
             p.title.toLowerCase().includes(addressText.toLowerCase())
         );
-        if (match && match.location?.coordinates) {
+        if (match && match.location?.coordinates && match.location.coordinates.length >= 2) {
           const [lng, lat] = match.location.coordinates;
-          setCenterCoords([lat, lng]);
-          setGeocodedLabel(match.address || match.title);
-          setLocationNotFound(false);
+          const numLat = Number(lat);
+          const numLng = Number(lng);
+          if (isFinite(numLat) && isFinite(numLng) && !isNaN(numLat) && !isNaN(numLng)) {
+            setCenterCoords([numLat, numLng]);
+            setGeocodedLabel(match.address || match.title);
+            setLocationNotFound(false);
+          } else {
+            setLocationNotFound(true);
+          }
         } else {
           // Address not found by Leaflet/OSM: display famous landmarks option
           setLocationNotFound(true);
@@ -252,8 +258,15 @@ export const BrowsePage: React.FC<BrowsePageProps> = ({
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
-          setCenterCoords([pos.coords.latitude, pos.coords.longitude]);
-          setGeocodedLabel('Your Current GPS Location');
+          const lat = pos?.coords?.latitude;
+          const lng = pos?.coords?.longitude;
+          if (typeof lat === 'number' && typeof lng === 'number' && isFinite(lat) && isFinite(lng) && !isNaN(lat) && !isNaN(lng)) {
+            setCenterCoords([lat, lng]);
+            setGeocodedLabel('Your Current GPS Location');
+          } else {
+            setCenterCoords([28.7495, 77.1175]);
+            setGeocodedLabel('DTU Campus Center, Rohini');
+          }
         },
         () => {
           // Fallback to campus default
