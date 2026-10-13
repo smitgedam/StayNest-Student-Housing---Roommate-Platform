@@ -1,0 +1,858 @@
+{
+  "users": [
+    {
+      "id": "usr_student_1",
+      "name": "Rahul Sharma",
+      "email": "rahul@college.edu",
+      "passwordHash": "$2b$10$xbAyWDKw2EZBD6s8S/VVmOgdcnUmbfXfLG664NJsQGaU9UsMgvzyi",
+      "role": "student",
+      "isVerified": true,
+      "college": "Delhi Technological University (DTU)",
+      "phone": "+91 98765 43210",
+      "roommatePrefs": {
+        "sleepSchedule": "early",
+        "diet": "veg",
+        "smoking": "no",
+        "studyHabits": "quiet",
+        "cleanliness": "neat_freak",
+        "guestPolicy": "no_parties",
+        "foodSharing": "independent",
+        "budgetMin": 6000,
+        "budgetMax": 11000,
+        "interests": [
+          "Coding",
+          "Tech Projects",
+          "Gym & Fitness",
+          "Reading"
+        ],
+        "lookingForRoommate": true
+      },
+      "ratingAvg": 4.8,
+      "ratingCount": 3,
+      "createdAt": "2026-09-13T04:51:57.758Z",
+      "updatedAt": "2026-10-08T04:51:57.759Z"
+    },
+    {
+      "id": "usr_student_2",
+      "name": "Priya Verma",
+      "email": "priya@college.edu",
+      "passwordHash": "$2b$10$xbAyWDKw2EZBD6s8S/VVmOgdcnUmbfXfLG664NJsQGaU9UsMgvzyi",
+      "role": "student",
+      "isVerified": true,
+      "college": "Netaji Subhas University of Technology (NSUT)",
+      "phone": "+91 98123 45678",
+      "roommatePrefs": {
+        "sleepSchedule": "late",
+        "diet": "both",
+        "smoking": "occasional",
+        "studyHabits": "social",
+        "cleanliness": "moderate",
+        "guestPolicy": "weekends_only",
+        "foodSharing": "cook_together",
+        "budgetMin": 8000,
+        "budgetMax": 14000,
+        "interests": [
+          "Music",
+          "Debating",
+          "Movies & Netflix",
+          "Cooking"
+        ],
+        "lookingForRoommate": true
+      },
+      "ratingAvg": 4.5,
+      "ratingCount": 2,
+      "createdAt": "2026-09-18T04:51:57.759Z",
+      "updatedAt": "2026-10-11T04:51:57.759Z"
+    },
+    {
+      "id": "usr_student_3",
+      "name": "Aman Patel",
+      "email": "aman@college.edu",
+      "passwordHash": "$2b$10$xbAyWDKw2EZBD6s8S/VVmOgdcnUmbfXfLG664NJsQGaU9UsMgvzyi",
+      "role": "student",
+      "isVerified": true,
+      "college": "Delhi Technological University (DTU)",
+      "phone": "+91 99222 33445",
+      "roommatePrefs": {
+        "sleepSchedule": "flexible",
+        "diet": "veg",
+        "smoking": "no",
+        "studyHabits": "moderate",
+        "cleanliness": "neat_freak",
+        "guestPolicy": "weekends_only",
+        "foodSharing": "cook_together",
+        "budgetMin": 7000,
+        "budgetMax": 12000,
+        "interests": [
+          "Coding",
+          "Gaming",
+          "Gym & Fitness",
+          "Cricket"
+        ],
+        "lookingForRoommate": true
+      },
+      "ratingAvg": 4.9,
+      "ratingCount": 4,
+      "createdAt": "2026-09-23T04:51:57.759Z",
+      "updatedAt": "2026-10-12T04:51:57.759Z"
+    },
+    {
+      "id": "usr_student_4",
+      "name": "Sneha Sen",
+      "email": "sneha@college.edu",
+      "passwordHash": "$2b$10$xbAyWDKw2EZBD6s8S/VVmOgdcnUmbfXfLG664NJsQGaU9UsMgvzyi",
+      "role": "student",
+      "isVerified": true,
+      "college": "Delhi Technological University (DTU)",
+      "phone": "+91 98101 23456",
+      "roommatePrefs": {
+        "sleepSchedule": "early",
+        "diet": "veg",
+        "smoking": "no",
+        "studyHabits": "quiet",
+        "cleanliness": "neat_freak",
+        "guestPolicy": "no_parties",
+        "foodSharing": "mess_tiffin",
+        "budgetMin": 6500,
+        "budgetMax": 10500,
+        "interests": [
+          "Coding",
+          "Reading",
+          "Photography",
+          "Badminton"
+        ],
+        "lookingForRoommate": true
+      },
+      "ratingAvg": 4.9,
+      "ratingCount": 5,
+      "createdAt": "2026-09-25T04:51:57.759Z",
+      "updatedAt": "2026-10-11T04:51:57.759Z"
+    },
+    {
+      "id": "usr_owner_1",
+      "name": "Vikram Malhotra",
+      "email": "vikram@staynest.com",
+      "passwordHash": "$2b$10$xbAyWDKw2EZBD6s8S/VVmOgdcnUmbfXfLG664NJsQGaU9UsMgvzyi",
+      "role": "owner",
+      "isVerified": true,
+      "verificationStatus": "approved",
+      "verificationDocUrl": "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600",
+      "college": "DTU Alum",
+      "phone": "+91 98990 11223",
+      "ratingAvg": 4.2,
+      "ratingCount": 6,
+      "createdAt": "2026-08-14T04:51:57.759Z",
+      "updatedAt": "2026-10-11T04:51:57.759Z"
+    },
+    {
+      "id": "usr_owner_2",
+      "name": "Suresh Raina",
+      "email": "suresh@staynest.com",
+      "passwordHash": "$2b$10$xbAyWDKw2EZBD6s8S/VVmOgdcnUmbfXfLG664NJsQGaU9UsMgvzyi",
+      "role": "owner",
+      "isVerified": false,
+      "verificationStatus": "pending",
+      "verificationDocUrl": "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=600",
+      "college": "Rohini Estate Owner",
+      "phone": "+91 97110 55443",
+      "ratingAvg": 0,
+      "ratingCount": 0,
+      "createdAt": "2026-10-03T04:51:57.759Z",
+      "updatedAt": "2026-10-12T04:51:57.759Z"
+    },
+    {
+      "id": "usr_mess_1",
+      "name": "Ramesh Gupta (Annapurna Tiffin)",
+      "email": "annapurna@staynest.com",
+      "passwordHash": "$2b$10$xbAyWDKw2EZBD6s8S/VVmOgdcnUmbfXfLG664NJsQGaU9UsMgvzyi",
+      "role": "mess_provider",
+      "isVerified": true,
+      "college": "Campus Kitchen Partner",
+      "phone": "+91 98111 22334",
+      "ratingAvg": 4.3,
+      "ratingCount": 14,
+      "createdAt": "2026-09-03T04:51:57.759Z",
+      "updatedAt": "2026-10-13T04:51:57.759Z"
+    },
+    {
+      "id": "usr_admin_1",
+      "name": "Admin Moderator",
+      "email": "admin@staynest.com",
+      "passwordHash": "$2b$10$xbAyWDKw2EZBD6s8S/VVmOgdcnUmbfXfLG664NJsQGaU9UsMgvzyi",
+      "role": "admin",
+      "isVerified": true,
+      "college": "StayNest Administration",
+      "phone": "+91 11 2345 6789",
+      "createdAt": "2026-07-05T04:51:57.759Z",
+      "updatedAt": "2026-10-13T04:51:57.759Z"
+    },
+    {
+      "id": "usr_1791871147485_lp6pg",
+      "name": "Test Mess Provider",
+      "email": "provider_test@mess.com",
+      "passwordHash": "$2b$10$JROfTGuK3akDNlQnDx09E.aRGEMOYaGZnEulou/X8GNpmSH/Y1Izy",
+      "role": "mess_provider",
+      "isVerified": false,
+      "verificationStatus": "approved",
+      "college": "",
+      "phone": "",
+      "ratingAvg": 0,
+      "ratingCount": 0,
+      "createdAt": "2026-10-13T05:59:07.485Z",
+      "updatedAt": "2026-10-13T05:59:07.485Z"
+    }
+  ],
+  "properties": [
+    {
+      "id": "prop_1",
+      "ownerId": "usr_owner_1",
+      "title": "Sunrise PG near Gate 2",
+      "description": "Well-maintained single room with high-speed 50 Mbps fiber WiFi, 24x7 power backup, study desk, attached washroom, and peaceful study atmosphere right next to DTU Gate 2.",
+      "status": "available",
+      "propertyType": "single_room",
+      "rentPerMonth": 6500,
+      "depositAmount": 10000,
+      "genderPolicy": "any",
+      "amenities": {
+        "wifi": true,
+        "wifiSpeedMbps": 50,
+        "attachedBathroom": true,
+        "furnished": true,
+        "powerBackup": true,
+        "waterSupplyHours": "6am - 10am, 6pm - 10pm",
+        "foodIncluded": true,
+        "laundry": true,
+        "parking": false,
+        "ac": true,
+        "curfewTime": "10:30 PM",
+        "petsAllowed": false
+      },
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          77.1175,
+          28.7495
+        ]
+      },
+      "address": "Plot 42, Pocket 3, Sector 17, Rohini, Delhi",
+      "nearestCollege": "Delhi Technological University (Gate 2 - 250m)",
+      "photos": [
+        "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800",
+        "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?w=800",
+        "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800"
+      ],
+      "ratingAvg": 4.5,
+      "ratingCount": 3,
+      "lastConfirmedAt": "2026-10-12T04:51:57.759Z",
+      "createdAt": "2026-09-18T04:51:57.759Z",
+      "updatedAt": "2026-10-13T04:51:57.759Z"
+    },
+    {
+      "id": "prop_2",
+      "ownerId": "usr_owner_1",
+      "title": "Green Nest 2BHK",
+      "description": "Spacious independent 2BHK flat ideal for 2-3 students looking to room together. Modular kitchen, twin balconies, dedicated two-wheeler parking, and invertor backup.",
+      "status": "available",
+      "propertyType": "flat_2bhk",
+      "rentPerMonth": 14000,
+      "depositAmount": 20000,
+      "genderPolicy": "any",
+      "amenities": {
+        "wifi": true,
+        "wifiSpeedMbps": 100,
+        "attachedBathroom": true,
+        "furnished": true,
+        "powerBackup": true,
+        "waterSupplyHours": "24 Hours",
+        "foodIncluded": false,
+        "laundry": false,
+        "parking": true,
+        "ac": true,
+        "curfewTime": "No curfew",
+        "petsAllowed": true
+      },
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          77.123,
+          28.744
+        ]
+      },
+      "address": "B-Block, Sector 16, Rohini, Delhi",
+      "nearestCollege": "Delhi Technological University (DTU - 1.2 km)",
+      "photos": [
+        "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800",
+        "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800"
+      ],
+      "ratingAvg": 4.7,
+      "ratingCount": 2,
+      "lastConfirmedAt": "2026-10-09T04:51:57.759Z",
+      "createdAt": "2026-09-25T04:51:57.759Z",
+      "updatedAt": "2026-10-13T04:51:57.759Z"
+    },
+    {
+      "id": "prop_3",
+      "ownerId": "usr_owner_1",
+      "title": "Scholars Room",
+      "description": "Budget-friendly shared room for 2 students. Includes clean twin single beds, study lamps, wooden wardrobes, and high-speed WiFi. RO drinking water on premise.",
+      "status": "available",
+      "propertyType": "shared_room",
+      "rentPerMonth": 5200,
+      "depositAmount": 8000,
+      "genderPolicy": "male_only",
+      "amenities": {
+        "wifi": true,
+        "wifiSpeedMbps": 30,
+        "attachedBathroom": false,
+        "furnished": true,
+        "powerBackup": true,
+        "waterSupplyHours": "6am - 9am, 7pm - 10pm",
+        "foodIncluded": false,
+        "laundry": true,
+        "parking": false,
+        "ac": false,
+        "curfewTime": "10:00 PM",
+        "petsAllowed": false
+      },
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          77.111,
+          28.753
+        ]
+      },
+      "address": "Street 4, Shahbad Daulatpur, near DTU Main Gate, Delhi",
+      "nearestCollege": "Delhi Technological University (DTU - 400m)",
+      "photos": [
+        "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800",
+        "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=800"
+      ],
+      "ratingAvg": 4.3,
+      "ratingCount": 4,
+      "lastConfirmedAt": "2026-10-05T04:51:57.759Z",
+      "createdAt": "2026-09-08T04:51:57.759Z",
+      "updatedAt": "2026-10-13T04:51:57.759Z"
+    }
+  ],
+  "messProviders": [
+    {
+      "id": "mess_1",
+      "ownerId": "usr_mess_1",
+      "name": "Annapurna Tiffin",
+      "description": "Hygienic pure-vegetarian homemade north Indian meals delivered warm in insulated tiffin sets. Custom spice levels on request.",
+      "dietType": "veg",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          77.119,
+          28.748
+        ]
+      },
+      "address": "Shop 12, Sector 17 Market, Rohini, Delhi",
+      "deliveryRadiusKm": 5,
+      "plans": [
+        {
+          "name": "Lunch + Dinner Regular",
+          "pricePerMonth": 2800,
+          "mealsIncluded": [
+            "Lunch",
+            "Dinner"
+          ]
+        },
+        {
+          "name": "Full Day (3 Meals + Sunday Special)",
+          "pricePerMonth": 3600,
+          "mealsIncluded": [
+            "Breakfast",
+            "Lunch",
+            "Dinner"
+          ]
+        }
+      ],
+      "trialMealAvailable": true,
+      "trialMealPrice": 60,
+      "ratingAvg": 4.3,
+      "ratingCount": 22,
+      "active": true,
+      "createdAt": "2026-09-13T04:51:57.759Z",
+      "updatedAt": "2026-10-13T05:32:49.073Z",
+      "menuTimetable": [
+        {
+          "day": "Monday",
+          "breakfast": "Aloo Pyaz Paratha with fresh curd, butter & ginger chai",
+          "lunch": "Rajma Rasila, steamed Jeera Rice, Tawa Roti, Cucumber Salad",
+          "eveningSnacks": "Vegetable Cutlet with hot tea",
+          "dinner": "Shahi Paneer, Dal Tadka, Tandoori Roti, Boondi Raita",
+          "todaySpecial": "Shahi Paneer & Hot Gulab Jamun"
+        },
+        {
+          "day": "Tuesday",
+          "breakfast": "Poha with roasted peanuts, Sev & Lemon Chai",
+          "lunch": "Kadhi Pakoda, steamed rice, Aloo Gobhi dry, papad",
+          "eveningSnacks": "Crispy Samosa with mint chutney",
+          "dinner": "Kadhai Paneer / Egg Curry, Arhar Dal, Phulkas, Green Salad",
+          "todaySpecial": "Special Kadhi Pakoda with Ghee Rice"
+        },
+        {
+          "day": "Wednesday",
+          "breakfast": "Masala Idli with coconut chutney & piping hot Sambhar",
+          "lunch": "Chole Bhature / Chole Kulche with pickled onions and mint raita",
+          "eveningSnacks": "Bread Pakora with tea",
+          "dinner": "Matar Paneer, Chana Dal, Jeera Rice, Chapati",
+          "todaySpecial": "Amritsari Chole with fluffy Bhature"
+        },
+        {
+          "day": "Thursday",
+          "breakfast": "Methi Paratha with tomato chutney and masala chai",
+          "lunch": "Dal Makhani (slow-cooked 12 hrs), Jeera Rice, Mix Veg sabzi",
+          "eveningSnacks": "Pao Bhaji / Maggi with tea",
+          "dinner": "Paneer Butter Masala, Yellow Dal, Butter Naan / Tawa Roti",
+          "todaySpecial": "Authentic Dal Makhani & Jeera Rice"
+        },
+        {
+          "day": "Friday",
+          "breakfast": "Uttapam / Besan Chilla with coconut dip & tea",
+          "lunch": "Kashmiri Dum Aloo, Dal Fry, Basmati Rice, Onion Salad",
+          "eveningSnacks": "Aloo Tikki Chaat with sweet tamarind chutney",
+          "dinner": "Paneer Do Pyaza / Chicken Masala, Moong Dal, Roti",
+          "todaySpecial": "Paneer Do Pyaza & Kheer"
+        },
+        {
+          "day": "Saturday",
+          "breakfast": "Poori Bhaji (Spicy Aloo curry) with Halwa",
+          "lunch": "Veg Pulao with crunchy Boondi Raita & Dal Fry",
+          "eveningSnacks": "Onion & Paneer Pakoras with Chai",
+          "dinner": "Palak Paneer, Rajma curry, Tawa Roti, Papad",
+          "todaySpecial": "Poori Bhaji & Suji Halwa for Breakfast"
+        },
+        {
+          "day": "Sunday",
+          "breakfast": "Special Masala Dosa / Bedmi Poori with Aloo Sabzi",
+          "lunch": "Hyderabadi Veg Biryani / Chicken Biryani with Mirchi ka Salan & Raita",
+          "eveningSnacks": "Bun Maska with Kadak Chai",
+          "dinner": "Chef Special Paneer Lababdar, Dal Tadka, Gulaab Jamun",
+          "todaySpecial": "Dum Biryani with Mirchi ka Salan & Gulab Jamun Feast"
+        }
+      ]
+    },
+    {
+      "id": "mess_2",
+      "ownerId": "usr_mess_1",
+      "name": "Maa Ki Rasoi",
+      "description": "Homestyle cooking offering both vegetarian and egg/chicken meals on alternate days. Free delivery right to hostel and PG gates.",
+      "dietType": "both",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          77.114,
+          28.751
+        ]
+      },
+      "address": "Pocket D-14, Sector 16, Rohini, Delhi",
+      "deliveryRadiusKm": 4,
+      "plans": [
+        {
+          "name": "Dinner Only Plan",
+          "pricePerMonth": 1900,
+          "mealsIncluded": [
+            "Dinner"
+          ]
+        },
+        {
+          "name": "Lunch + Dinner Special",
+          "pricePerMonth": 3200,
+          "mealsIncluded": [
+            "Lunch",
+            "Dinner"
+          ]
+        }
+      ],
+      "trialMealAvailable": true,
+      "trialMealPrice": 70,
+      "ratingAvg": 4,
+      "ratingCount": 16,
+      "active": true,
+      "createdAt": "2026-09-21T04:51:57.759Z",
+      "updatedAt": "2026-10-13T04:51:57.759Z"
+    },
+    {
+      "id": "mess_3",
+      "ownerId": "usr_mess_1",
+      "name": "Campus Meals",
+      "description": "Nutritious meals designed for college students with protein-rich options, fresh rotis, and hygienic kitchen inspections.",
+      "dietType": "non-veg",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          77.128,
+          28.741
+        ]
+      },
+      "address": "Main Market, Bawana Road, Delhi",
+      "deliveryRadiusKm": 6,
+      "plans": [
+        {
+          "name": "3 Meals Comprehensive",
+          "pricePerMonth": 3400,
+          "mealsIncluded": [
+            "Breakfast",
+            "Lunch",
+            "Dinner"
+          ]
+        }
+      ],
+      "trialMealAvailable": false,
+      "ratingAvg": 3.8,
+      "ratingCount": 9,
+      "active": true,
+      "createdAt": "2026-09-28T04:51:57.759Z",
+      "updatedAt": "2026-10-13T04:51:57.759Z"
+    }
+  ],
+  "bookingRequests": [
+    {
+      "id": "bk_1",
+      "propertyId": "prop_1",
+      "studentId": "usr_student_1",
+      "ownerId": "usr_owner_1",
+      "moveInDate": "2026-11-01",
+      "durationMonths": 3,
+      "headcount": 1,
+      "message": "Hi Vikram ji, I am a 3rd year B.Tech student at DTU. Looking to shift by 1st Nov. Can we arrange a visit this weekend?",
+      "status": "pending",
+      "createdAt": "2026-10-11T04:51:57.759Z",
+      "updatedAt": "2026-10-11T04:51:57.759Z"
+    },
+    {
+      "id": "bk_2",
+      "propertyId": "prop_2",
+      "studentId": "usr_student_2",
+      "ownerId": "usr_owner_1",
+      "moveInDate": "2026-11-15",
+      "durationMonths": 6,
+      "headcount": 2,
+      "message": "Looking for a 2BHK for me and my classmate. We are quiet and focused on studies.",
+      "status": "accepted",
+      "createdAt": "2026-10-06T04:51:57.759Z",
+      "updatedAt": "2026-10-10T04:51:57.759Z"
+    },
+    {
+      "id": "bk_3",
+      "propertyId": "prop_3",
+      "studentId": "usr_student_3",
+      "ownerId": "usr_owner_1",
+      "moveInDate": "2026-09-01",
+      "durationMonths": 2,
+      "headcount": 1,
+      "message": "Completed internship stay for 2 months near DTU.",
+      "status": "completed_stay",
+      "createdAt": "2026-08-14T04:51:57.759Z",
+      "updatedAt": "2026-10-03T04:51:57.759Z"
+    }
+  ],
+  "reviews": [
+    {
+      "id": "rev_1",
+      "bookingRequestId": "bk_3",
+      "propertyId": "prop_3",
+      "authorId": "usr_student_3",
+      "score": 5,
+      "text": "Great stay! Clean rooms, cooperative owner, and WiFi was very stable throughout exam week.",
+      "createdAt": "2026-10-04T04:51:57.759Z",
+      "updatedAt": "2026-10-04T04:51:57.759Z"
+    },
+    {
+      "id": "rev_2",
+      "bookingRequestId": "bk_prev_1",
+      "propertyId": "prop_1",
+      "authorId": "usr_student_2",
+      "score": 4,
+      "text": "Super close to Gate 2. Food included was hearty and landlord responded quickly to power backup switch.",
+      "createdAt": "2026-09-23T04:51:57.759Z",
+      "updatedAt": "2026-09-23T04:51:57.759Z"
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg_1",
+      "threadId": "usr_owner_1_usr_student_1_prop_1",
+      "senderId": "usr_student_1",
+      "recipientId": "usr_owner_1",
+      "propertyId": "prop_1",
+      "text": "Is the room still free for next semester?",
+      "readAt": "2026-10-13T03:45:17.759Z",
+      "createdAt": "2026-10-13T03:28:37.759Z"
+    },
+    {
+      "id": "msg_2",
+      "threadId": "usr_owner_1_usr_student_1_prop_1",
+      "senderId": "usr_owner_1",
+      "recipientId": "usr_student_1",
+      "propertyId": "prop_1",
+      "text": "Yes Rahul, you can visit this week to check the room.",
+      "readAt": "2026-10-13T04:18:37.759Z",
+      "createdAt": "2026-10-13T04:01:57.759Z"
+    },
+    {
+      "id": "msg_3",
+      "threadId": "usr_owner_1_usr_student_1_prop_1",
+      "senderId": "usr_student_1",
+      "recipientId": "usr_owner_1",
+      "propertyId": "prop_1",
+      "text": "Great, I will send a booking request through the portal!",
+      "readAt": null,
+      "createdAt": "2026-10-13T04:35:17.759Z"
+    },
+    {
+      "id": "msg_4",
+      "threadId": "usr_student_1_usr_student_3_general",
+      "senderId": "usr_student_3",
+      "recipientId": "usr_student_1",
+      "text": "Hey Rahul, saw you also have early sleep schedule and quiet study habits. Want to team up for a 2BHK?",
+      "readAt": null,
+      "createdAt": "2026-10-13T04:38:37.759Z"
+    }
+  ],
+  "reports": [
+    {
+      "id": "rep_1",
+      "propertyId": "prop_2",
+      "reporterId": "usr_student_1",
+      "reason": "Wrong details",
+      "details": "The deposit listed was different when I spoke over call. Please verify.",
+      "status": "pending",
+      "createdAt": "2026-10-12T04:51:57.759Z"
+    }
+  ],
+  "maintenanceTickets": [
+    {
+      "id": "tk_1",
+      "propertyId": "prop_1",
+      "propertyTitle": "Sunrise PG near Gate 2",
+      "studentId": "usr_student_1",
+      "studentName": "Rahul Sharma",
+      "roomNo": "Room 204",
+      "category": "plumbing",
+      "priority": "high",
+      "title": "Washroom tap dripping & slow shower pressure",
+      "description": "The cold water tap in attached washroom is constantly leaking and causing water wastage. Shower pressure dropped yesterday.",
+      "status": "in_progress",
+      "assignedTechnician": "Manoj Kumar (Plumber - +91 98112 34567)",
+      "resolutionNotes": "Technician scheduled for 4:00 PM today with replacement ceramic valve.",
+      "createdAt": "2026-10-12T10:51:57.759Z",
+      "updatedAt": "2026-10-13T00:51:57.759Z"
+    },
+    {
+      "id": "tk_2",
+      "propertyId": "prop_1",
+      "propertyTitle": "Sunrise PG near Gate 2",
+      "studentId": "usr_student_3",
+      "studentName": "Aman Patel",
+      "roomNo": "Room 205",
+      "category": "wifi",
+      "priority": "medium",
+      "title": "2nd Floor Wi-Fi router packet loss",
+      "description": "The router on 2nd floor drops connection during evening study hours (8 PM - 11 PM). Please check adapter or reset channel.",
+      "status": "pending",
+      "createdAt": "2026-10-12T23:51:57.759Z",
+      "updatedAt": "2026-10-12T23:51:57.759Z"
+    },
+    {
+      "id": "tk_3",
+      "propertyId": "prop_2",
+      "propertyTitle": "Greenwood 2BHK Student Flat",
+      "studentId": "usr_student_2",
+      "studentName": "Priya Verma",
+      "roomNo": "Flat 302",
+      "category": "electrical",
+      "priority": "low",
+      "title": "Bedroom ceiling fan regulator replacement",
+      "description": "Regulator knob was loose and only running on maximum speed 5. Requested electronic stepless regulator.",
+      "status": "resolved",
+      "assignedTechnician": "Dinesh (Electrician)",
+      "resolutionNotes": "Replaced with Anchor Roma 5-step modular regulator. Tested and working fine.",
+      "createdAt": "2026-10-09T04:51:57.759Z",
+      "updatedAt": "2026-10-12T04:51:57.759Z"
+    }
+  ],
+  "expenses": [
+    {
+      "id": "exp_1",
+      "title": "October Shared 2BHK Flat Rent",
+      "category": "rent",
+      "amount": 16000,
+      "paidBy": {
+        "id": "usr_student_1",
+        "name": "Rahul Sharma"
+      },
+      "splitAmong": [
+        {
+          "id": "usr_student_1",
+          "name": "Rahul Sharma",
+          "share": 8000,
+          "settled": true
+        },
+        {
+          "id": "usr_student_3",
+          "name": "Aman Patel",
+          "share": 8000,
+          "settled": false
+        }
+      ],
+      "upiId": "rahulsharma@oksbi",
+      "date": "2026-10-01",
+      "createdAt": "2026-10-02T04:51:57.759Z"
+    },
+    {
+      "id": "exp_2",
+      "title": "BSES TPDDL Electricity & Sub-meter",
+      "category": "electricity",
+      "amount": 1940,
+      "paidBy": {
+        "id": "usr_student_3",
+        "name": "Aman Patel"
+      },
+      "splitAmong": [
+        {
+          "id": "usr_student_1",
+          "name": "Rahul Sharma",
+          "share": 970,
+          "settled": true
+        },
+        {
+          "id": "usr_student_3",
+          "name": "Aman Patel",
+          "share": 970,
+          "settled": true
+        }
+      ],
+      "upiId": "amanpatel@paytm",
+      "date": "2026-10-05",
+      "createdAt": "2026-10-06T04:51:57.759Z"
+    },
+    {
+      "id": "exp_3",
+      "title": "ACT Fibernet 150 Mbps High-Speed WiFi",
+      "category": "wifi",
+      "amount": 899,
+      "paidBy": {
+        "id": "usr_student_1",
+        "name": "Rahul Sharma"
+      },
+      "splitAmong": [
+        {
+          "id": "usr_student_1",
+          "name": "Rahul Sharma",
+          "share": 450,
+          "settled": true
+        },
+        {
+          "id": "usr_student_3",
+          "name": "Aman Patel",
+          "share": 449,
+          "settled": false
+        }
+      ],
+      "upiId": "rahulsharma@oksbi",
+      "date": "2026-10-08",
+      "createdAt": "2026-10-09T04:51:57.759Z"
+    },
+    {
+      "id": "exp_4",
+      "title": "Weekly 20L RO Water Cans & Kitchen Essentials",
+      "category": "water",
+      "amount": 680,
+      "paidBy": {
+        "id": "usr_student_1",
+        "name": "Rahul Sharma"
+      },
+      "splitAmong": [
+        {
+          "id": "usr_student_1",
+          "name": "Rahul Sharma",
+          "share": 340,
+          "settled": true
+        },
+        {
+          "id": "usr_student_3",
+          "name": "Aman Patel",
+          "share": 340,
+          "settled": false
+        }
+      ],
+      "upiId": "rahulsharma@oksbi",
+      "date": "2026-10-10",
+      "createdAt": "2026-10-11T04:51:57.759Z"
+    }
+  ],
+  "mealVotes": [
+    {
+      "id": "mv_1",
+      "messProviderId": "mess_1",
+      "mealType": "lunch",
+      "userId": "usr_student_1",
+      "vote": "up",
+      "dishFeedback": "Paneer Butter Masala was very fresh today! Hot phulkas served on time.",
+      "createdAt": "2026-10-13T02:51:57.759Z"
+    },
+    {
+      "id": "mv_2",
+      "messProviderId": "mess_1",
+      "mealType": "lunch",
+      "userId": "usr_student_3",
+      "vote": "up",
+      "dishFeedback": "Dal Makhani tasted great, not too oily.",
+      "createdAt": "2026-10-13T03:51:57.759Z"
+    },
+    {
+      "id": "mv_3",
+      "messProviderId": "mess_2",
+      "mealType": "lunch",
+      "userId": "usr_student_2",
+      "vote": "up",
+      "dishFeedback": "Good portion size and clean packaging.",
+      "createdAt": "2026-10-13T01:51:57.759Z"
+    }
+  ],
+  "safetyReviews": [
+    {
+      "id": "sr_1",
+      "propertyId": "prop_1",
+      "studentId": "usr_student_1",
+      "studentName": "Rahul Sharma",
+      "overallScore": 9.3,
+      "streetLightingScore": 5,
+      "securityGuardsScore": 5,
+      "femaleFriendlyScore": 5,
+      "nightWalkability": "well_lit",
+      "tips": "Approach road directly faces DTU Gate 2. Brightly illuminated LED lights all night. Guard stays active at the barrier with visitor log.",
+      "createdAt": "2026-10-01T04:51:57.759Z"
+    },
+    {
+      "id": "sr_2",
+      "propertyId": "prop_2",
+      "studentId": "usr_student_2",
+      "studentName": "Priya Verma",
+      "overallScore": 8.8,
+      "streetLightingScore": 4,
+      "securityGuardsScore": 4,
+      "femaleFriendlyScore": 5,
+      "nightWalkability": "safe",
+      "tips": "E-rickshaws available right up to entrance till 10:30 PM. Apollo 24/7 chemist is only 150m down the lane. Very comfortable for female students.",
+      "createdAt": "2026-10-05T04:51:57.759Z"
+    },
+    {
+      "id": "sr_3",
+      "propertyId": "prop_3",
+      "studentId": "usr_student_3",
+      "studentName": "Aman Patel",
+      "overallScore": 8.6,
+      "streetLightingScore": 4,
+      "securityGuardsScore": 5,
+      "femaleFriendlyScore": 4,
+      "nightWalkability": "safe",
+      "tips": "Gated colony with boom barrier. CCTV camera installed at building entrance. Safe neighborhood for late library returns.",
+      "createdAt": "2026-10-08T04:51:57.759Z"
+    }
+  ]
+}

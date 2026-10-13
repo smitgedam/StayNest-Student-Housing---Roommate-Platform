@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useSocket } from '../context/SocketContext';
+import { useFavorites } from '../context/FavoritesContext';
+import { StayNestLogo } from './StayNestLogo';
 import { ThemeToggle } from './ThemeToggle';
 import {
   Home,
@@ -17,6 +19,7 @@ import {
   Menu,
   X,
   Building,
+  Heart,
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -31,6 +34,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   openBookingCount = 0,
 }) => {
   const { user, logout } = useAuth();
+  const { totalFavoritesCount } = useFavorites();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const role = user?.role || 'guest';
@@ -44,12 +48,10 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="flex items-center gap-3">
             <button
               onClick={() => setCurrentTab(user ? 'browse' : 'login')}
-              className="flex items-center gap-2 text-xl font-extrabold text-slate-900 dark:text-white tracking-tight hover:opacity-90 transition"
+              className="flex items-center gap-2 text-xl font-extrabold text-slate-900 dark:text-white tracking-tight hover:opacity-90 transition group"
             >
-              <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-black shadow-xs">
-                S
-              </div>
-              <span className="font-extrabold">StayNest</span>
+              <StayNestLogo size="md" />
+              <span className="font-extrabold tracking-tight">StayNest</span>
             </button>
 
             {user && (
@@ -60,39 +62,64 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Desktop Navigation Links (Only for authenticated users) */}
+          {/* Desktop Navigation Links - Tailored for each role */}
           {user && (
-            <nav className="hidden md:flex items-center space-x-1 lg:space-x-2">
-              <button
-                onClick={() => setCurrentTab('browse')}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition flex items-center gap-1.5 ${
-                  currentTab === 'browse'
-                    ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300 font-semibold'
-                    : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
-                }`}
-              >
-                <Home className="w-4 h-4" />
-                Browse
-              </button>
-
-              <button
-                onClick={() => setCurrentTab('mess')}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition flex items-center gap-1.5 ${
-                  currentTab === 'mess'
-                    ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300 font-semibold'
-                    : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
-                }`}
-              >
-                <UtensilsCrossed className="w-4 h-4" />
-                Mess
-              </button>
-
+            <nav className="hidden md:flex items-center gap-1 lg:gap-1.5">
+              {/* Role: STUDENT Navigation */}
               {role === 'student' && (
                 <>
                   <button
+                    onClick={() => setCurrentTab('browse')}
+                    className={`px-2.5 lg:px-3 py-2 rounded-lg text-xs lg:text-sm font-semibold transition flex items-center gap-1.5 ${
+                      currentTab === 'browse'
+                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300'
+                        : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
+                    }`}
+                  >
+                    <Home className="w-4 h-4" />
+                    Browse
+                  </button>
+
+                  <button
+                    onClick={() => setCurrentTab('mess')}
+                    className={`px-2.5 lg:px-3 py-2 rounded-lg text-xs lg:text-sm font-semibold transition flex items-center gap-1.5 ${
+                      currentTab === 'mess'
+                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300'
+                        : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
+                    }`}
+                  >
+                    <UtensilsCrossed className="w-4 h-4" />
+                    Mess
+                  </button>
+
+                  <button
+                    onClick={() => setCurrentTab('favorites')}
+                    className={`px-2.5 lg:px-3 py-2 rounded-lg text-xs lg:text-sm font-semibold transition flex items-center gap-1.5 relative ${
+                      currentTab === 'favorites'
+                        ? 'bg-rose-50 text-rose-700 dark:bg-rose-950/70 dark:text-rose-300'
+                        : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
+                    }`}
+                  >
+                    <Heart
+                      className={`w-4 h-4 ${
+                        currentTab === 'favorites'
+                          ? 'fill-rose-500 text-rose-500'
+                          : 'text-rose-500'
+                      }`}
+                    />
+                    Favorites
+                    {totalFavoritesCount > 0 && (
+                      <span className="px-1.5 py-0.2 bg-rose-600 text-white rounded-full text-[10px] font-bold">
+                        {totalFavoritesCount}
+                      </span>
+                    )}
+                  </button>
+
+                  <button
                     onClick={() => setCurrentTab('roommates')}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition flex items-center gap-1.5 ${
+                    className={`px-2.5 lg:px-3 py-2 rounded-lg text-xs lg:text-sm font-semibold transition flex items-center gap-1.5 ${
                       currentTab === 'roommates'
-                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300 font-semibold'
+                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300'
                         : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
                     }`}
                   >
@@ -102,16 +129,16 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                   <button
                     onClick={() => setCurrentTab('bookings')}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition flex items-center gap-1.5 relative ${
+                    className={`px-2.5 lg:px-3 py-2 rounded-lg text-xs lg:text-sm font-semibold transition flex items-center gap-1.5 relative ${
                       currentTab === 'bookings'
-                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300 font-semibold'
+                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300'
                         : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
                     }`}
                   >
                     <CalendarCheck className="w-4 h-4" />
-                    My Bookings
+                    Bookings
                     {openBookingCount > 0 && (
-                      <span className="ml-1 px-1.5 py-0.2 bg-blue-600 text-white rounded-full text-[10px] font-bold">
+                      <span className="px-1.5 py-0.2 bg-blue-600 text-white rounded-full text-[10px] font-bold">
                         {openBookingCount}
                       </span>
                     )}
@@ -119,9 +146,9 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                   <button
                     onClick={() => setCurrentTab('tools')}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition flex items-center gap-1.5 ${
+                    className={`px-2.5 lg:px-3 py-2 rounded-lg text-xs lg:text-sm font-semibold transition flex items-center gap-1.5 ${
                       currentTab === 'tools'
-                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300 font-semibold'
+                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300'
                         : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
                     }`}
                   >
@@ -131,46 +158,125 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </>
               )}
 
+              {/* Role: OWNER Navigation */}
               {role === 'owner' && (
-                <button
-                  onClick={() => setCurrentTab('dashboard')}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition flex items-center gap-1.5 relative ${
-                    currentTab === 'dashboard'
-                      ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300 font-semibold'
-                      : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
-                  }`}
-                >
-                  <Building className="w-4 h-4" />
-                  Dashboard
-                  {openBookingCount > 0 && (
-                    <span className="ml-1 px-1.5 py-0.2 bg-amber-500 text-white rounded-full text-[10px] font-bold">
-                      {openBookingCount}
-                    </span>
-                  )}
-                </button>
+                <>
+                  <button
+                    onClick={() => setCurrentTab('dashboard')}
+                    className={`px-2.5 lg:px-3 py-2 rounded-lg text-xs lg:text-sm font-semibold transition flex items-center gap-1.5 relative ${
+                      currentTab === 'dashboard'
+                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300'
+                        : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
+                    }`}
+                  >
+                    <Building className="w-4 h-4" />
+                    Dashboard
+                    {openBookingCount > 0 && (
+                      <span className="px-1.5 py-0.2 bg-amber-500 text-white rounded-full text-[10px] font-bold">
+                        {openBookingCount}
+                      </span>
+                    )}
+                  </button>
+
+                  <button
+                    onClick={() => setCurrentTab('browse')}
+                    className={`px-2.5 lg:px-3 py-2 rounded-lg text-xs lg:text-sm font-semibold transition flex items-center gap-1.5 ${
+                      currentTab === 'browse'
+                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300'
+                        : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
+                    }`}
+                  >
+                    <Home className="w-4 h-4" />
+                    Browse
+                  </button>
+
+                  <button
+                    onClick={() => setCurrentTab('mess')}
+                    className={`px-2.5 lg:px-3 py-2 rounded-lg text-xs lg:text-sm font-semibold transition flex items-center gap-1.5 ${
+                      currentTab === 'mess'
+                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300'
+                        : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
+                    }`}
+                  >
+                    <UtensilsCrossed className="w-4 h-4" />
+                    Mess
+                  </button>
+
+                  <button
+                    onClick={() => setCurrentTab('favorites')}
+                    className={`px-2.5 lg:px-3 py-2 rounded-lg text-xs lg:text-sm font-semibold transition flex items-center gap-1.5 relative ${
+                      currentTab === 'favorites'
+                        ? 'bg-rose-50 text-rose-700 dark:bg-rose-950/70 dark:text-rose-300'
+                        : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
+                    }`}
+                  >
+                    <Heart className="w-4 h-4 text-rose-500" />
+                    Favorites
+                  </button>
+                </>
               )}
 
+              {/* Role: MESS PROVIDER Navigation */}
               {role === 'mess_provider' && (
-                <button
-                  onClick={() => setCurrentTab('mymess')}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition flex items-center gap-1.5 ${
-                    currentTab === 'mymess'
-                      ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300 font-semibold'
-                      : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
-                  }`}
-                >
-                  <UtensilsCrossed className="w-4 h-4" />
-                  My Mess
-                </button>
+                <>
+                  <button
+                    onClick={() => setCurrentTab('mymess')}
+                    className={`px-2.5 lg:px-3 py-2 rounded-lg text-xs lg:text-sm font-semibold transition flex items-center gap-1.5 ${
+                      currentTab === 'mymess'
+                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300'
+                        : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
+                    }`}
+                  >
+                    <UtensilsCrossed className="w-4 h-4" />
+                    My Mess
+                  </button>
+
+                  <button
+                    onClick={() => setCurrentTab('mess')}
+                    className={`px-2.5 lg:px-3 py-2 rounded-lg text-xs lg:text-sm font-semibold transition flex items-center gap-1.5 ${
+                      currentTab === 'mess'
+                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300'
+                        : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
+                    }`}
+                  >
+                    <UtensilsCrossed className="w-4 h-4" />
+                    Mess Directory
+                  </button>
+
+                  <button
+                    onClick={() => setCurrentTab('browse')}
+                    className={`px-2.5 lg:px-3 py-2 rounded-lg text-xs lg:text-sm font-semibold transition flex items-center gap-1.5 ${
+                      currentTab === 'browse'
+                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300'
+                        : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
+                    }`}
+                  >
+                    <Home className="w-4 h-4" />
+                    Browse
+                  </button>
+
+                  <button
+                    onClick={() => setCurrentTab('favorites')}
+                    className={`px-2.5 lg:px-3 py-2 rounded-lg text-xs lg:text-sm font-semibold transition flex items-center gap-1.5 relative ${
+                      currentTab === 'favorites'
+                        ? 'bg-rose-50 text-rose-700 dark:bg-rose-950/70 dark:text-rose-300'
+                        : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
+                    }`}
+                  >
+                    <Heart className="w-4 h-4 text-rose-500" />
+                    Favorites
+                  </button>
+                </>
               )}
 
+              {/* Role: ADMIN Navigation */}
               {role === 'admin' && (
                 <>
                   <button
                     onClick={() => setCurrentTab('admin_verifications')}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition flex items-center gap-1.5 ${
+                    className={`px-2.5 lg:px-3 py-2 rounded-lg text-xs lg:text-sm font-semibold transition flex items-center gap-1.5 ${
                       currentTab === 'admin_verifications'
-                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300 font-semibold'
+                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300'
                         : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
                     }`}
                   >
@@ -180,31 +286,54 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                   <button
                     onClick={() => setCurrentTab('admin_reports')}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition flex items-center gap-1.5 ${
+                    className={`px-2.5 lg:px-3 py-2 rounded-lg text-xs lg:text-sm font-semibold transition flex items-center gap-1.5 ${
                       currentTab === 'admin_reports'
-                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300 font-semibold'
+                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300'
                         : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
                     }`}
                   >
                     <ShieldAlert className="w-4 h-4" />
                     Reports
                   </button>
+
+                  <button
+                    onClick={() => setCurrentTab('browse')}
+                    className={`px-2.5 lg:px-3 py-2 rounded-lg text-xs lg:text-sm font-semibold transition flex items-center gap-1.5 ${
+                      currentTab === 'browse'
+                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300'
+                        : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
+                    }`}
+                  >
+                    <Home className="w-4 h-4" />
+                    Browse
+                  </button>
+
+                  <button
+                    onClick={() => setCurrentTab('mess')}
+                    className={`px-2.5 lg:px-3 py-2 rounded-lg text-xs lg:text-sm font-semibold transition flex items-center gap-1.5 ${
+                      currentTab === 'mess'
+                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300'
+                        : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
+                    }`}
+                  >
+                    <UtensilsCrossed className="w-4 h-4" />
+                    Mess
+                  </button>
                 </>
               )}
 
-              {user && (
-                <button
-                  onClick={() => setCurrentTab('chat')}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition flex items-center gap-1.5 ${
-                    currentTab === 'chat'
-                      ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300 font-semibold'
-                      : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
-                  }`}
-                >
-                  <MessageSquare className="w-4 h-4" />
-                  Chat
-                </button>
-              )}
+              {/* Chat Available for all authenticated roles */}
+              <button
+                onClick={() => setCurrentTab('chat')}
+                className={`px-2.5 lg:px-3 py-2 rounded-lg text-xs lg:text-sm font-semibold transition flex items-center gap-1.5 ${
+                  currentTab === 'chat'
+                    ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300'
+                    : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800'
+                }`}
+              >
+                <MessageSquare className="w-4 h-4" />
+                Chat
+              </button>
             </nav>
           )}
 
@@ -271,21 +400,38 @@ export const Navbar: React.FC<NavbarProps> = ({
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-gray-200 dark:border-slate-800 px-4 pt-2 pb-4 space-y-1 bg-white dark:bg-slate-900">
-          <button
-            onClick={() => { setCurrentTab('browse'); setMobileMenuOpen(false); }}
-            className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center gap-2"
-          >
-            <Home className="w-4 h-4" /> Browse
-          </button>
-          <button
-            onClick={() => { setCurrentTab('mess'); setMobileMenuOpen(false); }}
-            className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center gap-2"
-          >
-            <UtensilsCrossed className="w-4 h-4" /> Mess Directory
-          </button>
-
+          {/* Role: STUDENT Mobile Navigation */}
           {role === 'student' && (
             <>
+              <button
+                onClick={() => { setCurrentTab('browse'); setMobileMenuOpen(false); }}
+                className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center gap-2"
+              >
+                <Home className="w-4 h-4" /> Browse Properties
+              </button>
+              <button
+                onClick={() => { setCurrentTab('mess'); setMobileMenuOpen(false); }}
+                className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center gap-2"
+              >
+                <UtensilsCrossed className="w-4 h-4" /> Mess Directory
+              </button>
+              <button
+                onClick={() => { setCurrentTab('favorites'); setMobileMenuOpen(false); }}
+                className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium flex items-center justify-between ${
+                  currentTab === 'favorites'
+                    ? 'bg-rose-50 text-rose-700 dark:bg-rose-950/70 dark:text-rose-300 font-semibold'
+                    : 'text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800'
+                }`}
+              >
+                <span className="flex items-center gap-2">
+                  <Heart className="w-4 h-4 text-rose-500 fill-rose-500" /> My Favorites
+                </span>
+                {totalFavoritesCount > 0 && (
+                  <span className="px-1.5 py-0.2 bg-rose-600 text-white rounded-full text-[10px] font-bold">
+                    {totalFavoritesCount}
+                  </span>
+                )}
+              </button>
               <button
                 onClick={() => { setCurrentTab('roommates'); setMobileMenuOpen(false); }}
                 className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center gap-2"
@@ -294,9 +440,16 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
               <button
                 onClick={() => { setCurrentTab('bookings'); setMobileMenuOpen(false); }}
-                className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center gap-2"
+                className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center justify-between"
               >
-                <CalendarCheck className="w-4 h-4" /> My Bookings
+                <span className="flex items-center gap-2">
+                  <CalendarCheck className="w-4 h-4" /> My Bookings
+                </span>
+                {openBookingCount > 0 && (
+                  <span className="px-1.5 py-0.2 bg-blue-600 text-white rounded-full text-[10px] font-bold">
+                    {openBookingCount}
+                  </span>
+                )}
               </button>
               <button
                 onClick={() => { setCurrentTab('tools'); setMobileMenuOpen(false); }}
@@ -307,24 +460,74 @@ export const Navbar: React.FC<NavbarProps> = ({
             </>
           )}
 
+          {/* Role: OWNER Mobile Navigation */}
           {role === 'owner' && (
-            <button
-              onClick={() => { setCurrentTab('dashboard'); setMobileMenuOpen(false); }}
-              className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center gap-2"
-            >
-              <Building className="w-4 h-4" /> Owner Dashboard
-            </button>
+            <>
+              <button
+                onClick={() => { setCurrentTab('dashboard'); setMobileMenuOpen(false); }}
+                className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center justify-between"
+              >
+                <span className="flex items-center gap-2">
+                  <Building className="w-4 h-4" /> Owner Dashboard
+                </span>
+                {openBookingCount > 0 && (
+                  <span className="px-1.5 py-0.2 bg-amber-500 text-white rounded-full text-[10px] font-bold">
+                    {openBookingCount}
+                  </span>
+                )}
+              </button>
+              <button
+                onClick={() => { setCurrentTab('browse'); setMobileMenuOpen(false); }}
+                className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center gap-2"
+              >
+                <Home className="w-4 h-4" /> Browse Properties
+              </button>
+              <button
+                onClick={() => { setCurrentTab('mess'); setMobileMenuOpen(false); }}
+                className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center gap-2"
+              >
+                <UtensilsCrossed className="w-4 h-4" /> Mess Directory
+              </button>
+              <button
+                onClick={() => { setCurrentTab('favorites'); setMobileMenuOpen(false); }}
+                className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center gap-2"
+              >
+                <Heart className="w-4 h-4 text-rose-500" /> My Favorites
+              </button>
+            </>
           )}
 
+          {/* Role: MESS PROVIDER Mobile Navigation */}
           {role === 'mess_provider' && (
-            <button
-              onClick={() => { setCurrentTab('mymess'); setMobileMenuOpen(false); }}
-              className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center gap-2"
-            >
-              <UtensilsCrossed className="w-4 h-4" /> My Mess Listings
-            </button>
+            <>
+              <button
+                onClick={() => { setCurrentTab('mymess'); setMobileMenuOpen(false); }}
+                className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center gap-2"
+              >
+                <UtensilsCrossed className="w-4 h-4" /> My Mess Listings
+              </button>
+              <button
+                onClick={() => { setCurrentTab('mess'); setMobileMenuOpen(false); }}
+                className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center gap-2"
+              >
+                <UtensilsCrossed className="w-4 h-4" /> Mess Directory
+              </button>
+              <button
+                onClick={() => { setCurrentTab('browse'); setMobileMenuOpen(false); }}
+                className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center gap-2"
+              >
+                <Home className="w-4 h-4" /> Browse Properties
+              </button>
+              <button
+                onClick={() => { setCurrentTab('favorites'); setMobileMenuOpen(false); }}
+                className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center gap-2"
+              >
+                <Heart className="w-4 h-4 text-rose-500" /> My Favorites
+              </button>
+            </>
           )}
 
+          {/* Role: ADMIN Mobile Navigation */}
           {role === 'admin' && (
             <>
               <button
@@ -339,17 +542,28 @@ export const Navbar: React.FC<NavbarProps> = ({
               >
                 <ShieldAlert className="w-4 h-4" /> Reports
               </button>
+              <button
+                onClick={() => { setCurrentTab('browse'); setMobileMenuOpen(false); }}
+                className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center gap-2"
+              >
+                <Home className="w-4 h-4" /> Browse Properties
+              </button>
+              <button
+                onClick={() => { setCurrentTab('mess'); setMobileMenuOpen(false); }}
+                className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center gap-2"
+              >
+                <UtensilsCrossed className="w-4 h-4" /> Mess Directory
+              </button>
             </>
           )}
 
-          {user && (
-            <button
-              onClick={() => { setCurrentTab('chat'); setMobileMenuOpen(false); }}
-              className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center gap-2"
-            >
-              <MessageSquare className="w-4 h-4" /> Chat
-            </button>
-          )}
+          {/* Chat Available for all */}
+          <button
+            onClick={() => { setCurrentTab('chat'); setMobileMenuOpen(false); }}
+            className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center gap-2"
+          >
+            <MessageSquare className="w-4 h-4" /> Chat
+          </button>
 
           <div className="pt-2 border-t border-gray-100 dark:border-slate-800 flex items-center justify-between">
             {user ? (

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import { Property } from '../types';
+import { reverseGeocodeCoords } from '../utils/geocoding';
 
 interface PropertyMapProps {
   properties: Property[];
@@ -8,14 +9,18 @@ interface PropertyMapProps {
   radiusKm?: number;
   onSelectProperty?: (property: Property) => void;
   selectedPropertyId?: string | null;
+  onCenterChange?: (coords: [number, number]) => void;
+  onAddressResolved?: (address: string, coords: [number, number]) => void;
 }
 
 export const PropertyMap: React.FC<PropertyMapProps> = ({
   properties,
   center,
-  radiusKm = 20,
+  radiusKm = 10,
   onSelectProperty,
   selectedPropertyId,
+  onCenterChange,
+  onAddressResolved,
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
@@ -39,6 +44,27 @@ export const PropertyMap: React.FC<PropertyMapProps> = ({
         maxZoom: 19,
       }).addTo(map);
 
+      // Clicking anywhere on map places marker, updates 10km radius circle, and resolves address
+      map.on('click', async (e: L.LeafletMouseEvent) => {
+        const coords: [number, number] = [Number(e.latlng.lat.toFixed(5)), Number(e.latlng.lng.toFixed(5))];
+        if (centerMarkerRef.current) {
+          centerMarkerRef.current.setLatLng(e.latlng);
+        }
+        if (circleRef.current) {
+          circleRef.current.setLatLng(e.latlng);
+        }
+        if (onCenterChange) {
+          onCenterChange(coords);
+        }
+        const resolvedAddress = await reverseGeocodeCoords(coords[0], coords[1]);
+        if (centerMarkerRef.current) {
+          centerMarkerRef.current.setTooltipContent(`📍 ${resolvedAddress}`).openTooltip();
+        }
+        if (onAddressResolved) {
+          onAddressResolved(resolvedAddress, coords);
+        }
+      });
+
       mapInstanceRef.current = map;
 
       // Handle resize events so map tiles adapt cleanly to responsive viewport changes
@@ -58,23 +84,52 @@ export const PropertyMap: React.FC<PropertyMapProps> = ({
     const map = mapInstanceRef.current;
     if (!map) return;
 
-    map.setView([center[0], center[1]], map.getZoom() || 13);
+    // Smoothly fly map to new center coordinates when changed
+    map.flyTo([center[0], center[1]], Math.max(map.getZoom() || 13, 13), {
+      duration: 0.8,
+    });
 
-    // Update or create center marker
+    // Update or create draggable center marker
     if (centerMarkerRef.current) {
       centerMarkerRef.current.setLatLng([center[0], center[1]]);
     } else {
       const centerIcon = L.divIcon({
         className: 'user-center-marker',
         html: `
-          <div style="background-color: #2563eb; width: 16px; height: 16px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 10px rgba(37,99,235,0.6);"></div>
+          <div style="background-color: #2563eb; width: 22px; height: 22px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 14px rgba(37,99,235,0.8); cursor: grab; display: flex; align-items: center; justify-content: center;">
+            <div style="width: 6px; height: 6px; background-color: white; border-radius: 50%;"></div>
+          </div>
         `,
-        iconSize: [16, 16],
-        iconAnchor: [8, 8],
+        iconSize: [22, 22],
+        iconAnchor: [11, 11],
       });
-      centerMarkerRef.current = L.marker([center[0], center[1]], { icon: centerIcon })
-        .addTo(map)
-        .bindTooltip('Search location (Campus / You)', { permanent: false, direction: 'top' });
+
+      const centerMarker = L.marker([center[0], center[1]], {
+        icon: centerIcon,
+        draggable: true,
+        title: 'Search Center (10 km range)',
+      }).addTo(map);
+
+      centerMarker.bindTooltip('Location search pin (10 km range)', { permanent: false, direction: 'top' });
+
+      // When user drags marker anywhere on map, auto-resolve address and notify parent
+      centerMarker.on('dragend', async () => {
+        const pos = centerMarker.getLatLng();
+        const coords: [number, number] = [Number(pos.lat.toFixed(5)), Number(pos.lng.toFixed(5))];
+        if (circleRef.current) {
+          circleRef.current.setLatLng(pos);
+        }
+        if (onCenterChange) {
+          onCenterChange(coords);
+        }
+        const resolvedAddress = await reverseGeocodeCoords(coords[0], coords[1]);
+        centerMarker.setTooltipContent(`📍 ${resolvedAddress}`).openTooltip();
+        if (onAddressResolved) {
+          onAddressResolved(resolvedAddress, coords);
+        }
+      });
+
+      centerMarkerRef.current = centerMarker;
     }
 
     // Update radius circle
@@ -149,8 +204,9 @@ export const PropertyMap: React.FC<PropertyMapProps> = ({
   return (
     <div className="relative w-full h-full min-h-[300px] sm:min-h-[350px] rounded-xl overflow-hidden border border-gray-200 dark:border-slate-800 shadow-xs isolate z-0">
       <div ref={mapContainerRef} className="w-full h-full min-h-[300px] sm:min-h-[350px]" />
-      <div className="absolute bottom-3 left-3 z-10 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xs px-3 py-1.5 rounded-lg text-xs font-medium text-gray-700 dark:text-slate-300 shadow-xs border border-gray-200 dark:border-slate-700 pointer-events-none">
-        Showing properties within {radiusKm} km
+      <div className="absolute bottom-3 left-3 z-10 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xs px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-700 dark:text-slate-300 shadow-xs border border-gray-200 dark:border-slate-700 pointer-events-none flex items-center gap-2">
+        <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
+        <span>Showing properties within {radiusKm} km</span>
       </div>
     </div>
   );

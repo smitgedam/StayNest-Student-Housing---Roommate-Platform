@@ -199,6 +199,73 @@ messRouter.put('/:id', authMiddleware, requireRole('mess_provider', 'admin'), (r
   });
 });
 
+// DELETE /api/mess/:id - Permanently delete mess listing
+messRouter.delete('/:id', authMiddleware, (req: AuthenticatedRequest, res: Response): void => {
+  if (!req.user) {
+    res.status(401).json({ error: 'Unauthorized' });
+    return;
+  }
+
+  const { id } = req.params;
+  const mess = db.getMessProviderById(id);
+  if (!mess) {
+    res.status(404).json({ error: 'Mess listing not found' });
+    return;
+  }
+
+  // Check ownership (or admin role)
+  if (mess.ownerId !== req.user.id && req.user.role !== 'admin') {
+    res.status(403).json({ error: 'Forbidden: You can only delete your own mess listing' });
+    return;
+  }
+
+  const deleted = db.deleteMessProvider(id);
+  if (deleted) {
+    res.json({ message: 'Mess listing permanently deleted' });
+  } else {
+    res.status(500).json({ error: 'Failed to delete mess listing' });
+  }
+});
+
+// PUT /api/mess/:id/menu - Set/Update 7-day Menu Timetable by Mess Provider
+messRouter.put('/:id/menu', authMiddleware, (req: AuthenticatedRequest, res: Response): void => {
+  if (!req.user) {
+    res.status(401).json({ error: 'Unauthorized' });
+    return;
+  }
+
+  const { id } = req.params;
+  const mess = db.getMessProviderById(id);
+  if (!mess) {
+    res.status(404).json({ error: 'Mess not found' });
+    return;
+  }
+
+  if (mess.ownerId !== req.user.id && req.user.role !== 'admin') {
+    res.status(403).json({ error: 'Forbidden: You can only edit the menu for your own mess' });
+    return;
+  }
+
+  const { timetable } = req.body;
+  if (!Array.isArray(timetable)) {
+    res.status(400).json({ error: 'Timetable array is required' });
+    return;
+  }
+
+  // Update on mess provider object
+  const updated = db.updateMessProvider(id, {
+    menuTimetable: timetable,
+  });
+
+  // Also cache in DEFAULT_TIMETABLES
+  DEFAULT_TIMETABLES[id] = timetable;
+
+  res.json({
+    message: 'Weekly meal timetable updated successfully',
+    timetable: updated?.menuTimetable || timetable,
+  });
+});
+
 // Default 7-day meal timetable for student messes
 const DEFAULT_TIMETABLES: Record<string, any[]> = {
   default: [
@@ -270,12 +337,15 @@ messRouter.get('/:id/menu', optionalAuthMiddleware, (req: AuthenticatedRequest, 
     return;
   }
 
-  const timetable = DEFAULT_TIMETABLES[id] || DEFAULT_TIMETABLES.default;
-  const votes = db.getMealVotes(id);
+  const timetable = mess.menuTimetable && mess.menuTimetable.length > 0
+    ? mess.menuTimetable
+    : (DEFAULT_TIMETABLES[id] || DEFAULT_TIMETABLES.default);
 
+  const votes = db.getMealVotes(id);
   const totalVotes = votes.length;
   const upVotes = votes.filter(v => v.vote === 'up').length;
-  const approvalRate = totalVotes > 0 ? Math.round((upVotes / totalVotes) * 100) : 94;
+  // Approval rate is calculated ONLY when totalVotes > 0
+  const approvalRate = totalVotes > 0 ? Math.round((upVotes / totalVotes) * 100) : null;
 
   const currentDayName = new Date().toLocaleDateString('en-US', { weekday: 'long' });
   const todaysMenu = timetable.find((m: any) => m.day === currentDayName) || timetable[0];
@@ -287,9 +357,10 @@ messRouter.get('/:id/menu', optionalAuthMiddleware, (req: AuthenticatedRequest, 
     todaysMenu,
     timetable,
     stats: {
+      hasVotes: totalVotes > 0,
       approvalRate,
-      totalVotes: Math.max(12, totalVotes),
-      upVotes: Math.max(11, upVotes),
+      totalVotes,
+      upVotes,
     },
     recentFeedbacks: votes.filter(v => v.dishFeedback).map(v => ({
       userId: v.userId,

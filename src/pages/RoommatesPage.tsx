@@ -124,12 +124,12 @@ export const RoommatesPage: React.FC<RoommatesPageProps> = ({
           <select
             value={sleepSchedule}
             onChange={(e) => setSleepSchedule(e.target.value)}
-            className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 p-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none"
+            className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 p-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none cursor-pointer"
           >
-            <option value="any">Any</option>
-            <option value="early">Early bird</option>
-            <option value="late">Night owl</option>
-            <option value="flexible">Flexible</option>
+            <option value="any" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Any</option>
+            <option value="early" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Early bird</option>
+            <option value="late" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Night owl</option>
+            <option value="flexible" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Flexible</option>
           </select>
         </div>
 
@@ -138,12 +138,12 @@ export const RoommatesPage: React.FC<RoommatesPageProps> = ({
           <select
             value={diet}
             onChange={(e) => setDiet(e.target.value)}
-            className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 p-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none"
+            className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 p-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none cursor-pointer"
           >
-            <option value="any">Any</option>
-            <option value="veg">Veg</option>
-            <option value="non-veg">Non-veg</option>
-            <option value="both">Both</option>
+            <option value="any" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Any</option>
+            <option value="veg" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Veg</option>
+            <option value="non-veg" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Non-veg</option>
+            <option value="both" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Both</option>
           </select>
         </div>
 
@@ -152,12 +152,12 @@ export const RoommatesPage: React.FC<RoommatesPageProps> = ({
           <select
             value={studyHabits}
             onChange={(e) => setStudyHabits(e.target.value)}
-            className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 p-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none"
+            className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 p-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none cursor-pointer"
           >
-            <option value="any">Any</option>
-            <option value="quiet">Quiet / Silent</option>
-            <option value="moderate">Moderate</option>
-            <option value="social">Social / Group</option>
+            <option value="any" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Any</option>
+            <option value="quiet" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Quiet / Silent</option>
+            <option value="moderate" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Moderate</option>
+            <option value="social" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Social / Group</option>
           </select>
         </div>
 
@@ -166,12 +166,12 @@ export const RoommatesPage: React.FC<RoommatesPageProps> = ({
           <select
             value={cleanliness}
             onChange={(e) => setCleanliness(e.target.value)}
-            className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 p-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none"
+            className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 p-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none cursor-pointer"
           >
-            <option value="any">Any</option>
-            <option value="neat_freak">Neat freak</option>
-            <option value="moderate">Moderate</option>
-            <option value="relaxed">Relaxed</option>
+            <option value="any" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Any</option>
+            <option value="neat_freak" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Neat freak</option>
+            <option value="moderate" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Moderate</option>
+            <option value="relaxed" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Relaxed</option>
           </select>
         </div>
 
@@ -180,15 +180,15 @@ export const RoommatesPage: React.FC<RoommatesPageProps> = ({
           <select
             value={interest}
             onChange={(e) => setInterest(e.target.value)}
-            className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 p-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none"
+            className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 p-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none cursor-pointer"
           >
-            <option value="any">Any interest</option>
-            <option value="Coding">Coding</option>
-            <option value="Gaming">Gaming</option>
-            <option value="Gym & Fitness">Gym & Fitness</option>
-            <option value="Music">Music</option>
-            <option value="Cricket">Cricket</option>
-            <option value="Reading">Reading</option>
+            <option value="any" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Any interest</option>
+            <option value="Coding" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Coding</option>
+            <option value="Gaming" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Gaming</option>
+            <option value="Gym & Fitness" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Gym & Fitness</option>
+            <option value="Music" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Music</option>
+            <option value="Cricket" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Cricket</option>
+            <option value="Reading" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Reading</option>
           </select>
         </div>
 
@@ -197,12 +197,12 @@ export const RoommatesPage: React.FC<RoommatesPageProps> = ({
           <select
             value={smoking}
             onChange={(e) => setSmoking(e.target.value)}
-            className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 p-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none"
+            className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 p-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none cursor-pointer"
           >
-            <option value="any">Any</option>
-            <option value="no">No smoking</option>
-            <option value="occasional">Occasional</option>
-            <option value="yes">Smoking</option>
+            <option value="any" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Any</option>
+            <option value="no" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">No smoking</option>
+            <option value="occasional" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Occasional</option>
+            <option value="yes" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Smoking</option>
           </select>
         </div>
 

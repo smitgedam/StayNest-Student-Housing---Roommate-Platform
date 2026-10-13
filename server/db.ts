@@ -868,6 +868,18 @@ class Store {
     return this.data.messProviders[idx];
   }
 
+  deleteMessProvider(id: string): boolean {
+    const idx = this.data.messProviders.findIndex(m => m.id === id);
+    if (idx === -1) return false;
+    this.data.messProviders.splice(idx, 1);
+    // Also remove any meal votes for this mess
+    if (this.data.mealVotes) {
+      this.data.mealVotes = this.data.mealVotes.filter(v => v.messProviderId !== id);
+    }
+    this.save();
+    return true;
+  }
+
   // Bookings
   getBookings(): BookingRequest[] {
     return this.data.bookingRequests;

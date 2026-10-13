@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { SocketProvider } from './context/SocketContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { FavoritesProvider } from './context/FavoritesContext';
 import { ThemeToggle } from './components/ThemeToggle';
+import { StayNestLogo } from './components/StayNestLogo';
 import { Navbar } from './components/Navbar';
 import { BrowsePage } from './pages/BrowsePage';
 import { MessDirectoryPage } from './pages/MessDirectoryPage';
+import { FavoritesPage } from './pages/FavoritesPage';
 import { RoommatesPage } from './pages/RoommatesPage';
 import { OwnerDashboardPage } from './pages/OwnerDashboardPage';
 import { MyBookingsPage } from './pages/MyBookingsPage';
@@ -107,9 +110,7 @@ function MainApp() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16">
               <div className="flex items-center gap-2 text-xl font-bold text-gray-900 dark:text-white tracking-tight">
-                <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-black shadow-xs">
-                  S
-                </div>
+                <StayNestLogo size="md" />
                 <span>StayNest</span>
               </div>
               <div className="flex items-center gap-2">
@@ -188,6 +189,14 @@ function MainApp() {
           />
         )}
 
+        {currentTab === 'favorites' && (
+          <FavoritesPage
+            onOpenChat={handleOpenChat}
+            onNavigateTab={setCurrentTab}
+            onViewMessDetails={handleViewMessDetails}
+          />
+        )}
+
         {currentTab === 'roommates' && (
           <RoommatesPage
             onOpenChat={handleOpenChat}
@@ -241,9 +250,11 @@ export default function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <SocketProvider>
-          <MainApp />
-        </SocketProvider>
+        <FavoritesProvider>
+          <SocketProvider>
+            <MainApp />
+          </SocketProvider>
+        </FavoritesProvider>
       </AuthProvider>
     </ThemeProvider>
   );

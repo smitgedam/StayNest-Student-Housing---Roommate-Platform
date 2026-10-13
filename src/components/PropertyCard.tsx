@@ -1,6 +1,7 @@
 import React from 'react';
 import { Property } from '../types';
-import { Wifi, Wind, Utensils, ShieldCheck, MapPin, Zap, Bath } from 'lucide-react';
+import { Wifi, Wind, Utensils, ShieldCheck, MapPin, Zap, Bath, Heart } from 'lucide-react';
+import { useFavorites } from '../context/FavoritesContext';
 
 interface PropertyCardProps {
   property: Property;
@@ -13,6 +14,9 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
   onViewDetails,
   isSelected = false,
 }) => {
+  const { isPropertyFavorite, togglePropertyFavorite } = useFavorites();
+  const isFavorite = isPropertyFavorite(property.id);
+
   const formatType = (type: string) => {
     switch (type) {
       case 'single_room': return 'Single Room';
@@ -30,7 +34,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
   return (
     <article
       onClick={() => onViewDetails(property)}
-      className={`group bg-white dark:bg-slate-900 rounded-xl border transition-all duration-200 overflow-hidden flex flex-col sm:flex-row cursor-pointer hover:shadow-md w-full min-w-0 ${
+      className={`group bg-white dark:bg-slate-900 rounded-xl border transition-all duration-200 overflow-hidden flex flex-col sm:flex-row cursor-pointer hover:shadow-md w-full min-w-0 relative ${
         isSelected
           ? 'border-blue-600 ring-2 ring-blue-100 dark:ring-blue-900/40'
           : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
@@ -47,6 +51,28 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
         <div className="absolute bottom-2 left-2 sm:hidden text-white font-semibold text-xs drop-shadow-sm">
           {formatType(property.propertyType)}
         </div>
+
+        {/* Favorite Toggle Button */}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            togglePropertyFavorite(property);
+          }}
+          className={`absolute top-2 right-2 p-1.5 rounded-full backdrop-blur-md transition-all duration-200 shadow-xs z-10 ${
+            isFavorite
+              ? 'bg-rose-500/90 text-white hover:bg-rose-600 hover:scale-110'
+              : 'bg-black/35 hover:bg-black/60 text-white/90 hover:text-white hover:scale-110'
+          }`}
+          title={isFavorite ? 'Remove from favorites' : 'Save to favorites'}
+          aria-label={isFavorite ? 'Remove from favorites' : 'Save to favorites'}
+        >
+          <Heart
+            className={`w-4 h-4 transition-transform duration-200 ${
+              isFavorite ? 'fill-white stroke-white scale-105' : 'stroke-white'
+            }`}
+          />
+        </button>
       </div>
 
       {/* Content */}

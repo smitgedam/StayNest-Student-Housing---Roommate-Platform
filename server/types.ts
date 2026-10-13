@@ -190,6 +190,7 @@ export interface MessProvider {
   ratingAvg: number;
   ratingCount: number;
   active: boolean;
+  menuTimetable?: MealTimetableDay[];
   createdAt: string;
   updatedAt: string;
 }

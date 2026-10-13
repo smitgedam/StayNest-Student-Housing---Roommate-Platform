@@ -9,7 +9,6 @@
   }
 }
 
-/* Base styles for dark mode root */
 html.dark {
   color-scheme: dark;
   background-color: #090d16;
@@ -19,6 +18,22 @@ html.dark {
 html.dark body {
   background-color: #090d16;
   color: #f1f5f9;
+}
+
+/* Ensure native select dropdown menus render dark in dark mode */
+html.dark select {
+  color-scheme: dark;
+  background-color: #1e293b;
+  color: #f8fafc;
+}
+
+html.dark select option {
+  background-color: #0f172a;
+  color: #f8fafc;
+}
+
+html.dark input {
+  color-scheme: dark;
 }
 
 /* Comprehensive Leaflet Stacking Context Containment

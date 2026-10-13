@@ -88,7 +88,13 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSwitchToLogin, onS
             <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">I am a</label>
             <select
               value={role}
-              onChange={(e) => setRole(e.target.value)}
+              onChange={(e) => {
+                const newRole = e.target.value;
+                setRole(newRole);
+                if (newRole !== 'student') {
+                  setCollege('');
+                }
+              }}
               className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 p-2.5 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none"
             >
               <option value="student">Student</option>
@@ -97,16 +103,21 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSwitchToLogin, onS
             </select>
           </div>
 
-          <div>
-            <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">College</label>
-            <input
-              type="text"
-              value={college}
-              onChange={(e) => setCollege(e.target.value)}
-              placeholder="Shown to owners (e.g. DTU, NSUT)"
-              className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 p-2.5 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none"
-            />
-          </div>
+          {role === 'student' && (
+            <div>
+              <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">
+                College <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                value={college}
+                onChange={(e) => setCollege(e.target.value)}
+                placeholder="Shown to owners (e.g. DTU, NSUT)"
+                className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 p-2.5 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none"
+                required={role === 'student'}
+              />
+            </div>
+          )}
 
           <div>
             <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">Phone (Optional)</label>

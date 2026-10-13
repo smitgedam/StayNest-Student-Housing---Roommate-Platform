@@ -113,6 +113,7 @@ export interface MessProvider {
   ratingCount: number;
   active: boolean;
   distanceKm?: number;
+  menuTimetable?: MealTimetableDay[];
   createdAt: string;
   updatedAt: string;
 }

@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { MessProvider, MealPlan } from '../types';
 import { useAuth } from '../context/AuthContext';
 import { MapPicker } from '../components/MapPicker';
-import { Utensils, Plus, Trash2, CheckCircle2, Star, Edit3 } from 'lucide-react';
+import { MessMenuEditorModal } from '../components/MessMenuEditorModal';
+import { Utensils, Plus, Trash2, CheckCircle2, Star, Edit3, Calendar, UtensilsCrossed, AlertTriangle } from 'lucide-react';
 
 export const MyMessPage: React.FC = () => {
   const { user, token } = useAuth();
   const [myMessList, setMyMessList] = useState<MessProvider[]>([]);
   const [loading, setLoading] = useState(true);
+  const [editingMenuMess, setEditingMenuMess] = useState<MessProvider | null>(null);
 
   // Form
   const [name, setName] = useState('');
@@ -126,6 +128,37 @@ export const MyMessPage: React.FC = () => {
     }
   };
 
+  const [messToDelete, setMessToDelete] = useState<MessProvider | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const confirmDeleteMess = async () => {
+    if (!token || !messToDelete) return;
+    setIsDeleting(true);
+    setFormError(null);
+    setFormSuccess(null);
+
+    try {
+      const res = await fetch(`/api/mess/${messToDelete.id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        setFormSuccess(`"${messToDelete.name}" listing was permanently deleted from the web application.`);
+        // Remove immediately from state so it does not display in the web application
+        setMyMessList((prev) => prev.filter((m) => m.id !== messToDelete.id));
+        setMessToDelete(null);
+        fetchMyMess();
+      } else {
+        const data = await res.json();
+        setFormError(data.error || 'Failed to delete mess listing');
+      }
+    } catch {
+      setFormError('Network error while deleting mess listing');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
       {/* Title */}
@@ -209,23 +242,17 @@ export const MyMessPage: React.FC = () => {
               </div>
             </div>
 
-            <div>
-              <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">Kitchen Address</label>
-              <input
-                type="text"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                placeholder="Kitchen address"
-                className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white p-2.5 focus:border-blue-500 focus:outline-none"
-                required
-              />
-            </div>
-
-            {/* Kitchen Map Picker */}
+            {/* Kitchen Map & Address Picker - Single Unified Address Bar */}
             <MapPicker
+              label="Kitchen Address"
+              required
+              address={address}
+              onAddressChange={(newAddr) => setAddress(newAddr)}
               value={coords}
               onChange={(c) => setCoords(c)}
-              label="Click map to pin kitchen location"
+              hideSuggestions={true}
+              landmarkExample="e.g. Near DTU Gate 2 Main Market, Opposite Metro Pillar 420, Near Red Cross Hospital, Next to Haldiram's"
+              placeholder="Enter kitchen address (marker moves in real time, or drag pin)..."
             />
 
             {/* Plans Editor */}
@@ -339,22 +366,22 @@ export const MyMessPage: React.FC = () => {
               {myMessList.map((m) => (
                 <div
                   key={m.id}
-                  className="p-4 rounded-xl border border-gray-200 dark:border-slate-800 bg-gray-50/40 dark:bg-slate-800/40 flex items-center justify-between gap-2"
+                  className="p-4 rounded-xl border border-gray-200 dark:border-slate-800 bg-gray-50/40 dark:bg-slate-800/40 space-y-3"
                 >
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold text-sm text-gray-900 dark:text-white">{m.name}</span>
-                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 uppercase">
-                        {m.dietType}
-                      </span>
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-sm text-gray-900 dark:text-white">{m.name}</span>
+                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 uppercase">
+                          {m.dietType}
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">
+                        Rating {m.ratingAvg} • Radius: {m.deliveryRadiusKm} km • {m.address}
+                      </p>
                     </div>
-                    <p className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">
-                      Rating {m.ratingAvg} • Radius: {m.deliveryRadiusKm} km
-                    </p>
-                  </div>
 
-                  <div className="flex items-center gap-3">
-                    <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 dark:text-slate-300 cursor-pointer">
+                    <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 dark:text-slate-300 cursor-pointer shrink-0">
                       <input
                         type="checkbox"
                         checked={m.active}
@@ -364,12 +391,86 @@ export const MyMessPage: React.FC = () => {
                       Active
                     </label>
                   </div>
+
+                  {/* Actions: Edit 7-Day Menu & Delete listing */}
+                  <div className="flex items-center justify-between pt-2 border-t border-gray-200/70 dark:border-slate-800 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setEditingMenuMess(m)}
+                      className="px-3 py-1.5 text-xs font-bold text-amber-900 dark:text-amber-200 bg-amber-100 hover:bg-amber-200 dark:bg-amber-950/80 dark:hover:bg-amber-900 rounded-lg transition flex items-center gap-1.5 shadow-2xs"
+                    >
+                      <UtensilsCrossed className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                      Set / Edit 7-Day Menu
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setMessToDelete(m)}
+                      className="px-2.5 py-1.5 text-xs font-semibold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-950/50 rounded-lg transition flex items-center gap-1 border border-red-200 dark:border-red-900/60"
+                      title="Delete listing completely from the web application"
+                    >
+                      <Trash2 className="w-3.5 h-3.5 text-red-500" />
+                      Delete Listing
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
           )}
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {messToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 dark:bg-black/80 p-4 backdrop-blur-xs">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full p-6 shadow-2xl border border-red-200 dark:border-red-950/80 space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-xl bg-red-100 dark:bg-red-950/60 text-red-600 dark:text-red-400 flex items-center justify-center shrink-0">
+                <Trash2 className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="font-bold text-base text-gray-900 dark:text-white">
+                  Permanently Delete Mess Listing?
+                </h3>
+                <p className="text-xs text-gray-500 dark:text-slate-400">
+                  Confirmation required before complete removal
+                </p>
+              </div>
+            </div>
+
+            <p className="text-xs text-gray-700 dark:text-slate-300 leading-relaxed bg-red-50/70 dark:bg-red-950/30 p-3 rounded-xl border border-red-100 dark:border-red-900/40">
+              Are you sure you want to completely delete <strong>&quot;{messToDelete.name}&quot;</strong>? This will permanently delete your kitchen listing, meal subscription plans, and weekly menu timetable. Once deleted, it will not display in the web application.
+            </p>
+
+            <div className="flex items-center justify-end gap-2.5 pt-2 border-t border-gray-100 dark:border-slate-800">
+              <button
+                type="button"
+                onClick={() => setMessToDelete(null)}
+                disabled={isDeleting}
+                className="px-4 py-2 text-xs font-semibold text-gray-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={confirmDeleteMess}
+                disabled={isDeleting}
+                className="px-4 py-2 text-xs font-bold text-white bg-red-600 hover:bg-red-700 rounded-lg transition shadow-xs flex items-center gap-1.5 disabled:opacity-50"
+              >
+                {isDeleting ? 'Deleting...' : 'Yes, Delete Completely'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 7-Day Menu Timetable Customization Modal for Mess Providers */}
+      <MessMenuEditorModal
+        mess={editingMenuMess}
+        isOpen={Boolean(editingMenuMess)}
+        onClose={() => setEditingMenuMess(null)}
+        onSaved={fetchMyMess}
+      />
     </div>
   );
 };

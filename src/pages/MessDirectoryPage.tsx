@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { MessProvider } from '../types';
-import { Utensils, Star, MapPin, Search, CheckCircle2, Phone, MessageSquare, UtensilsCrossed } from 'lucide-react';
+import { Utensils, Star, MapPin, Search, CheckCircle2, Phone, MessageSquare, UtensilsCrossed, Heart } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useFavorites } from '../context/FavoritesContext';
 import { DailyMessMenuModal } from '../components/DailyMessMenuModal';
 
 interface MessDirectoryPageProps {
@@ -11,6 +12,7 @@ interface MessDirectoryPageProps {
 
 export const MessDirectoryPage: React.FC<MessDirectoryPageProps> = ({ onOpenChat }) => {
   const { user } = useAuth();
+  const { isMessFavorite, toggleMessFavorite } = useFavorites();
   const [messList, setMessList] = useState<MessProvider[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -87,12 +89,12 @@ export const MessDirectoryPage: React.FC<MessDirectoryPageProps> = ({ onOpenChat
           <select
             value={diet}
             onChange={(e) => setDiet(e.target.value)}
-            className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 p-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none"
+            className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 p-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none cursor-pointer"
           >
-            <option value="any">Any</option>
-            <option value="veg">Veg</option>
-            <option value="non-veg">Non-veg</option>
-            <option value="both">Both</option>
+            <option value="any" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Any</option>
+            <option value="veg" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Veg</option>
+            <option value="non-veg" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Non-veg</option>
+            <option value="both" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Both</option>
           </select>
         </div>
 
@@ -143,9 +145,24 @@ export const MessDirectoryPage: React.FC<MessDirectoryPageProps> = ({ onOpenChat
               <div className="space-y-3">
                 <div className="flex items-start justify-between gap-2">
                   <h3 className="font-bold text-slate-900 dark:text-white text-base leading-snug">{item.name}</h3>
-                  <span className="text-xs font-semibold capitalize text-slate-600 dark:text-slate-300 shrink-0">
-                    {item.dietType === 'veg' ? '🌱 Pure Veg' : item.dietType === 'non-veg' ? '🍗 Non-Veg' : '🍲 Veg & Non-Veg'}
-                  </span>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <span className="text-xs font-semibold capitalize text-slate-600 dark:text-slate-300">
+                      {item.dietType === 'veg' ? '🌱 Pure Veg' : item.dietType === 'non-veg' ? '🍗 Non-Veg' : '🍲 Veg & Non-Veg'}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => toggleMessFavorite(item)}
+                      className={`p-1.5 rounded-lg transition ${
+                        isMessFavorite(item.id)
+                          ? 'text-rose-500 bg-rose-50 dark:bg-rose-950/70 hover:bg-rose-100 dark:hover:bg-rose-900/60'
+                          : 'text-gray-400 hover:text-rose-500 hover:bg-gray-100 dark:hover:bg-slate-800'
+                      }`}
+                      title={isMessFavorite(item.id) ? 'Remove from favorites' : 'Save mess to favorites'}
+                      aria-label={isMessFavorite(item.id) ? 'Remove from favorites' : 'Save mess to favorites'}
+                    >
+                      <Heart className={`w-4 h-4 transition-transform duration-200 ${isMessFavorite(item.id) ? 'fill-rose-500 text-rose-500 scale-105' : ''}`} />
+                    </button>
+                  </div>
                 </div>
 
                 <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
@@ -228,9 +245,28 @@ export const MessDirectoryPage: React.FC<MessDirectoryPageProps> = ({ onOpenChat
                 <h3 className="font-bold text-gray-900 dark:text-white text-lg">{activeMess.name}</h3>
                 <p className="text-xs text-gray-500 dark:text-slate-400">{activeMess.address}</p>
               </div>
-              <button onClick={() => setActiveMess(null)} className="text-gray-400 hover:text-gray-600 dark:hover:text-slate-200">
-                ✕
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => toggleMessFavorite(activeMess)}
+                  className={`px-2.5 py-1.5 rounded-lg transition flex items-center gap-1.5 text-xs font-semibold ${
+                    isMessFavorite(activeMess.id)
+                      ? 'bg-rose-50 text-rose-600 dark:bg-rose-950/70 dark:text-rose-300 border border-rose-200 dark:border-rose-900/60'
+                      : 'text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 border border-gray-200 dark:border-slate-700'
+                  }`}
+                  title={isMessFavorite(activeMess.id) ? 'Remove from favorites' : 'Save to favorites'}
+                >
+                  <Heart
+                    className={`w-4 h-4 transition-transform duration-200 ${
+                      isMessFavorite(activeMess.id) ? 'fill-rose-500 text-rose-500 scale-105' : 'text-gray-500 dark:text-slate-400'
+                    }`}
+                  />
+                  <span>{isMessFavorite(activeMess.id) ? 'Saved' : 'Save'}</span>
+                </button>
+                <button onClick={() => setActiveMess(null)} className="p-1.5 text-gray-400 hover:text-gray-600 dark:hover:text-slate-200">
+                  ✕
+                </button>
+              </div>
             </div>
 
             <p className="text-xs text-gray-700 dark:text-slate-300">{activeMess.description}</p>

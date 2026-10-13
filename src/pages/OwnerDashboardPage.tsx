@@ -29,6 +29,8 @@ export const OwnerDashboardPage: React.FC = () => {
   // New Modals State
   const [showMaintenanceModal, setShowMaintenanceModal] = useState(false);
   const [showAgreementModal, setShowAgreementModal] = useState(false);
+  const [propertyToDelete, setPropertyToDelete] = useState<Property | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // New property form state
   const [title, setTitle] = useState('');
@@ -131,18 +133,27 @@ export const OwnerDashboardPage: React.FC = () => {
     }
   };
 
-  const handleDeleteProperty = async (propId: string) => {
-    if (!token || !window.confirm('Are you sure you want to delete this listing?')) return;
+  const confirmDeleteProperty = async () => {
+    if (!token || !propertyToDelete) return;
+    setIsDeleting(true);
     try {
-      const res = await fetch(`/api/properties/${propId}`, {
+      const res = await fetch(`/api/properties/${propertyToDelete.id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
+        setFormSuccess(`"${propertyToDelete.title}" listing deleted successfully.`);
+        setProperties((prev) => prev.filter((p) => p.id !== propertyToDelete.id));
+        setPropertyToDelete(null);
         fetchData();
+      } else {
+        const data = await res.json();
+        setFormError(data.error || 'Failed to delete listing');
       }
     } catch {
-      // ignore
+      setFormError('Network error while deleting listing');
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -351,7 +362,7 @@ export const OwnerDashboardPage: React.FC = () => {
               Mark rented
             </button>
             <button
-              onClick={() => handleDeleteProperty(staleListing.id)}
+              onClick={() => setPropertyToDelete(staleListing)}
               className="px-3.5 py-1.5 bg-white dark:bg-slate-800 border border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg text-xs font-semibold transition"
             >
               Remove listing
@@ -470,23 +481,15 @@ export const OwnerDashboardPage: React.FC = () => {
               </div>
             </div>
 
-            <div>
-              <label className="block text-xs font-semibold text-gray-700 dark:text-slate-300 mb-1">Address</label>
-              <input
-                type="text"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                placeholder="Street, area, city"
-                className="w-full text-xs rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white p-2.5 focus:border-blue-500 focus:outline-none"
-                required
-              />
-            </div>
-
-            {/* Interactive Map Pin Picker */}
+            {/* Interactive Map & Address Picker - Single Unified Address Bar */}
             <MapPicker
+              label="Property Address"
+              required
+              address={address}
+              onAddressChange={(newAddr) => setAddress(newAddr)}
               value={coords}
               onChange={(newCoords) => setCoords(newCoords)}
-              label="Click map to pin location for live proximity search"
+              placeholder="Enter property address (marker moves in real time, or drag pin)..."
             />
 
             {/* Amenities Checkboxes */}
@@ -642,7 +645,7 @@ export const OwnerDashboardPage: React.FC = () => {
                         {prop.status === 'available' ? 'Mark rented' : 'Relist'}
                       </button>
                       <button
-                        onClick={() => handleDeleteProperty(prop.id)}
+                        onClick={() => setPropertyToDelete(prop)}
                         className="p-1.5 text-gray-400 hover:text-red-600 dark:hover:text-red-400 rounded-lg transition"
                         title="Delete listing"
                       >
@@ -801,6 +804,37 @@ export const OwnerDashboardPage: React.FC = () => {
                 className="px-4 py-2 text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 dark:bg-blue-600 dark:hover:bg-blue-700 rounded-lg disabled:opacity-50"
               >
                 {verificationSubmitting ? 'Submitting...' : 'Submit to Admin Queue'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* In-App Delete Confirmation Modal */}
+      {propertyToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 dark:bg-black/80 p-4 backdrop-blur-xs">
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-sm w-full p-5 shadow-2xl border border-gray-200 dark:border-slate-800 space-y-3">
+            <h3 className="font-bold text-gray-900 dark:text-white text-base">
+              Delete Property Listing?
+            </h3>
+            <p className="text-xs text-gray-600 dark:text-slate-400">
+              Are you sure you want to permanently delete <strong>"{propertyToDelete.title}"</strong>? This will remove the listing from search and student inquiries.
+            </p>
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-gray-100 dark:border-slate-800">
+              <button
+                type="button"
+                onClick={() => setPropertyToDelete(null)}
+                className="px-3 py-1.5 text-xs font-semibold text-gray-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={isDeleting}
+                onClick={confirmDeleteProperty}
+                className="px-3.5 py-1.5 text-xs font-bold text-white bg-red-600 hover:bg-red-700 rounded-lg transition shadow-xs disabled:opacity-50"
+              >
+                {isDeleting ? 'Deleting...' : 'Delete permanently'}
               </button>
             </div>
           </div>

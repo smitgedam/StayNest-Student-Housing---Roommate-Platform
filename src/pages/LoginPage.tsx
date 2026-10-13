@@ -71,6 +71,65 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSwitchToRegister, onSucc
           </button>
         </form>
 
+        <div className="pt-2 border-t border-gray-100 dark:border-slate-800 space-y-2">
+          <p className="text-[11px] font-bold text-gray-500 dark:text-slate-400 uppercase tracking-wider text-center">
+            Or test with 1-click demo accounts
+          </p>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                clearError();
+                setEmail('rahul@college.edu');
+                setPassword('password123');
+              }}
+              className="p-2 text-left rounded-lg border border-blue-200 dark:border-blue-900/60 bg-blue-50/60 dark:bg-blue-950/40 hover:bg-blue-100 transition"
+            >
+              <div className="text-xs font-bold text-blue-900 dark:text-blue-300">🎓 Student</div>
+              <div className="text-[10px] text-blue-700 dark:text-blue-400 truncate">rahul@college.edu</div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                clearError();
+                setEmail('vikram@staynest.com');
+                setPassword('password123');
+              }}
+              className="p-2 text-left rounded-lg border border-purple-200 dark:border-purple-900/60 bg-purple-50/60 dark:bg-purple-950/40 hover:bg-purple-100 transition"
+            >
+              <div className="text-xs font-bold text-purple-900 dark:text-purple-300">🏠 Owner</div>
+              <div className="text-[10px] text-purple-700 dark:text-purple-400 truncate">vikram@staynest.com</div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                clearError();
+                setEmail('annapurna@staynest.com');
+                setPassword('password123');
+              }}
+              className="p-2 text-left rounded-lg border border-amber-200 dark:border-amber-900/60 bg-amber-50/60 dark:bg-amber-950/40 hover:bg-amber-100 transition"
+            >
+              <div className="text-xs font-bold text-amber-900 dark:text-amber-300">🍲 Mess Provider</div>
+              <div className="text-[10px] text-amber-700 dark:text-amber-400 truncate">annapurna@staynest.com</div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                clearError();
+                setEmail('admin@staynest.com');
+                setPassword('password123');
+              }}
+              className="p-2 text-left rounded-lg border border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/60 dark:bg-emerald-950/40 hover:bg-emerald-100 transition"
+            >
+              <div className="text-xs font-bold text-emerald-900 dark:text-emerald-300">🛡️ Admin</div>
+              <div className="text-[10px] text-emerald-700 dark:text-emerald-400 truncate">admin@staynest.com</div>
+            </button>
+          </div>
+        </div>
+
         <div className="text-center text-xs text-gray-600 dark:text-slate-400">
           No account?{' '}
           <button
@@ -79,11 +138,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSwitchToRegister, onSucc
           >
             Register
           </button>
-        </div>
-
-        {/* Wireframe Page 1 Yellow Banner */}
-        <div className="bg-amber-100/70 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-900/60 text-amber-900 dark:text-amber-300 text-xs px-3.5 py-2 rounded-lg font-mono text-center">
-          POST /api/auth/login returns a 7-day JWT
         </div>
       </div>
     </div>

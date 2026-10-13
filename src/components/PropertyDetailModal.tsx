@@ -29,7 +29,9 @@ import {
   FileText,
   Wrench,
   UtensilsCrossed,
+  Heart,
 } from 'lucide-react';
+import { useFavorites } from '../context/FavoritesContext';
 
 interface PropertyDetailModalProps {
   property: Property | null;
@@ -49,6 +51,7 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
   onBookingSuccess,
 }) => {
   const { user, token } = useAuth();
+  const { isPropertyFavorite, togglePropertyFavorite } = useFavorites();
   const [moveInDate, setMoveInDate] = useState<string>('2026-11-01');
   const [durationMonths, setDurationMonths] = useState<number>(3);
   const [headcount, setHeadcount] = useState<number>(1);
@@ -134,16 +137,40 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="text-right hidden sm:block">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="text-right hidden sm:block mr-1">
               <div className="text-xl font-black text-blue-700 dark:text-blue-400">
                 ₹{property.rentPerMonth?.toLocaleString()}
               </div>
               <div className="text-xs text-gray-500 dark:text-slate-400">per month</div>
             </div>
+
+            <button
+              type="button"
+              onClick={() => togglePropertyFavorite(property)}
+              className={`px-3 py-1.5 rounded-lg transition flex items-center gap-1.5 text-xs font-semibold shadow-2xs ${
+                isPropertyFavorite(property.id)
+                  ? 'bg-rose-50 text-rose-600 dark:bg-rose-950/70 dark:text-rose-300 border border-rose-200 dark:border-rose-900/60'
+                  : 'text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 border border-gray-200 dark:border-slate-700'
+              }`}
+              title={isPropertyFavorite(property.id) ? 'Remove from favorites' : 'Save to favorites'}
+            >
+              <Heart
+                className={`w-4 h-4 transition-transform duration-200 ${
+                  isPropertyFavorite(property.id)
+                    ? 'fill-rose-500 text-rose-500 scale-105'
+                    : 'text-gray-500 dark:text-slate-400'
+                }`}
+              />
+              <span className="hidden sm:inline">
+                {isPropertyFavorite(property.id) ? 'Saved' : 'Save'}
+              </span>
+            </button>
+
             <button
               onClick={onClose}
               className="p-1.5 rounded-lg text-gray-400 dark:text-slate-400 hover:text-gray-700 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800 transition"
+              aria-label="Close dialog"
             >
               <X className="w-6 h-6" />
             </button>

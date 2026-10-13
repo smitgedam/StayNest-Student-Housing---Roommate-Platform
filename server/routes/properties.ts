@@ -40,7 +40,7 @@ propertiesRouter.get('/', optionalAuthMiddleware, (req: AuthenticatedRequest, re
 
   const centerLat = lat ? parseFloat(lat) : null;
   const centerLng = lng ? parseFloat(lng) : null;
-  const maxRadius = radiusKm ? parseFloat(radiusKm) : 25;
+  const maxRadius = radiusKm ? parseFloat(radiusKm) : 10;
 
   if (minRent) {
     const min = parseFloat(minRent);
@@ -104,7 +104,7 @@ propertiesRouter.get('/', optionalAuthMiddleware, (req: AuthenticatedRequest, re
   });
 
   const filtered = centerLat !== null && centerLng !== null && radiusKm
-    ? withDistance.filter(item => item.distanceKm === null || item.distanceKm <= maxRadius)
+    ? withDistance.filter(item => item.distanceKm !== null && item.distanceKm <= maxRadius)
     : withDistance;
 
   // Sort by distance if location provided, else by creation date

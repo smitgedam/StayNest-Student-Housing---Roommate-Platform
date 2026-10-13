@@ -99,8 +99,9 @@ export const DailyMessMenuModal: React.FC<DailyMessMenuModalProps> = ({
     todaySpecial: 'Special Paneer Dish & Sweet',
   };
 
-  const approvalRate = menuData?.stats?.approvalRate || 92;
-  const totalVotes = menuData?.stats?.totalVotes || 18;
+  const totalVotes = Number(menuData?.stats?.totalVotes || 0);
+  const approvalRate = typeof menuData?.stats?.approvalRate === 'number' ? menuData.stats.approvalRate : null;
+  const hasVotes = totalVotes > 0 && approvalRate !== null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 dark:bg-black/80 p-4 backdrop-blur-xs">
@@ -231,31 +232,44 @@ export const DailyMessMenuModal: React.FC<DailyMessMenuModalProps> = ({
             </div>
           </div>
 
-          {/* Student Community Meal Approval Meter */}
+          {/* Student Community Meal Approval Meter - Only shown when votes exist */}
           <div className="p-4 bg-gray-50 dark:bg-slate-800/60 rounded-xl border border-gray-200 dark:border-slate-700 space-y-3">
-            <div className="flex items-center justify-between">
-              <div>
+            {hasVotes ? (
+              <>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="font-bold text-gray-900 dark:text-white text-xs block">
+                      Student Community Meal Approval
+                    </span>
+                    <span className="text-[11px] text-gray-500 dark:text-slate-400">
+                      Based on {totalVotes} student meal {totalVotes === 1 ? 'review' : 'reviews'} today
+                    </span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-lg font-black text-emerald-600 dark:text-emerald-400 font-mono">
+                      {approvalRate}% Approved
+                    </span>
+                  </div>
+                </div>
+
+                {/* Progress bar */}
+                <div className="w-full bg-gray-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+                  <div
+                    className="bg-emerald-500 h-full rounded-full transition-all duration-500"
+                    style={{ width: `${approvalRate}%` }}
+                  />
+                </div>
+              </>
+            ) : (
+              <div className="py-1">
                 <span className="font-bold text-gray-900 dark:text-white text-xs block">
                   Student Community Meal Approval
                 </span>
-                <span className="text-[11px] text-gray-500 dark:text-slate-400">
-                  Based on {totalVotes} student meal reviews today
-                </span>
+                <p className="text-[11px] text-gray-500 dark:text-slate-400 mt-0.5">
+                  No student votes recorded for this mess yet. Community approval rating will be shown once students vote good/bad below.
+                </p>
               </div>
-              <div className="text-right">
-                <span className="text-lg font-black text-emerald-600 dark:text-emerald-400 font-mono">
-                  {approvalRate}% Approved
-                </span>
-              </div>
-            </div>
-
-            {/* Progress bar */}
-            <div className="w-full bg-gray-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
-              <div
-                className="bg-emerald-500 h-full rounded-full transition-all duration-500"
-                style={{ width: `${approvalRate}%` }}
-              />
-            </div>
+            )}
 
             {/* Voting Buttons */}
             {user?.role === 'student' && (
